@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.snapbizz.axis" />
+                  <option name="mobileSdkAppId" value="1:225090059821:android:19de109c834e425b05c2a4" />
+                  <option name="projectId" value="snapbizz-axis-test" />
+                  <option name="projectNumber" value="225090059821" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
