@@ -23,3 +23,4 @@ rootProject.name = "Snapbilling - DD"
 include(":app")
 include(":core")
 include(":ui")
+include(":onboarding")
