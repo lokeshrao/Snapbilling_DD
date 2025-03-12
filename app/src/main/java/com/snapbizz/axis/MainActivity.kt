@@ -6,14 +6,10 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import com.snapbizz.axis.navigation.Navigation
+import com.snapbizz.axis.navigation.Screen
 import com.snapbizz.core.helpers.ConfigManager
-import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapScaffold
-import com.snapbizz.ui.snapComponents.SnapText
 import com.snapbizz.ui.theme.SnapbillingDDTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,28 +23,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SnapbillingDDTheme {
-                SnapScaffold(
-                    title = "Android"
-                ) {
-                    Greeting("Android")
-                }
+                    SnapScaffold {
+                        Navigation(Screen.HOME)
+                    }
 
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    var context = LocalContext.current.applicationContext
-    Column {
-        SnapButton(text = "Hello", onClick = {getRemoteConfig(context)})
-        SnapText(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-    }
-
 }
 
 fun getRemoteConfig(application: Context) {
