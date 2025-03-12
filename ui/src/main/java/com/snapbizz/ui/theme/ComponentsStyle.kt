@@ -8,8 +8,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 object SnapButtonStyle {
-    val DefaultBackground = Color.Blue
-    val DefaultTextColor = Color.White
     val DefaultCornerRadius = 12.dp
 }
 

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.Image
+import androidx.compose.material.Text
 import androidx.compose.ui.tooling.preview.Preview
 import com.snapbizz.common.SnapThemeConfig
 import kotlinx.coroutines.launch
