@@ -11,7 +11,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/models" />
             <option value="$PROJECT_DIR$/onboarding" />
             <option value="$PROJECT_DIR$/ui" />
           </set>

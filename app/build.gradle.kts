@@ -44,9 +44,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":ui"))
     implementation(project(":core"))
     implementation(project(":onboarding"))
+    implementation(project(":ui"))
+    implementation(project(":common"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -58,10 +60,5 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     kapt(libs.hilt.compiler)
 
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
-    implementation(libs.kotlinx.coroutines.android)
 
 }

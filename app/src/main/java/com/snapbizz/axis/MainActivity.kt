@@ -35,15 +35,6 @@ class MainActivity : ComponentActivity() {
 fun getRemoteConfig(application: Context) {
     val configManager = ConfigManager(application)
     CoroutineScope(Job() + Dispatchers.IO).launch {
-        configManager.configFlow.collectLatest { config ->
-            config?.let {
-                Log.d("config",it.toString())
-            }
-        }
-    }
-    CoroutineScope(Job() + Dispatchers.IO).launch {
         configManager.fetchConfig(ConfigManager.Source.FIREBASE)
     }
-
-
 }
