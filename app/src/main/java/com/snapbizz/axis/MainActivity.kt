@@ -6,12 +6,15 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.snapbizz.core.helpers.AppConfig
 import com.snapbizz.core.helpers.ConfigManager
 import com.snapbizz.ui.snapComponents.SnapButton
+import com.snapbizz.ui.snapComponents.SnapEditText
 import com.snapbizz.ui.snapComponents.SnapScaffold
 import com.snapbizz.ui.snapComponents.SnapText
 import com.snapbizz.ui.theme.SnapbillingDDTheme
@@ -45,21 +48,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         SnapButton(text = "Hello", onClick = {getRemoteConfig(context)})
         SnapText(
             text = "Hello $name!",
-            modifier = modifier
+            modifier = modifier.background(AppConfig.Primary)
         )
+        SnapEditText(value = "hello",hint="hellohi ", onValueChange = {})
     }
 
 }
 
 fun getRemoteConfig(application: Context) {
     val configManager = ConfigManager(application)
-    CoroutineScope(Job() + Dispatchers.IO).launch {
-        configManager.configFlow.collectLatest { config ->
-            config?.let {
-                Log.d("config",it.toString())
-            }
-        }
-    }
     CoroutineScope(Job() + Dispatchers.IO).launch {
         configManager.fetchConfig(ConfigManager.Source.FIREBASE)
     }
