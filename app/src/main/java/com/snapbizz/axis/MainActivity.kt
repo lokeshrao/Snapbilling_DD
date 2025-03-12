@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.snapbizz.core.helpers.AppConfig
+import com.snapbizz.common.SnapThemeConfig
 import com.snapbizz.core.helpers.ConfigManager
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapEditText
@@ -43,12 +43,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    var context = LocalContext.current.applicationContext
+    val context = LocalContext.current.applicationContext
     Column {
-        SnapButton(text = "Hello", onClick = {getRemoteConfig(context)})
+        SnapButton(text = "Hello", debounce = true, onClick = {Log.d("Button Clicked", "Hello")})
         SnapText(
             text = "Hello $name!",
-            modifier = modifier.background(AppConfig.Primary)
+            modifier = modifier.background(SnapThemeConfig.Primary)
         )
         SnapEditText(value = "hello",hint="hellohi ", onValueChange = {})
     }
@@ -60,6 +60,4 @@ fun getRemoteConfig(application: Context) {
     CoroutineScope(Job() + Dispatchers.IO).launch {
         configManager.fetchConfig(ConfigManager.Source.FIREBASE)
     }
-
-
 }
