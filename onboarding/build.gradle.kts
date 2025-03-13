@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.retrofit)
     kapt(libs.hilt.compiler)
+    implementation(libs.converter.gson)
 
 
 }

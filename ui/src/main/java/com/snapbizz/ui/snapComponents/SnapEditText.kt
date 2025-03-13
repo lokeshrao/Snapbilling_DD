@@ -19,16 +19,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import com.snapbizz.common.config.SnapThemeConfig
 
 @Composable
 fun SnapEditText(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    label: String? = null,
     hint: String = "",
-    backgroundColor: Color = Color.White,
-    textColor: Color = Color.Black,
-    hintColor: Color = Color.Gray,
+    backgroundColor: Color = SnapThemeConfig.Primary,
+    textColor: Color = SnapThemeConfig.Text,
+    hintColor: Color = SnapThemeConfig.Hint,
     cornerRadius: Int = 12,
     leadingIconResId: Int? = null,
     trailingIconResId: Int? = null,
@@ -37,65 +39,78 @@ fun SnapEditText(
 ) {
     var textState by remember { mutableStateOf(value) }
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .clip(RoundedCornerShape(cornerRadius.dp))
-            .background(backgroundColor)
-            .border(1.dp, Color.Gray, RoundedCornerShape(cornerRadius.dp))
-            .padding(horizontal = 12.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // Leading Icon
-            leadingIconResId?.let {
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .padding(end = 8.dp)
-                )
-            }
-
-            // Text Input
-            BasicTextField(
-                value = textState,
-                onValueChange = {
-                    textState = it
-                    onValueChange(it)
-                },
-                textStyle = TextStyle(fontSize = 16.sp, color = textColor),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 8.dp),
-                visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+    Column(modifier = modifier.fillMaxWidth()) {
+        label?.let {
+            SnapText(
+                text = it,
+                fontSize = 14.sp,
+                color = Color.DarkGray,
+                modifier = Modifier.padding(vertical = 4.dp)
             )
+        }
 
-            // Placeholder Text (Hint)
-            if (textState.isEmpty()) {
-                SnapText(
-                    text = hint,
-                    color = hintColor,
-                    fontSize = 14.sp,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-            }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clip(RoundedCornerShape(cornerRadius.dp))
+                .background(backgroundColor)
+                .border(1.dp, Color.Gray, RoundedCornerShape(cornerRadius.dp))
+                .padding(horizontal = 12.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                leadingIconResId?.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(end = 8.dp)
+                    )
+                }
 
-            // Trailing Icon
-            trailingIconResId?.let {
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable { onTrailingIconClick?.invoke() }
-                )
+                Box(modifier = Modifier.weight(1f)) {
+                    if (textState.isEmpty()) {
+                        SnapText(
+                            text = hint,
+                            color = hintColor,
+                            fontSize = 14.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.CenterStart)
+                        )
+                    }
+
+                    BasicTextField(
+                        value = textState,
+                        onValueChange = {
+                            textState = it
+                            onValueChange(it)
+                        },
+                        textStyle = TextStyle(fontSize = 16.sp, color = textColor),
+                        modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+                    )
+                }
+
+                trailingIconResId?.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { onTrailingIconClick?.invoke() }
+                    )
+                }
             }
         }
     }
 }
+
+
+
+

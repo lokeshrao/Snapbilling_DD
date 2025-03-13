@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="invalid_phone_number">Invalid phone number</string>
+    <string name="otp_cannot_be_blank">OTP cannot be blank</string>
+    <string name="invalid_phone_number_format">Invalid phone number format</string>
+    <string name="otp_send_failure">Failed to send OTP</string>
+    <string name="store_not_found_info">Store Not Found </string>
+    <string name="otp_verification_failure">Unable to Verify OTP</string>
+    <string name="device_attached_error">Device Attached to another store</string>
+    <string name="registration_error">Registration Error. Phone number already registered with another Snapbizz Product. Please use a different phone number.</string>
+    <string name="no_users_from_server">No Users From Server</string>
+    <string name="login_wrong_password">Wrong Password</string>
+    <string name="login_no_user_found">No User Found</string>
+    <string name="login_failure">Unable to Login</string>
+    <string name="loading">Loading</string>
+    <string name="unable_to_get_users">Failed to fetch latest users list</string>
+    <string name="resend_otp">Resend</string>
+    <string name="otp_sent">Otp Sent Successfully</string>
+
+    <string name="registration_error_prefix">Registration Error</string>
+
+</resources>

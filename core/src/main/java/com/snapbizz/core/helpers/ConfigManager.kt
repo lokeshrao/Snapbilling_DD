@@ -60,8 +60,10 @@ class ConfigManager(private val context: Context) {
 
     suspend fun loadConfigOnInit() {
         val storedJson = SnapDataStore.getConfigFlow(context).first()
-        val config = gson.fromJson(storedJson, ConfigResponse::class.java)
-        SnapThemeConfig.update(config)
+        if(storedJson?.isNotEmpty() == true) {
+            val config = gson.fromJson(storedJson, ConfigResponse::class.java)
+            SnapThemeConfig.update(config)
+        }
     }
 
     sealed class Source {
