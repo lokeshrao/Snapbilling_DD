@@ -34,7 +34,7 @@ fun SnapButton(
     debounce: Boolean = false,
     debounceTimeMs: Long = 3000
 ) {
-    var lastClickTime by remember { mutableStateOf(0L) }
+    var lastClickTime by remember { mutableLongStateOf(0L) }
     val coroutineScope = rememberCoroutineScope()
 
     Box(
