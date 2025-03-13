@@ -1,18 +1,17 @@
 package com.snapbizz.onboarding
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snapbizz.core.utils.DispatcherProvider
 import com.snapbizz.core.utils.ResourceProvider
+import com.snapbizz.core.utils.SnapCommonUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.internal.Provider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class OtpViewModel @Inject constructor(
@@ -63,6 +62,10 @@ class OtpViewModel @Inject constructor(
 
     fun setStoreDetails(storeDetailsResponse: StoreDetailsResponse) {
         _storeDetails.value = storeDetailsResponse
+    }
+
+    fun getDeviceId(context: Context) {
+        _deviceId.value = SnapCommonUtils.getDeviceId(context)
     }
 
     fun clearError() {

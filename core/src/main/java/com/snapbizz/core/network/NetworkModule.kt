@@ -1,5 +1,6 @@
 package com.snapbizz.core.network
 import android.util.Log
+import com.snapbizz.core.utils.ApiURL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Lazy<Retrofit?> {
-        return lazy { getRetrofitInstance("https://google.com") }
+        return lazy { getRetrofitInstance(ApiURL.BASE_URL) }
     }
 
     private fun getRetrofitInstance(baseUrl: String, forceCreate: Boolean = false): Retrofit {
