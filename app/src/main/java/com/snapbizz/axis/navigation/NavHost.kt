@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.snapbizz.axis.HomeScreen
-import com.snapbizz.onboarding.OtpScreen
+import com.snapbizz.onboarding.registration.OtpScreen
 
 @Composable
 fun Navigation(startingDestination: Screen) {
