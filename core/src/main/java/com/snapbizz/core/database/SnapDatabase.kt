@@ -12,6 +12,7 @@ import com.snapbizz.core.database.dao.CustomerDetailsDao
 import com.snapbizz.core.database.dao.InventoryDao
 import com.snapbizz.core.database.dao.InvoiceDao
 import com.snapbizz.core.database.dao.ItemsDao
+import com.snapbizz.core.database.dao.LogDao
 import com.snapbizz.core.database.dao.ProductCustomizationDao
 import com.snapbizz.core.database.dao.ProductPacksDao
 import com.snapbizz.core.database.dao.ProductsDao
@@ -23,6 +24,7 @@ import com.snapbizz.core.database.entities.CustomerDetails
 import com.snapbizz.core.database.entities.Inventory
 import com.snapbizz.core.database.entities.Invoice
 import com.snapbizz.core.database.entities.Items
+import com.snapbizz.core.database.entities.LogEntity
 import com.snapbizz.core.database.entities.ProductCustomization
 import com.snapbizz.core.database.entities.ProductPacks
 import com.snapbizz.core.database.entities.Products
@@ -30,7 +32,7 @@ import com.snapbizz.core.database.entities.Transactions
 import com.snapbizz.core.database.entities.Users
 
 @Database(
-    entities = [Inventory::class, ProductPacks::class, Products::class, ProductCustomization::class, Invoice::class, Items::class, Customer::class, CustomerDetails::class, Users::class, Transactions::class, Category::class],
+    entities = [Inventory::class, ProductPacks::class, Products::class, ProductCustomization::class, Invoice::class, Items::class, Customer::class, CustomerDetails::class, Users::class, Transactions::class, Category::class, LogEntity::class],
     version = 1
 )
 @TypeConverters(Converters::class)
@@ -47,6 +49,7 @@ abstract class SnapDatabase : RoomDatabase() {
     abstract fun customerDetailsDao(): CustomerDetailsDao
     abstract fun categoryDao(): CategoryDao
     abstract fun usersDao(): UsersDao
+    abstract fun logDao(): LogDao
 
 
     companion object {

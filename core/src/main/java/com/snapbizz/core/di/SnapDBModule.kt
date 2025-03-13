@@ -1,13 +1,13 @@
-package com.snapbizz.core.database
+package com.snapbizz.core.di
 
 import android.content.Context
+import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.database.dao.CategoryDao
 import com.snapbizz.core.database.dao.CustomerDao
 import com.snapbizz.core.database.dao.CustomerDetailsDao
 import com.snapbizz.core.database.dao.InventoryDao
 import com.snapbizz.core.database.dao.InvoiceDao
 import com.snapbizz.core.database.dao.ItemsDao
-import com.snapbizz.core.database.dao.LogDao
 import com.snapbizz.core.database.dao.ProductCustomizationDao
 import com.snapbizz.core.database.dao.ProductPacksDao
 import com.snapbizz.core.database.dao.ProductsDao
@@ -90,10 +90,5 @@ object SnapDBModule {
     @Singleton
     fun provideCategoryDao(appDatabase: SnapDatabase): CategoryDao {
         return appDatabase.categoryDao()
-    }
-    @Provides
-    @Singleton
-    fun provideLogsDao(appDatabase: SnapDatabase): LogDao {
-        return appDatabase.logDao()
     }
 }
