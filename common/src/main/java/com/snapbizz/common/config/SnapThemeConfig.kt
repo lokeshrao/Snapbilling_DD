@@ -1,4 +1,4 @@
-package com.snapbizz.common
+package com.snapbizz.common.config
 
 import android.graphics.Color.parseColor
 import android.util.Log

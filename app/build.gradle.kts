@@ -55,9 +55,9 @@ dependencies {
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.hilt.android)
-    implementation(libs.androidx.navigation.compose)
     kapt(libs.hilt.compiler)
 
 

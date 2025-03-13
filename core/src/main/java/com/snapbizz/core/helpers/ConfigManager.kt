@@ -7,8 +7,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.gson.Gson
-import com.snapbizz.common.ConfigResponse
-import com.snapbizz.common.SnapThemeConfig
+import com.snapbizz.common.config.ConfigResponse
+import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.core.datastore.SnapDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

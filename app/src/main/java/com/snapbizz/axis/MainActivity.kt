@@ -11,12 +11,14 @@ import com.snapbizz.axis.navigation.Screen
 import com.snapbizz.core.helpers.ConfigManager
 import com.snapbizz.ui.snapComponents.SnapScaffold
 import com.snapbizz.ui.theme.SnapbillingDDTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

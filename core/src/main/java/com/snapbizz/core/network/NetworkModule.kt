@@ -1,4 +1,5 @@
 package com.snapbizz.core.network
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,17 +18,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
-        return getRetrofitInstance("https://jsonplaceholder.typicode.com/")
+    fun provideRetrofit(): Lazy<Retrofit?> {
+        return lazy { getRetrofitInstance("https://google.com") }
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideApiService(retrofit: Retrofit): ApiService {
-//        return retrofit.create(ApiService::class.java)
-//    }
-
     private fun getRetrofitInstance(baseUrl: String, forceCreate: Boolean = false): Retrofit {
+        Log.d("NetworkModule", "Providing Retrofit instance")
         return if (forceCreate || retrofitInstance == null || currentBaseUrl != baseUrl) {
             synchronized(this) {
                 if (forceCreate || retrofitInstance == null || currentBaseUrl != baseUrl) {
