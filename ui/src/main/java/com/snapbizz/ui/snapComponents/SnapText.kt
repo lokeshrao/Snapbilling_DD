@@ -9,12 +9,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.snapbizz.common.config.SnapThemeConfig
 
 @Composable
 fun SnapText(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = Color.White,
+    color: Color = SnapThemeConfig.Text,
     fontSize: TextUnit = 16.sp,
     textAlign: TextAlign = TextAlign.Center,
     fontWeight: FontWeight = FontWeight.Normal

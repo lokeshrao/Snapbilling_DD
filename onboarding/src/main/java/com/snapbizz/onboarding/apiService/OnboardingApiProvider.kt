@@ -1,4 +1,4 @@
-package com.snapbizz.onboarding
+package com.snapbizz.onboarding.apiService
 
 import com.snapbizz.common.config.SnapThemeConfig
 import dagger.Module

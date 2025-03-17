@@ -6,16 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.snapbizz.core.utils.DispatcherProvider
 import com.snapbizz.core.utils.ResourceProvider
 import com.snapbizz.core.utils.SnapCommonUtils
+import com.snapbizz.onboarding.data.OnboardingRepositoryImpl
+import com.snapbizz.onboarding.data.StoreDetailsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
 import javax.inject.Inject
 
 @HiltViewModel
-class OtpViewModel @Inject constructor(
-    private val retrofit: Lazy<Retrofit?>,
+class OnBoardingViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val resourceProvider: ResourceProvider,
     val onBoardingRepo: OnboardingRepositoryImpl
@@ -160,6 +160,7 @@ class OtpViewModel @Inject constructor(
             if (it.isSuccess) {
                 _storeDetails.value = result.getOrNull()
                 _isVerified.value = true
+                _message.value = result.getOrNull()?.status
 
             } else {
                 if (it.exceptionOrNull()?.message?.contains(resourceProvider.getString(R.string.registration_error)) == true) {

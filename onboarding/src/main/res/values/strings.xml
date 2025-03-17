@@ -18,5 +18,21 @@
     <string name="otp_sent">Otp Sent Successfully</string>
 
     <string name="registration_error_prefix">Registration Error</string>
+    <string name="registration_title">DD Registration</string>
+    <string name="owner_details">Owner Details</string>
+    <string name="owner_name">Owner Name</string>
+    <string name="email">Email</string>
+    <string name="store_details">Store Details</string>
+    <string name="address">Address</string>
+    <string name="store_name">Store Name</string>
+    <string name="store_phone_number">Store Phone Number</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="gstin_number">GSTIN Number</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="pos_id">POS ID</string>
+    <string name="proceed">Proceed</string>
+    <string name="central_portal_token">Unable to get token</string>
+    <string name="check_agreement">Click checkbox to indicate that you have read and agree to the terms presented in the Terms and Conditions agreement</string>
 
 </resources>

@@ -12,26 +12,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import com.snapbizz.ui.snapComponents.SnapText
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.snapbizz.common.config.SnapThemeConfig
+import com.google.gson.Gson
+import com.snapbizz.core.utils.Dimens.paddingLarge
 import com.snapbizz.core.utils.Dimens.paddingMedium
 import com.snapbizz.core.utils.Dimens.paddingSmall
-import com.snapbizz.core.utils.SnapCommonUtils
 import com.snapbizz.core.utils.showMessage
-import com.snapbizz.onboarding.OtpViewModel
+import com.snapbizz.onboarding.OnBoardingViewModel
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapEditText
+import com.snapbizz.ui.snapComponents.SnapText
 import com.snapbizz.ui.theme.SnapTextStyle
 
 @Composable
-fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
+fun OtpScreen(onNavigateToRegister: (String) -> Unit,viewModel: OnBoardingViewModel = hiltViewModel()) {
     val isOtpSent by viewModel.isOtpSent.collectAsState()
     val deviceId by viewModel.deviceId.collectAsState()
     val isLoading by viewModel.loading.collectAsState()
@@ -45,11 +40,11 @@ fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
         viewModel.getDeviceId(context)
     }
 
-//    LaunchedEffect(isVerified) {
-//        if (isVerified) {
-//            onNavigateToRegister(Gson().toJson(viewModel.storeDetails.value))
-//        }
-//    }
+    LaunchedEffect(isVerified) {
+        if (isVerified) {
+            onNavigateToRegister(Gson().toJson(viewModel.storeDetails.value))
+        }
+    }
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
@@ -64,13 +59,12 @@ fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
 
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(paddingMedium),
+                .padding(paddingMedium).weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SnapText(text = "Enter Phone")
             SnapEditText(
                 value = phoneNo,
+                label = "Enter Phone",
                 onValueChange = {
                     if (it.length <= 10) {
                         viewModel.setPhoneNo(it)
@@ -82,9 +76,9 @@ fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
             )
 
             if (isOtpSent) {
-                SnapText(text = "Enter Otp")
                 SnapEditText(
                     value = otp,
+                    label = "Enter Otp",
                     onValueChange = { viewModel.setOtp(it) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -109,8 +103,8 @@ fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
             fontSize = SnapTextStyle.Default.fontSize,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(paddingMedium),
-            textAlign = TextAlign.Left
+                .padding(paddingLarge),
+            textAlign = TextAlign.Left,
         )
     }
 }

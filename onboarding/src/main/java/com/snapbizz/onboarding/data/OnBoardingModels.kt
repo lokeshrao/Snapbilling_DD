@@ -1,4 +1,4 @@
-package com.snapbizz.onboarding
+package com.snapbizz.onboarding.data
 
 import com.google.gson.annotations.SerializedName
 import com.snapbizz.core.database.entities.Category

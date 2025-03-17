@@ -24,7 +24,7 @@ import com.snapbizz.common.config.SnapThemeConfig
 @Composable
 fun SnapEditText(
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: ((String) -> Unit)?=null,
     modifier: Modifier = Modifier,
     label: String? = null,
     hint: String = "",
@@ -89,7 +89,7 @@ fun SnapEditText(
                         value = textState,
                         onValueChange = {
                             textState = it
-                            onValueChange(it)
+                            onValueChange?.invoke(it)
                         },
                         textStyle = TextStyle(fontSize = 16.sp, color = textColor),
                         modifier = Modifier.fillMaxWidth(),
