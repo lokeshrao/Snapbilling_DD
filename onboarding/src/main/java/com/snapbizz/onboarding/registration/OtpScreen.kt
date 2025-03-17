@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.snapbizz.ui.snapComponents.SnapText
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.core.utils.Dimens.paddingMedium
 import com.snapbizz.core.utils.Dimens.paddingSmall
 import com.snapbizz.core.utils.SnapCommonUtils
@@ -27,6 +28,7 @@ import com.snapbizz.core.utils.showMessage
 import com.snapbizz.onboarding.OtpViewModel
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapEditText
+import com.snapbizz.ui.theme.SnapTextStyle
 
 @Composable
 fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
@@ -39,6 +41,9 @@ fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
     val otp by viewModel.otp.collectAsState()
 
     val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.getDeviceId(context)
+    }
 
 //    LaunchedEffect(isVerified) {
 //        if (isVerified) {
@@ -99,5 +104,13 @@ fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
                 }
             )
         }
+        SnapText(
+            text = "Device ID: $deviceId",
+            fontSize = SnapTextStyle.Default.fontSize,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddingMedium),
+            textAlign = TextAlign.Left
+        )
     }
 }
