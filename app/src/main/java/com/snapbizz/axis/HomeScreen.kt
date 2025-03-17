@@ -21,12 +21,17 @@ fun HomeScreen(onNavigateToRegister: (String) -> Unit) {
             SnapButton(text = "Hello", onClick = {
                 SnapLogger.log("MyService", "Logging from a Service", LogModule.HOME, LogPriority.HIGH)
                 SnapLogger.log("MyService", "Logging from a Service", LogModule.HOME)
-                try {
-                    var i = 10/0
-                }catch (ex : Exception){
-                    ex.printStackTrace()
-                    SnapLogger.logException("MyService", LogModule.HOME,ex)
-                }
+
+                    try {
+                        try {
+                            throw IllegalArgumentException("Inner Exception Occurred")
+                        } catch (inner: Exception) {
+                            throw IllegalStateException("Outer Exception Occurred", inner)
+                        }
+                    } catch (outer: Exception) {
+                        outer.printStackTrace()
+                        SnapLogger.logException("MyService", LogModule.HOME, outer)
+                    }
             })
             SnapText(
                 text = "Hello Home Screen", modifier = Modifier.background(Color.Blue)

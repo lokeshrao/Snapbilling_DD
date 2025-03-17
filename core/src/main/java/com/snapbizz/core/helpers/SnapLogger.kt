@@ -3,6 +3,8 @@ package com.snapbizz.core.helpers
 import android.content.Context
 import com.snapbizz.core.database.dao.LogDao
 import com.snapbizz.core.database.entities.LogEntity
+import com.snapbizz.core.utils.SnapCommonUtils
+import com.snapbizz.core.utils.formatDateToString
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.File
@@ -29,16 +31,22 @@ object SnapLogger {
 
     fun logException(tag: String, module: LogModule, exception: Exception) {
         logScope.launch {
-            val stackTraceElement = exception.stackTrace.firstOrNull()
-            val methodName = stackTraceElement?.methodName ?: "UnknownMethod"
-            val lineNumber = stackTraceElement?.lineNumber ?: -1
-            val errorMessage = exception.localizedMessage ?: "Unknown Exception"
-            val logMessage = "$methodName():$lineNumber | $errorMessage"
+            val logBuilder = StringBuilder()
+            var currentException: Throwable? = exception
 
-            Timber.tag(tag).e(exception, logMessage)
-            logMessage(module.name, tag, logMessage, LogPriority.LOW)
+            while (currentException != null) {
+                val stackTraceElement = currentException.stackTrace.firstOrNull()
+                val methodName = stackTraceElement?.methodName ?: "UnknownMethod"
+                val lineNumber = stackTraceElement?.lineNumber ?: -1
+                val errorMessage = currentException.localizedMessage ?: "Unknown Exception"
+                logBuilder.append("$methodName():$lineNumber | $errorMessage\n")
+                currentException = currentException.cause
+            }
+            val finalLogMessage = logBuilder.toString().trim()
+            logMessage(module.name, tag, finalLogMessage, LogPriority.LOW)
         }
     }
+
 
     private suspend fun logMessage(source: String, tag: String, message: String, priority: LogPriority, dispatcher: CoroutineDispatcher=Dispatchers.IO) {
         withContext(dispatcher) {
@@ -55,7 +63,7 @@ object SnapLogger {
             var writer: FileWriter? = null
             try {
                 writer = FileWriter(getLogFile(), true)
-                writer.append("${System.currentTimeMillis()} | [$tag] ($source): $message\n")
+                writer.append("${formatDateToString(Date(),isTime = true)} | [$source] ($tag): $message\n")
                 writer.flush()
             } catch (e: IOException) {
                 Timber.e("Failed to write log to file: ${e.localizedMessage}")
@@ -73,7 +81,7 @@ object SnapLogger {
                         tag = tag,
                         source = source,
                         message = message,
-                        timestamp = System.currentTimeMillis().toString()
+                        timestamp = formatDateToString(Date(),isTime = true)
                     )
                 )
             } catch (e: Exception) {

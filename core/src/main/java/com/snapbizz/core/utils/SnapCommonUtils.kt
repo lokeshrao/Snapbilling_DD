@@ -11,6 +11,9 @@ import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import com.snapbizz.core.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object SnapCommonUtils {
     ///Todo
@@ -38,7 +41,7 @@ object SnapCommonUtils {
 //        return isAvailable
 //    }
     @SuppressLint("HardwareIds")
-    fun getDeviceId(context: Context) : String {
+    fun getDeviceId(context: Context): String {
         val deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         } else {
@@ -53,8 +56,26 @@ object SnapCommonUtils {
     }
 
 }
+
 fun Context.showMessage(message: String?, length: Int = Toast.LENGTH_SHORT) {
     message?.let {
         Toast.makeText(this, message, length).show()
+    }
+}
+
+fun formatDateToString(
+    date: Date?,
+    isTime: Boolean = false,
+    pattern: String = if (isTime) "dd-MM-yyyy hh:mm:ss a" else "dd-MM-yyyy"
+): String {
+    return try {
+        if (date == null) {
+            return "-"
+        }
+        val formatter = SimpleDateFormat(pattern, Locale.getDefault())
+        return formatter.format(date)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        "Error Fetching Time"
     }
 }
