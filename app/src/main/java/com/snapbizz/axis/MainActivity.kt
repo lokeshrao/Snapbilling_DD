@@ -22,10 +22,11 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             SnapbillingDDTheme {
-                    SnapScaffold {
+                    SnapScaffold(
+                    ) {
                         Navigation(Screen.HOME)
                     }
 

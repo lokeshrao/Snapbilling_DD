@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import com.snapbizz.core.helpers.LogModule
 import com.snapbizz.core.helpers.LogPriority
 import com.snapbizz.core.helpers.SnapLogger
+import com.snapbizz.ui.SnackbarManager
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapText
 
@@ -32,6 +33,7 @@ fun HomeScreen(onNavigateToRegister: (String) -> Unit) {
                         outer.printStackTrace()
                         SnapLogger.logException("MyService", LogModule.HOME, outer)
                     }
+                //SnackbarManager.showSnackbar("Hello Hi ","Retry",{})
                 onNavigateToRegister("")
             })
             SnapText(
