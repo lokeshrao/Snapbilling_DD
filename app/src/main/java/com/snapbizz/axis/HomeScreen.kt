@@ -32,6 +32,7 @@ fun HomeScreen(onNavigateToRegister: (String) -> Unit) {
                         outer.printStackTrace()
                         SnapLogger.logException("MyService", LogModule.HOME, outer)
                     }
+                onNavigateToRegister("")
             })
             SnapText(
                 text = "Hello Home Screen", modifier = Modifier.background(Color.Blue)
