@@ -28,14 +28,15 @@ fun SnapEditText(
     modifier: Modifier = Modifier,
     label: String? = null,
     hint: String = "",
-    backgroundColor: Color = SnapThemeConfig.Primary,
+    backgroundColor: Color = SnapThemeConfig.PrimaryBg,
     textColor: Color = SnapThemeConfig.Text,
     hintColor: Color = SnapThemeConfig.Hint,
     cornerRadius: Int = 12,
     leadingIconResId: Int? = null,
     trailingIconResId: Int? = null,
     onTrailingIconClick: (() -> Unit)? = null,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    enabled: Boolean = true,
 ) {
     var textState by remember { mutableStateOf(value) }
 
@@ -93,7 +94,8 @@ fun SnapEditText(
                         },
                         textStyle = TextStyle(fontSize = 16.sp, color = textColor),
                         modifier = Modifier.fillMaxWidth(),
-                        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+                        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+                        enabled = enabled
                     )
                 }
 

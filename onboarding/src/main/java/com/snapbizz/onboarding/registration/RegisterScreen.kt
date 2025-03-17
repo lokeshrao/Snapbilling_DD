@@ -179,6 +179,7 @@ fun SectionTitle(title: String) {
 fun InfoField(label: String, value: String?, modifier: Modifier = Modifier) {
     SnapEditText(
         value = value ?: "",
+        enabled = false,
         label = label,
         modifier = modifier
             .fillMaxWidth()
