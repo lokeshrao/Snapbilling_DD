@@ -3,11 +3,14 @@ package com.snapbizz.core.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
+import com.snapbizz.common.config.models.RetailerDetails
+import com.snapbizz.common.config.models.StoreDetails
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -46,6 +49,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         private val STORE_ID = longPreferencesKey("store_id")
         private val RETAILER_GSTIN = stringPreferencesKey("retailer_gstin")
         private val POS_ID = intPreferencesKey("pos_id")
+        private val STORE_REGISTRATION_STATUS = booleanPreferencesKey("is_store_registered")
     }
 
     suspend fun saveConfig(json: String) {
@@ -60,20 +64,20 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
-    suspend fun setDeviceId(context: Context, deviceId: String) {
-        context.snapstore.edit { preferences ->
+    suspend fun setDeviceId(deviceId: String) {
+        snapstore.edit { preferences ->
             preferences[DEVICE_ID] = deviceId
         }
     }
 
-    fun getDeviceId(context: Context): Flow<String?> {
-        return context.snapstore.data.map { preferences ->
+    fun getDeviceId(): Flow<String?> {
+        return snapstore.data.map { preferences ->
             preferences[DEVICE_ID]
         }
     }
 
-    suspend fun saveStoreDetails(context: Context, storeDetails: StoreDetailsResponse?, posId: Int) {
-        context.snapstore.edit { preferences ->
+    suspend fun saveStoreDetails(storeDetails: StoreDetailsResponse?, posId: Int) {
+        snapstore.edit { preferences ->
             storeDetails?.let { it->
                 preferences[RETAILER_OWNER_NAME] = it.retailerDetails?.name.orEmpty()
                 preferences[STORE_NAME_KEY] = it.storeDetails?.name.orEmpty()
@@ -90,11 +94,49 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
                 preferences[RETAILER_ID] = it.retailerDetails?.retailerId ?: 0L
                 preferences[STORE_ID] = it.storeDetails?.storeId ?: 0L
 
-                // Store Integers
                 preferences[STORE_STATE_ID] = it.storeDetails?.stateId ?: 0
                 preferences[STORE_ZIP] = it.storeDetails?.pincode ?: 0
                 preferences[POS_ID] = posId
             }
+        }
+    }
+
+    fun getStoreDetails(context: Context): Flow<StoreDetailsResponse> {
+        return snapstore.data.map { preferences ->
+            StoreDetailsResponse(
+                retailerDetails = RetailerDetails(
+                    name = preferences[RETAILER_OWNER_NAME] ?: "Owner name",
+                    email = preferences[RETAILER_OWNER_EMAIL] ?: "",
+                    retailerId = preferences[RETAILER_ID] ?: 0L,
+                    gstin = preferences[RETAILER_GSTIN] ?: ""
+                ),
+                storeDetails = StoreDetails(
+                    name = preferences[STORE_NAME_KEY] ?: "",
+                    phone = preferences[RETAILER_OWNER_NUMBER] ?: 0L,
+                    salespersonNumber = preferences[STORE_NUMBER_KEY] ?: 0L,
+                    tin = preferences[STORE_TIN_KEY] ?: 0L,
+                    address = preferences[STORE_ADDRESS_KEY] ?: "",
+                    city = preferences[STORE_CITY] ?: "",
+                    state = preferences[STORE_STATE] ?: "",
+                    stateId = preferences[STORE_STATE_ID] ?: 0,
+                    pincode = preferences[STORE_ZIP] ?: 0,
+                    storeId = preferences[STORE_ID] ?: 0L
+                ),
+                accessToken = preferences[STORE_AUTH_KEY] ?: ""
+            )
+        }
+    }
+
+
+    suspend fun setStoreAsRegistered(registrationStatus: Boolean) {
+        snapstore.edit { preferences ->
+            preferences[STORE_REGISTRATION_STATUS] = registrationStatus
+        }
+    }
+
+    fun isStoreRegistrationComplete(): Flow<Boolean?> {
+        return snapstore.data.map { preferences ->
+            preferences[STORE_REGISTRATION_STATUS]
         }
     }
 }

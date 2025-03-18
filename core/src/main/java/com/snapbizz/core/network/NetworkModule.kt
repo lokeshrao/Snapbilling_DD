@@ -38,7 +38,7 @@ object NetworkModule {
         }
     }
 
-    private fun createRetrofitInstance(baseUrl: String): Retrofit {
+    fun createRetrofitInstance(baseUrl: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())

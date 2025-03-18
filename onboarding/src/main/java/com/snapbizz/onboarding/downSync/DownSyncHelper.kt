@@ -10,7 +10,6 @@ import com.snapbizz.core.helpers.SnapLogger
 import com.snapbizz.core.utils.DownSyncConfig
 import com.snapbizz.core.database.dao.GenericDao
 import com.snapbizz.core.utils.Preferences
-import com.snapbizz.horticulture.sync.downSync.SyncApiService
 import com.snapbizz.onboarding.downSync.downloadSyncDto.InvoiceDto
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getCustomerDetailsSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getCustomersSyncConfig
