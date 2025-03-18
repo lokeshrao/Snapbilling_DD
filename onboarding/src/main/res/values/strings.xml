@@ -16,6 +16,7 @@
     <string name="unable_to_get_users">Failed to fetch latest users list</string>
     <string name="resend_otp">Resend</string>
     <string name="otp_sent">Otp Sent Successfully</string>
+    <string name="sync_completed">Sync Completed</string>
 
     <string name="registration_error_prefix">Registration Error</string>
     <string name="registration_title">DD Registration</string>

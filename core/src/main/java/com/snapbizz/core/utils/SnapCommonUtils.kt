@@ -11,6 +11,7 @@ import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import com.snapbizz.core.R
+import com.snapbizz.core.datastore.SnapDataStore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -41,7 +42,7 @@ object SnapCommonUtils {
 //        return isAvailable
 //    }
     @SuppressLint("HardwareIds")
-    fun getDeviceId(context: Context): String {
+    suspend fun getDeviceId(context: Context): String {
         val deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         } else {
@@ -51,7 +52,7 @@ object SnapCommonUtils {
                 context.contentResolver, Settings.Secure.ANDROID_ID
             )
         }
-        //hphSharedPreferences.setDeviceId(_deviceId.value)
+        SnapDataStore.setDeviceId(context = context, deviceId = deviceId)
         return deviceId
     }
 

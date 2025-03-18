@@ -38,7 +38,6 @@ fun SnapEditText(
     isPassword: Boolean = false,
     enabled: Boolean = true,
 ) {
-    var textState by remember { mutableStateOf(value) }
 
     Column(modifier = modifier.fillMaxWidth()) {
         label?.let {
@@ -75,7 +74,7 @@ fun SnapEditText(
                 }
 
                 Box(modifier = Modifier.weight(1f)) {
-                    if (textState.isEmpty()) {
+                    if (value.isEmpty()) {
                         SnapText(
                             text = hint,
                             color = hintColor,
@@ -87,9 +86,8 @@ fun SnapEditText(
                     }
 
                     BasicTextField(
-                        value = textState,
+                        value = value,
                         onValueChange = {
-                            textState = it
                             onValueChange?.invoke(it)
                         },
                         textStyle = TextStyle(fontSize = 16.sp, color = textColor),
@@ -112,7 +110,3 @@ fun SnapEditText(
         }
     }
 }
-
-
-
-
