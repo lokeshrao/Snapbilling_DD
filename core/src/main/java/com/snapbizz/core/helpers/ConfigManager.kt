@@ -17,61 +17,43 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import timber.log.Timber
 
-class ConfigManager(val snapDataStore: SnapDataStore) {
+suspend fun fetchAndApplyConfig(snapDataStore: SnapDataStore, source: Source) {
+    val remoteConfig = Firebase.remoteConfig
+    val gson = Gson()
 
-    private val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
-    private val gson = Gson()
-
-    suspend fun fetchConfig(source: Source) {
-        Log.d("FIREBASE", "Source:$source")
-
-        val json = when (source) {
-            Source.FIREBASE -> fetchFromFirebase()
-            is Source.API -> fetchFromAPI(source.url)
+    val json = when (source) {
+        Source.FIREBASE -> {
+            remoteConfig.fetchAndActivate().await()
+            remoteConfig.getString("app_config")
         }
-        Log.d("FIREBASE", json.toString())
-        json?.let {
-            saveConfigToDataStore(it)
+        is Source.API -> {
+            val client = OkHttpClient()
+            val request = Request.Builder().url(source.url).build()
+            client.newCall(request).execute().body?.string()
         }
     }
 
-    private suspend fun fetchFromFirebase(): String = withContext(Dispatchers.IO) {
-        Log.d("FIREBASE", "Fetching firebase logs")
-        remoteConfig.fetchAndActivate().await()
-        return@withContext remoteConfig.getString("app_config")
-    }
-
-    private suspend fun fetchFromAPI(url: String): String? = withContext(Dispatchers.IO) {
-        val client = OkHttpClient()
-        val request = Request.Builder().url(url).build()
-        return@withContext client.newCall(request).execute().body?.string()
-    }
-
-    private suspend fun saveConfigToDataStore(json: String) {
-        snapDataStore.saveConfig(json)
-        val parsedConfig = gson.fromJson(json, ConfigResponse::class.java)
+    json?.let {
+        snapDataStore.saveConfig(it)
+        val parsedConfig = gson.fromJson(it, ConfigResponse::class.java)
         SnapThemeConfig.update(parsedConfig)
     }
-
-    fun getStoredConfig(): Flow<String?> {
-        return snapDataStore.getConfigFlow()
-    }
-
-    suspend fun loadConfigOnInit() {
-        val storedJson = snapDataStore.getConfigFlow().first()
-        if(storedJson?.isNotEmpty() == true) {
-            val config = gson.fromJson(storedJson, ConfigResponse::class.java)
-            SnapThemeConfig.update(config)
-        }
-    }
-
-    sealed class Source {
-        data object FIREBASE : Source()
-        data class API(val url: String) : Source()
+}
+suspend fun loadConfigOnInit(snapDataStore: SnapDataStore) {
+    val gson = Gson()
+    val storedJson = snapDataStore.getConfigFlow().first()
+    if(storedJson?.isNotEmpty() == true) {
+        val config = gson.fromJson(storedJson, ConfigResponse::class.java)
+        SnapThemeConfig.update(config)
     }
 }
 
+sealed class Source {
+    data object FIREBASE : Source()
+    data class API(val url: String) : Source()
+}
 object FirebaseManager {
     fun initFirebase(context: Context) {
         if (FirebaseApp.getApps(context).isEmpty()) {

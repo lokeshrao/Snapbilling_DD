@@ -1,13 +1,15 @@
 package com.snapbizz.axis.application
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import com.snapbizz.core.database.dao.LogDao
 import com.snapbizz.core.datastore.SnapDataStore
-import com.snapbizz.core.helpers.ConfigManager
+import com.snapbizz.core.datastore.SnapDataStoreEntryPoint
 import com.snapbizz.core.helpers.FirebaseManager
 import com.snapbizz.core.helpers.SnapLogger
+import com.snapbizz.core.helpers.Source
+import com.snapbizz.core.helpers.fetchAndApplyConfig
+import com.snapbizz.core.helpers.loadConfigOnInit
+import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,23 +21,24 @@ import javax.inject.Inject
 class SnapApplication : Application(){
     @Inject
     lateinit var logsDao:LogDao
-    @Inject
-    lateinit var snapDataStore: SnapDataStore
 
     override fun onCreate() {
         super.onCreate()
         FirebaseManager.initFirebase(this)
         CoroutineScope(Dispatchers.IO).launch {
-            ConfigManager(snapDataStore).loadConfigOnInit()
+            CoroutineScope(Dispatchers.IO).launch {
+                val snapDataStore :SnapDataStore = EntryPointAccessors.fromApplication(this@SnapApplication, SnapDataStoreEntryPoint::class.java).snapDataStore
+                snapDataStore.let {
+                    loadConfigOnInit(it)
+                    getRemoteConfig(it)
+                }
+            }
         }
         SnapLogger.init(this,logsDao)
-        getRemoteConfig(snapDataStore)
-
     }
 }
 fun getRemoteConfig(snapDataStore: SnapDataStore) {
-    val configManager = ConfigManager(snapDataStore)
     CoroutineScope(Job() + Dispatchers.IO).launch {
-        configManager.fetchConfig(ConfigManager.Source.FIREBASE)
+        fetchAndApplyConfig(snapDataStore,Source.FIREBASE)
     }
 }

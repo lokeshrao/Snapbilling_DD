@@ -6,13 +6,22 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private val Context.snapstore by preferencesDataStore("snapstore")
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface SnapDataStoreEntryPoint {
+    val snapDataStore: SnapDataStore
+}
 
 @Singleton
 class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {

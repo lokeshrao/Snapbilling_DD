@@ -3,15 +3,20 @@ package com.snapbizz.core.helpers
 import android.content.Context
 import com.snapbizz.core.database.dao.LogDao
 import com.snapbizz.core.database.entities.LogEntity
-import com.snapbizz.core.utils.SnapCommonUtils
 import com.snapbizz.core.utils.formatDateToString
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object SnapLogger {
 
