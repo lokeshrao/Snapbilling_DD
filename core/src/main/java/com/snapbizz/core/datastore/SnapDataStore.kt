@@ -5,13 +5,17 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import com.snapbizz.common.config.models.RetailerDetails
 import com.snapbizz.common.config.models.StoreDetails
+import com.snapbizz.common.config.models.StoreDetailsResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -78,7 +82,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
 
     suspend fun saveStoreDetails(storeDetails: StoreDetailsResponse?, posId: Int) {
         snapstore.edit { preferences ->
-            storeDetails?.let { it->
+            storeDetails?.let {
                 preferences[RETAILER_OWNER_NAME] = it.retailerDetails?.name.orEmpty()
                 preferences[STORE_NAME_KEY] = it.storeDetails?.name.orEmpty()
                 preferences[RETAILER_OWNER_EMAIL] = it.retailerDetails?.email.orEmpty()
