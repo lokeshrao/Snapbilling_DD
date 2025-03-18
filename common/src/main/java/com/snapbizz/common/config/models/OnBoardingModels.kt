@@ -53,3 +53,14 @@ data class StoreDetails(
 
     @SerializedName("retailer_gstin") val retailerGstin: String? = null
 )
+
+data class ApiGenerateJWTTokenInput(
+    @SerializedName("store_id") var storeId: Long = 0,
+    @SerializedName("device_id") var deviceId: String? = null,
+    @SerializedName("access_token") var accessToken: String? = null
+)
+
+data class ApiGenerateJWTTokenResponse(
+    @SerializedName("status") var status: String? = null,
+    @SerializedName("token") var token: String? = null
+)
