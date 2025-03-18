@@ -40,7 +40,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         private val STORE_AUTH_KEY = stringPreferencesKey("store_auth_key")
         private val STORE_ID = longPreferencesKey("store_id")
         private val RETAILER_GSTIN = stringPreferencesKey("retailer_gstin")
-        private val POS_ID = intPreferencesKey
+        private val POS_ID = intPreferencesKey("pos_id")
     }
 
     suspend fun saveConfig(json: String) {
