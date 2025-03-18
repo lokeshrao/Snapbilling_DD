@@ -1,26 +1,36 @@
 package com.snapbizz.core.datastore
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-val Context.snapstore by preferencesDataStore("snapstore")
+private val Context.snapstore by preferencesDataStore("snapstore")
 
-object SnapDataStore {
-    
-    private val CONFIG_KEY = stringPreferencesKey("config_json")
+@Singleton
+class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
 
-    suspend fun saveConfig(context: Context, json: String) {
-        context.snapstore.edit { preferences ->
+    private val snapstore: DataStore<Preferences> = context.snapstore
+
+    companion object {
+        private val CONFIG_KEY = stringPreferencesKey("config_json")
+    }
+
+    suspend fun saveConfig(json: String) {
+        snapstore.edit { preferences ->
             preferences[CONFIG_KEY] = json
         }
     }
 
-    fun getConfigFlow(context: Context): Flow<String?> {
-        return context.snapstore.data.map { preferences ->
+    fun getConfigFlow(): Flow<String?> {
+        return snapstore.data.map { preferences ->
             preferences[CONFIG_KEY]
         }
     }

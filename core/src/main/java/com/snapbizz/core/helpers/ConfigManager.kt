@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class ConfigManager(private val context: Context) {
+class ConfigManager(val snapDataStore: SnapDataStore) {
 
     private val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
     private val gson = Gson()
@@ -49,17 +49,17 @@ class ConfigManager(private val context: Context) {
     }
 
     private suspend fun saveConfigToDataStore(json: String) {
-        SnapDataStore.saveConfig(context, json)
+        snapDataStore.saveConfig(json)
         val parsedConfig = gson.fromJson(json, ConfigResponse::class.java)
         SnapThemeConfig.update(parsedConfig)
     }
 
     fun getStoredConfig(): Flow<String?> {
-        return SnapDataStore.getConfigFlow(context)
+        return snapDataStore.getConfigFlow()
     }
 
     suspend fun loadConfigOnInit() {
-        val storedJson = SnapDataStore.getConfigFlow(context).first()
+        val storedJson = snapDataStore.getConfigFlow().first()
         if(storedJson?.isNotEmpty() == true) {
             val config = gson.fromJson(storedJson, ConfigResponse::class.java)
             SnapThemeConfig.update(config)
