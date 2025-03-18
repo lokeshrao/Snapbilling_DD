@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.gson.Gson
+import com.snapbizz.common.config.models.StoreDetailsResponse
 import com.snapbizz.core.utils.Dimens.paddingMedium
 import com.snapbizz.core.utils.Dimens.paddingSmall
 import com.snapbizz.core.utils.showMessage
 import com.snapbizz.onboarding.OnBoardingViewModel
 import com.snapbizz.onboarding.R
-import com.snapbizz.onboarding.data.StoreDetailsResponse
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapEditText
 import com.snapbizz.ui.snapComponents.SnapText
@@ -50,7 +50,7 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
 
     val scrollState = rememberScrollState()
     var isAgreed by rememberSaveable { mutableStateOf(false) }
-    //val posID by viewModel.posId.collectAsState()
+    val posID by viewModel.posId.collectAsState()
     var showAgreementDialog by rememberSaveable {
         mutableStateOf(false)
     }
@@ -129,7 +129,7 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
                 )
             }
 
-            //InfoField(label = stringResource(id = R.string.pos_id), value = posID.toString())
+            InfoField(label = stringResource(id = R.string.pos_id), value = posID.toString())
             Row {
                 //Checkbox(checked = isAgreed, onCheckedChange = { showAgreementDialog = true })
                 Spacer(modifier = Modifier.width(paddingSmall))
@@ -151,9 +151,9 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
                 text = stringResource(id = R.string.proceed),
                 onClick = {
 //                    HPHCommonUtils.isInternetAvailable(context) {
-//                        viewModel.doDownloadSync {
+                        viewModel.doDownloadSync {
 //                            onNavigateToLogin()
-//                        }
+                        }
 //                    }
                 }
             )

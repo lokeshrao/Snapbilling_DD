@@ -8,6 +8,8 @@ import com.snapbizz.core.datastore.SnapDataStore
 import com.snapbizz.core.utils.DispatcherProvider
 import com.snapbizz.core.utils.ResourceProvider
 import com.snapbizz.core.utils.SnapCommonUtils
+import com.snapbizz.core.utils.SnapConstants.POS_ID_FROM
+import com.snapbizz.core.utils.SnapConstants.POS_ID_TO
 import com.snapbizz.onboarding.data.OnboardingRepositoryImpl
 import com.snapbizz.onboarding.downSync.DownSyncHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +17,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val resourceProvider: ResourceProvider,
     val onBoardingRepo: OnboardingRepositoryImpl,
-    private val downSyncHelper: DownSyncHelper
+    private val downSyncHelper: DownSyncHelper,
+    private val snapDataStore: SnapDataStore
 ) : ViewModel() {
 
     private val _isOtpSent = MutableStateFlow(false)
@@ -51,6 +55,11 @@ class OnBoardingViewModel @Inject constructor(
     private val _otp = MutableStateFlow("")
     val otp: StateFlow<String> = _otp
 
+    private val _posId = MutableStateFlow<Int?>(
+        Random.nextInt(POS_ID_FROM, POS_ID_TO)
+    )
+    val posId: StateFlow<Int?> = _posId
+
     private val _syncMessages =
         MutableStateFlow<String?>(resourceProvider.getString(R.string.loading))
     val syncMessages: StateFlow<String?> = _syncMessages
@@ -72,8 +81,9 @@ class OnBoardingViewModel @Inject constructor(
     }
 
     fun getDeviceId(context: Context) {
+        _deviceId.value = SnapCommonUtils.getDeviceId(context)
         viewModelScope.launch {
-            _deviceId.value = SnapCommonUtils.getDeviceId(context)
+            snapDataStore.setDeviceId(_deviceId.value)
         }
     }
 
@@ -180,36 +190,36 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
-//    fun doDownloadSync(success: () -> Unit) {
-//        SnapDataStore.saveStoreDetails(storeDetails.value, posId.value?:0)
-//        hphSharedPreferences.loadPrefs()
-//        _message.value = null
-//        _loading.value = true
-//        viewModelScope.launch(dispatcherProvider.io) {
-//            _syncMessages.value = " Fetching categories .."
+    fun doDownloadSync(success: () -> Unit) {
+        _message.value = null
+        _loading.value = true
+        viewModelScope.launch(dispatcherProvider.io) {
+            snapDataStore.saveStoreDetails(storeDetails.value, posId.value?:0)
+            //hphSharedPreferences.loadPrefs()
+            //_syncMessages.value = " Fetching categories .."
 //            onBoardingRepo.getCategoryData().onFailure {
 //                _loading.value = false
 //                _message.value = it.message
 //                return@launch
 //            }
-//            downSyncHelper.doDownloadSync(_syncMessages).onSuccess {
-//                setStoreRegistered {
-//                    _message.value = resourceProvider.getString(R.string.sync_completed)
-//                    _loading.value = false
-//                    viewModelScope.launch(dispatcherProvider.main) {
-//                        success()
-//                    }
-//                }
-//            }.onFailure {
-//                _loading.value = false
-//                _message.value = it.message
-//            }
-//        }
-//    }
+            downSyncHelper.doDownloadSync(_syncMessages).onSuccess {
+                setStoreRegistered {
+                    _message.value = resourceProvider.getString(R.string.sync_completed)
+                    _loading.value = false
+                    viewModelScope.launch(dispatcherProvider.main) {
+                        success()
+                    }
+                }
+            }.onFailure {
+                _loading.value = false
+                _message.value = it.message
+            }
+        }
+    }
 
-    fun setStoreRegistered(result: () -> Unit) {
+    suspend fun setStoreRegistered(result: () -> Unit) {
         try {
-            //hphSharedPreferences.setStoreAsRegistered(true)
+            snapDataStore.setStoreAsRegistered(true)
             result()
         } catch (ex: Exception) {
             ex.printStackTrace()

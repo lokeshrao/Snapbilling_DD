@@ -2,6 +2,7 @@ package com.snapbizz.onboarding.data
 
 import android.os.Build
 import com.snapbizz.common.config.models.StoreDetailsResponse
+import com.snapbizz.core.database.dao.CategoryDao
 import com.snapbizz.core.database.entities.Category
 import com.snapbizz.core.utils.ResourceProvider
 import com.snapbizz.core.utils.SnapConstants.DEVICE_TYPE
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 class OnboardingRepositoryImpl @Inject constructor(
     private val apiService: OnboardingApiService?,
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val categoryDao: CategoryDao,
 )  {
 
     suspend fun sendOtp(phoneNo: Long, deviceId: String): Result<Unit> {

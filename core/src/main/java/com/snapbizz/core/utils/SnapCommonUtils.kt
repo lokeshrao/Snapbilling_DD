@@ -42,7 +42,7 @@ object SnapCommonUtils {
 //        return isAvailable
 //    }
     @SuppressLint("HardwareIds")
-    suspend fun getDeviceId(context: Context): String {
+    fun getDeviceId(context: Context): String {
         val deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         } else {
@@ -52,7 +52,6 @@ object SnapCommonUtils {
                 context.contentResolver, Settings.Secure.ANDROID_ID
             )
         }
-        SnapDataStore.setDeviceId(context = context, deviceId = deviceId)
         return deviceId
     }
 
