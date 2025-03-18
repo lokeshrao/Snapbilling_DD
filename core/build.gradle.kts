@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics.android)
 
     // ========== 🏗️ ROOM (DATABASE) ==========
-    implementation(libs.androidx.room.runtime)
+    api(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
 
