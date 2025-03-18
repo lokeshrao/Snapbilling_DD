@@ -3,6 +3,9 @@ package com.snapbizz.onboarding.downSync
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.snapbizz.common.config.models.ApiGenerateJWTTokenInput
+import com.snapbizz.common.config.models.ApiGenerateJWTTokenResponse
+import com.snapbizz.common.config.models.DefaultAPIResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -31,10 +34,6 @@ interface SyncApiService {
 
 }
 
-interface GenerateTokenService {
-    @POST("v3/api/generate_token")
-    fun genJWTToken(@Body apiGenerateJWTTokenInput: ApiGenerateJWTTokenInput?): Call<ApiGenerateJWTTokenResponse?>?
-}
 
 fun <U> prepareDataForUpload(gson: Gson, dataList: List<U>): JsonArray {
     val jsonArray = JsonArray()

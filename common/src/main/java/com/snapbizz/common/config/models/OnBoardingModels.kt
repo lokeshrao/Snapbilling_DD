@@ -64,3 +64,6 @@ data class ApiGenerateJWTTokenResponse(
     @SerializedName("status") var status: String? = null,
     @SerializedName("token") var token: String? = null
 )
+data class DefaultAPIResponse (
+    @SerializedName("status") var status: String? = null
+)

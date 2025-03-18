@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.snapbizz.core.utils.SnapPreferences
 
 private val Context.snapstore by preferencesDataStore("snapstore")
 
@@ -54,6 +55,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         private val RETAILER_GSTIN = stringPreferencesKey("retailer_gstin")
         private val POS_ID = intPreferencesKey("pos_id")
         private val STORE_REGISTRATION_STATUS = booleanPreferencesKey("is_store_registered")
+        private val SYNC_TOKEN = stringPreferencesKey("sync_token")
     }
 
     suspend fun saveConfig(json: String) {
@@ -142,5 +144,28 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         return snapstore.data.map { preferences ->
             preferences[STORE_REGISTRATION_STATUS]
         }
+    }
+
+    fun getSyncToken(): Flow<String?> {
+        return snapstore.data.map { preferences ->
+            preferences[SYNC_TOKEN]
+        }
+    }
+
+    suspend fun setSyncToken(token: String) {
+        snapstore.edit { preferences ->
+            preferences[SYNC_TOKEN] = token
+        }
+    }
+
+    fun loadPrefs() {
+        snapstore.data.map { preferences->
+            SnapPreferences.STORE_ID = preferences[STORE_ID]?:0L
+            SnapPreferences.POS_ID = preferences[POS_ID]?: 0
+            SnapPreferences.DEVICE_ID = preferences[DEVICE_ID].toString()
+            SnapPreferences.ACCESS_TOKEN = preferences[STORE_AUTH_KEY].toString()
+            SnapPreferences.BILLER_NAME = preferences[RETAILER_OWNER_NAME].toString()
+        }
+
     }
 }

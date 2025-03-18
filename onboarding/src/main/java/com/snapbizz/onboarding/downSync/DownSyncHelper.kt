@@ -9,7 +9,7 @@ import com.snapbizz.core.helpers.LogPriority
 import com.snapbizz.core.helpers.SnapLogger
 import com.snapbizz.core.utils.DownSyncConfig
 import com.snapbizz.core.database.dao.GenericDao
-import com.snapbizz.core.utils.Preferences
+import com.snapbizz.core.utils.SnapPreferences
 import com.snapbizz.onboarding.downSync.downloadSyncDto.InvoiceDto
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getCustomerDetailsSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getCustomersSyncConfig
@@ -47,7 +47,7 @@ class DownSyncHelper @Inject constructor(
                 while (true) {
                     SnapLogger.log("Sync","Calling API for ${config.tableName} with offset: $offset", LogModule.HOME, LogPriority.HIGH)
                     val response =
-                        syncApiService.getData(config.tableName,Preferences.STORE_ID,offset.toString())?.body()
+                        syncApiService.getData(config.tableName,SnapPreferences.STORE_ID,offset.toString())?.body()
                     if (response != null) {
                         SnapLogger.log("Sync","Response for ${config.tableName}: $response", LogModule.HOME, LogPriority.HIGH)
                         val status = response["status"]?.asString

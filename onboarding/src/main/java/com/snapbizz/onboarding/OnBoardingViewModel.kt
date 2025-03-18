@@ -195,7 +195,7 @@ class OnBoardingViewModel @Inject constructor(
         _loading.value = true
         viewModelScope.launch(dispatcherProvider.io) {
             snapDataStore.saveStoreDetails(storeDetails.value, posId.value?:0)
-            //hphSharedPreferences.loadPrefs()
+            snapDataStore.loadPrefs()
             //_syncMessages.value = " Fetching categories .."
 //            onBoardingRepo.getCategoryData().onFailure {
 //                _loading.value = false

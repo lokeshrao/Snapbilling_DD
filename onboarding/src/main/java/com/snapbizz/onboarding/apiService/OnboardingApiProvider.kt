@@ -1,18 +1,20 @@
 package com.snapbizz.onboarding.apiService
 
 import com.snapbizz.common.config.SnapThemeConfig
+import com.snapbizz.common.config.models.ApiGenerateJWTTokenInput
 import com.snapbizz.core.datastore.SnapDataStore
-import com.snapbizz.core.network.NetworkModule
+import com.snapbizz.core.network.GenerateTokenService
 import com.snapbizz.core.utils.ApiURL
-import com.snapbizz.core.utils.Preferences
-import com.snapbizz.onboarding.downSync.GenerateTokenService
+import com.snapbizz.core.utils.Dispatchers.provideDispatcher
+import com.snapbizz.core.utils.SnapPreferences
 import com.snapbizz.onboarding.downSync.SyncApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import retrofit2.Converter
 import retrofit2.Retrofit
 import java.net.ProtocolException
 import javax.inject.Singleton
@@ -46,13 +48,13 @@ object OnboardingApiProvider {
     ): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor { chain ->
             val originalRequest = chain.request()
-            Preferences.SYNC_TOKEN = snapDataStore.getSyncToken().toString()
+            SnapPreferences.SYNC_TOKEN = snapDataStore.getSyncToken().toString()
             val newRequest = originalRequest.newBuilder()
                 .header("content_type", "application/json;charset=UTF-8")
-                .header("authorization", Preferences.SYNC_TOKEN)
-                .header("store_id", Preferences.STORE_ID.toString())
-                .header("device_id", Preferences.DEVICE_ID)
-                .header("access_token", Preferences.ACCESS_TOKEN).build()
+                .header("authorization", SnapPreferences.SYNC_TOKEN)
+                .header("store_id", SnapPreferences.STORE_ID.toString())
+                .header("device_id", SnapPreferences.DEVICE_ID)
+                .header("access_token", SnapPreferences.ACCESS_TOKEN).build()
 
             try {
                 var response = chain.proceed(newRequest)
@@ -61,20 +63,22 @@ object OnboardingApiProvider {
 
                     val newToken = generateTokenService.genJWTToken(
                         ApiGenerateJWTTokenInput(
-                            Preferences.STORE_ID, Preferences.DEVICE_ID, Preferences.ACCESS_TOKEN
+                            SnapPreferences.STORE_ID, SnapPreferences.DEVICE_ID, SnapPreferences.ACCESS_TOKEN
                         )
                     )?.execute()?.body()?.token
 
                     if (newToken != null) {
-                        Preferences.SYNC_TOKEN = newToken
-                        snapDataStore.setSyncToken(newToken)
+                        SnapPreferences.SYNC_TOKEN = newToken
+                        CoroutineScope(provideDispatcher().io).launch {
+                            snapDataStore.setSyncToken(newToken)
+                        }
 
                         val newRequestWithToken = originalRequest.newBuilder()
                             .header("content_type", "application/json;charset=UTF-8")
-                            .header("authorization", Preferences.SYNC_TOKEN)
-                            .header("store_id", Preferences.STORE_ID.toString())
-                            .header("device_id", Preferences.DEVICE_ID)
-                            .header("access_token", Preferences.ACCESS_TOKEN).build()
+                            .header("authorization", SnapPreferences.SYNC_TOKEN)
+                            .header("store_id", SnapPreferences.STORE_ID.toString())
+                            .header("device_id", SnapPreferences.DEVICE_ID)
+                            .header("access_token", SnapPreferences.ACCESS_TOKEN).build()
 
                         response = chain.proceed(newRequestWithToken)
                     }
@@ -86,20 +90,22 @@ object OnboardingApiProvider {
                 if (e.message?.contains("Too many follow-up requests") == true) {
                     val newToken = generateTokenService.genJWTToken(
                         ApiGenerateJWTTokenInput(
-                            Preferences.STORE_ID, Preferences.DEVICE_ID, Preferences.ACCESS_TOKEN
+                            SnapPreferences.STORE_ID, SnapPreferences.DEVICE_ID, SnapPreferences.ACCESS_TOKEN
                         )
                     )?.execute()?.body()?.token
 
                     if (newToken != null) {
-                        Preferences.SYNC_TOKEN = newToken
-                        hphSharedPreferences.setSyncToken(newToken)
+                        SnapPreferences.SYNC_TOKEN = newToken
+                        CoroutineScope(provideDispatcher().io).launch {
+                            snapDataStore.setSyncToken(newToken)
+                        }
 
                         val newRequestWithToken = originalRequest.newBuilder()
                             .header("content_type", "application/json;charset=UTF-8")
-                            .header("authorization", Preferences.SYNC_TOKEN)
-                            .header("store_id", Preferences.STORE_ID.toString())
-                            .header("device_id", Preferences.DEVICE_ID)
-                            .header("access_token", Preferences.ACCESS_TOKEN).build()
+                            .header("authorization", SnapPreferences.SYNC_TOKEN)
+                            .header("store_id", SnapPreferences.STORE_ID.toString())
+                            .header("device_id", SnapPreferences.DEVICE_ID)
+                            .header("access_token", SnapPreferences.ACCESS_TOKEN).build()
 
                         return@addInterceptor chain.proceed(newRequestWithToken)
                     }

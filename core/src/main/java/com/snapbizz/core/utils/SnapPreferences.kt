@@ -1,6 +1,6 @@
 package com.snapbizz.core.utils
 
-object Preferences {
+object SnapPreferences {
     var BILLER_NAME: String = "admin"
     var POS_ID: Int = 0
     var STORE_ID: Long = 1234
