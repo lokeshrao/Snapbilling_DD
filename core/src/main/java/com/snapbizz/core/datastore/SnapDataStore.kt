@@ -1,47 +1,56 @@
 package com.snapbizz.core.datastore
 
 import android.content.Context
-import android.devicelock.DeviceId
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import com.snapbizz.common.config.models.StoreDetailsResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-val Context.snapstore by preferencesDataStore("snapstore")
+private val Context.snapstore by preferencesDataStore("snapstore")
 
-object SnapDataStore {
-    
-    private val CONFIG_KEY = stringPreferencesKey("config_json")
-    private val DEVICE_ID = stringPreferencesKey("device_id")
-    private val RETAILER_OWNER_NAME = stringPreferencesKey("retailer_owner_name")
-    private val STORE_NAME_KEY = stringPreferencesKey("store_name_key")
-    private val RETAILER_OWNER_NUMBER = longPreferencesKey("retailer_owner_number")
-    private val STORE_NUMBER_KEY = longPreferencesKey("store_number_key")
-    private val RETAILER_OWNER_EMAIL = stringPreferencesKey("retailer_owner_email")
-    private val STORE_TIN_KEY = longPreferencesKey("store_tin_key")
-    private val STORE_ADDRESS_KEY = stringPreferencesKey("store_address_key")
-    private val STORE_CITY = stringPreferencesKey("store_city")
-    private val STORE_STATE = stringPreferencesKey("store_state")
-    private val STORE_STATE_ID = intPreferencesKey("store_state_id")
-    private val STORE_ZIP = intPreferencesKey("store_zip")
-    private val RETAILER_ID = longPreferencesKey("retailer_id")
-    private val STORE_AUTH_KEY = stringPreferencesKey("store_auth_key")
-    private val STORE_ID = longPreferencesKey("store_id")
-    private val RETAILER_GSTIN = stringPreferencesKey("retailer_gstin")
-    private val POS_ID = intPreferencesKey("pos_id")
+@Singleton
+class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
 
-    suspend fun saveConfig(context: Context, json: String) {
-        context.snapstore.edit { preferences ->
+    private val snapstore: DataStore<Preferences> = context.snapstore
+
+    companion object {
+        private val CONFIG_KEY = stringPreferencesKey("config_json")
+        private val DEVICE_ID = stringPreferencesKey("device_id")
+        private val RETAILER_OWNER_NAME = stringPreferencesKey("retailer_owner_name")
+        private val STORE_NAME_KEY = stringPreferencesKey("store_name_key")
+        private val RETAILER_OWNER_NUMBER = longPreferencesKey("retailer_owner_number")
+        private val STORE_NUMBER_KEY = longPreferencesKey("store_number_key")
+        private val RETAILER_OWNER_EMAIL = stringPreferencesKey("retailer_owner_email")
+        private val STORE_TIN_KEY = longPreferencesKey("store_tin_key")
+        private val STORE_ADDRESS_KEY = stringPreferencesKey("store_address_key")
+        private val STORE_CITY = stringPreferencesKey("store_city")
+        private val STORE_STATE = stringPreferencesKey("store_state")
+        private val STORE_STATE_ID = intPreferencesKey("store_state_id")
+        private val STORE_ZIP = intPreferencesKey("store_zip")
+        private val RETAILER_ID = longPreferencesKey("retailer_id")
+        private val STORE_AUTH_KEY = stringPreferencesKey("store_auth_key")
+        private val STORE_ID = longPreferencesKey("store_id")
+        private val RETAILER_GSTIN = stringPreferencesKey("retailer_gstin")
+        private val POS_ID = intPreferencesKey
+    }
+
+    suspend fun saveConfig(json: String) {
+        snapstore.edit { preferences ->
             preferences[CONFIG_KEY] = json
         }
     }
 
-    fun getConfigFlow(context: Context): Flow<String?> {
-        return context.snapstore.data.map { preferences ->
+    fun getConfigFlow(): Flow<String?> {
+        return snapstore.data.map { preferences ->
             preferences[CONFIG_KEY]
         }
     }
