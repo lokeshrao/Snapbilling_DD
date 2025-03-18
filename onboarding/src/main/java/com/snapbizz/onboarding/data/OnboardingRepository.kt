@@ -1,6 +1,8 @@
 package com.snapbizz.onboarding.data
 
 import android.os.Build
+import com.snapbizz.common.config.models.StoreDetailsResponse
+import com.snapbizz.core.database.entities.Category
 import com.snapbizz.core.utils.ResourceProvider
 import com.snapbizz.core.utils.SnapConstants.DEVICE_TYPE
 import com.snapbizz.core.utils.SnapConstants.STORE_TYPE
@@ -105,5 +107,26 @@ class OnboardingRepositoryImpl @Inject constructor(
             Result.failure(Exception(resourceProvider.getString(R.string.otp_verification_failure)))
         }
     }
+
+//    suspend fun getCategoryData(): Result<List<Category>?> {
+//        return try {
+//            val response = userApiService.getProductCategories().execute()
+//            val result = response.body()
+//            if (response.isSuccessful &&result?.status.equals("SUCCESS",true)) {
+//                val categories = result?.getAllCategoriesJoined()
+//                if (!categories.isNullOrEmpty()) {
+//                    categoryDao.insert(categories)
+//                    Result.success(categories)
+//                } else {
+//                    Result.failure(Exception("No categories found"))
+//                }
+//            } else {
+//                Result.failure(Exception("Error: ${response.errorBody()?.string() ?: "Unknown error"}"))
+//            }
+//        } catch (ex: Exception) {
+//            ex.printStackTrace()
+//            Result.failure(Exception("Unable to get Product Categories", ex))
+//        }
+//    }
 }
 

@@ -38,4 +38,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.ui.graphics.android)
     implementation(libs.androidx.ui.text.android)
+    implementation(libs.converter.gson)
 }

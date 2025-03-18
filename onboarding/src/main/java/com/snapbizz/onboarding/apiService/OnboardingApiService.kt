@@ -1,10 +1,10 @@
 package com.snapbizz.onboarding.apiService
 
+import com.snapbizz.common.config.models.StoreDetailsResponse
 import com.snapbizz.onboarding.data.ApiDeviceRegistrationInput
 import com.snapbizz.onboarding.data.ApiGenerateOTPInputDetails
 import com.snapbizz.onboarding.data.ExistingStoreResponse
 import com.snapbizz.onboarding.data.GenerateStoreOTPAPIResponse
-import com.snapbizz.onboarding.data.StoreDetailsResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

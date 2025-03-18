@@ -30,21 +30,6 @@ interface ProductsDao : GenericDao<Products> {
     fun deleteAll()
 
 }
-
-interface GenericDao<out T> {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(items: List<@UnsafeVariance T>)
-
-    @RawQuery
-    suspend fun getPendingItemsRaw(query: SupportSQLiteQuery): List<T>
-
-    @RawQuery
-    suspend fun getPendingItemsCount(query: SupportSQLiteQuery): String
-
-    @RawQuery
-    suspend fun markSyncSuccessRaw(query: SupportSQLiteQuery): Int
-}
 interface Identifiable {
     fun getPrimaryKeyValue(): Any
 }
