@@ -22,17 +22,6 @@ fun HomeScreen(onNavigateToRegister: (String) -> Unit) {
             SnapButton(text = "Hello", onClick = {
                 SnapLogger.log("MyService", "Logging from a Service", LogModule.HOME, LogPriority.HIGH)
                 SnapLogger.log("MyService", "Logging from a Service", LogModule.HOME)
-
-                    try {
-                        try {
-                            throw IllegalArgumentException("Inner Exception Occurred")
-                        } catch (inner: Exception) {
-                            throw IllegalStateException("Outer Exception Occurred", inner)
-                        }
-                    } catch (outer: Exception) {
-                        outer.printStackTrace()
-                        SnapLogger.logException("MyService", LogModule.HOME, outer)
-                    }
                 //SnackbarManager.showSnackbar("Hello Hi ","Retry",{})
                 onNavigateToRegister("")
             })

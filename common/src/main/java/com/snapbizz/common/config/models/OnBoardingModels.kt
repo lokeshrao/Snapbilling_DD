@@ -1,6 +1,14 @@
 package com.snapbizz.common.config.models
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 data class StoreDetailsResponse(
     @SerializedName("store_details") val storeDetails: StoreDetails? = null,
@@ -67,3 +75,23 @@ data class ApiGenerateJWTTokenResponse(
 data class DefaultAPIResponse (
     @SerializedName("status") var status: String? = null
 )
+
+interface SyncApiService {
+    @GET("v3/api/{storeId}/{table}")
+    suspend fun getData(
+        @Path("table") table: String,
+        @Path("storeId") storeId: Long,
+        @Header("offset") offset: String
+    ): Response<JsonObject>?
+
+    @POST("{table}")
+    suspend fun uploadData(
+        @Path("table" , encoded = true) table: String, @Body data: JsonArray
+    ): DefaultAPIResponse?
+
+//    @PUT("{storeId}/{table}")
+//    suspend fun uploadUpdatedData(
+//        @Path("table") table: String, @Path("storeId") storeId: Long, @Body data: JsonArray
+//    ): DefaultAPIResponse?
+
+}

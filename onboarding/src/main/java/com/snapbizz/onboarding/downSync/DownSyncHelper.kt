@@ -3,6 +3,7 @@ package com.snapbizz.onboarding.downSync
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.snapbizz.common.config.models.SyncApiService
 import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.helpers.LogModule
 import com.snapbizz.core.helpers.LogPriority
@@ -25,7 +26,8 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class DownSyncHelper @Inject constructor(
-    private val syncApiService: SyncApiService, private val snapDatabase: SnapDatabase
+    private val syncApiService: SyncApiService,
+    private val snapDatabase: SnapDatabase
 ) {
     private val tableConfigs = listOf(
         getInventorySyncConfig(snapDatabase),
@@ -47,7 +49,7 @@ class DownSyncHelper @Inject constructor(
                 while (true) {
                     SnapLogger.log("Sync","Calling API for ${config.tableName} with offset: $offset", LogModule.HOME, LogPriority.HIGH)
                     val response =
-                        syncApiService.getData(config.tableName,SnapPreferences.STORE_ID,offset.toString())?.body()
+                        syncApiService  .getData(config.tableName,SnapPreferences.STORE_ID,offset.toString())?.body()
                     if (response != null) {
                         SnapLogger.log("Sync","Response for ${config.tableName}: $response", LogModule.HOME, LogPriority.HIGH)
                         val status = response["status"]?.asString

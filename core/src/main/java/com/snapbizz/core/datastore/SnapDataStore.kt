@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.snapbizz.core.utils.SnapPreferences
+import kotlinx.coroutines.flow.first
 
 private val Context.snapstore by preferencesDataStore("snapstore")
 
@@ -158,14 +159,13 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
-    fun loadPrefs() {
-        snapstore.data.map { preferences->
-            SnapPreferences.STORE_ID = preferences[STORE_ID]?:0L
-            SnapPreferences.POS_ID = preferences[POS_ID]?: 0
-            SnapPreferences.DEVICE_ID = preferences[DEVICE_ID].toString()
-            SnapPreferences.ACCESS_TOKEN = preferences[STORE_AUTH_KEY].toString()
-            SnapPreferences.BILLER_NAME = preferences[RETAILER_OWNER_NAME].toString()
-        }
-
+    suspend fun loadPrefs() {
+        val preferences = snapstore.data.first()
+        SnapPreferences.STORE_ID = preferences[STORE_ID] ?: 0L
+        SnapPreferences.POS_ID = preferences[POS_ID] ?: 0
+        SnapPreferences.DEVICE_ID = preferences[DEVICE_ID]?.toString().orEmpty()
+        SnapPreferences.ACCESS_TOKEN = preferences[STORE_AUTH_KEY]?.toString().orEmpty()
+        SnapPreferences.BILLER_NAME = preferences[RETAILER_OWNER_NAME]?.toString().orEmpty()
     }
+
 }
