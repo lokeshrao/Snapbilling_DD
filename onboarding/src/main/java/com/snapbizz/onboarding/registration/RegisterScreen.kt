@@ -29,6 +29,7 @@ import com.snapbizz.core.utils.showMessage
 import com.snapbizz.onboarding.OnBoardingViewModel
 import com.snapbizz.onboarding.R
 import com.snapbizz.ui.snapComponents.SnapButton
+import com.snapbizz.ui.snapComponents.SnapDialog
 import com.snapbizz.ui.snapComponents.SnapEditText
 import com.snapbizz.ui.snapComponents.SnapText
 import com.snapbizz.ui.theme.SnapTextStyle
@@ -46,7 +47,7 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
     }
     val storeDetails by viewModel.storeDetails.collectAsState()
     val error by viewModel.error.collectAsState()
-    //val syncMessages by viewModel.syncMessages.collectAsState()
+    val syncMessages by viewModel.syncMessages.collectAsState()
 
     val scrollState = rememberScrollState()
     var isAgreed by rememberSaveable { mutableStateOf(false) }
@@ -134,15 +135,15 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
                 //Checkbox(checked = isAgreed, onCheckedChange = { showAgreementDialog = true })
                 Spacer(modifier = Modifier.width(paddingSmall))
                 SnapText(text = stringResource(id = R.string.check_agreement))
-//                if (showAgreementDialog) {
-//                    HPHDialog(header = stringResource(id = R.string.terms),
-//                        message = stringResource(id = R.string.agreement_string),
-//                        onDismissRequest = { showAgreementDialog = false },
-//                        confirmButtonText = stringResource(id = R.string.accept),
-//                        dismissButtonText = stringResource(id = R.string.reject),
-//                        onConfirm = { isAgreed = true },
-//                        onDismiss = { isAgreed = false })
-//                }
+                if (showAgreementDialog) {
+                    SnapDialog(header = stringResource(id = R.string.terms),
+                        message = stringResource(id = R.string.agreement_string),
+                        onDismissRequest = { showAgreementDialog = false },
+                        confirmButtonText = stringResource(id = R.string.accept),
+                        dismissButtonText = stringResource(id = R.string.reject),
+                        onConfirm = { isAgreed = true },
+                        onDismiss = { isAgreed = false })
+                }
             }
             SnapButton(
                 modifier = Modifier

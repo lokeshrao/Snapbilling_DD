@@ -78,6 +78,10 @@ class OnBoardingViewModel @Inject constructor(
 
     fun setStoreDetails(storeDetailsResponse: StoreDetailsResponse) {
         _storeDetails.value = storeDetailsResponse
+        viewModelScope.launch(dispatcherProvider.io) {
+            snapDataStore.saveStoreDetails(storeDetails.value, posId.value?:0)
+            snapDataStore.loadPrefs()
+        }
     }
 
     fun getDeviceId(context: Context) {
@@ -194,8 +198,6 @@ class OnBoardingViewModel @Inject constructor(
         _message.value = null
         _loading.value = true
         viewModelScope.launch(dispatcherProvider.io) {
-            snapDataStore.saveStoreDetails(storeDetails.value, posId.value?:0)
-            snapDataStore.loadPrefs()
             //_syncMessages.value = " Fetching categories .."
 //            onBoardingRepo.getCategoryData().onFailure {
 //                _loading.value = false

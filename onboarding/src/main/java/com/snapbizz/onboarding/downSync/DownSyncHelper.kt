@@ -12,13 +12,17 @@ import com.snapbizz.core.utils.DownSyncConfig
 import com.snapbizz.core.database.dao.GenericDao
 import com.snapbizz.core.utils.SnapPreferences
 import com.snapbizz.onboarding.downSync.downloadSyncDto.InvoiceDto
+import com.snapbizz.onboarding.downSync.downloadSyncDto.getAppointmentServicesSyncConfig
+import com.snapbizz.onboarding.downSync.downloadSyncDto.getAppointmentsSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getCustomerDetailsSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getCustomersSyncConfig
+import com.snapbizz.onboarding.downSync.downloadSyncDto.getDoctorsSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getInventorySyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getInvoiceSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getProductCustomizationSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getProductPackSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getProductsSyncConfig
+import com.snapbizz.onboarding.downSync.downloadSyncDto.getRepresentativeSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.getTransactionSyncConfig
 import com.snapbizz.onboarding.downSync.downloadSyncDto.invoiceDtoToEntity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +42,9 @@ class DownSyncHelper @Inject constructor(
         getInvoiceSyncConfig(snapDatabase),
         getTransactionSyncConfig(snapDatabase),
         getProductCustomizationSyncConfig(snapDatabase),
+        getAppointmentsSyncConfig(snapDatabase),
+        getRepresentativeSyncConfig(snapDatabase),
+        getDoctorsSyncConfig(snapDatabase)
     )
 
     suspend fun doDownloadSync(syncStatus: MutableStateFlow<String?>): Result<Unit> {
@@ -49,7 +56,7 @@ class DownSyncHelper @Inject constructor(
                 while (true) {
                     SnapLogger.log("Sync","Calling API for ${config.tableName} with offset: $offset", LogModule.HOME, LogPriority.HIGH)
                     val response =
-                        syncApiService  .getData(config.tableName,SnapPreferences.STORE_ID,offset.toString())?.body()
+                        syncApiService.getData(config.tableName,SnapPreferences.STORE_ID,offset.toString())?.body()
                     if (response != null) {
                         SnapLogger.log("Sync","Response for ${config.tableName}: $response", LogModule.HOME, LogPriority.HIGH)
                         val status = response["status"]?.asString

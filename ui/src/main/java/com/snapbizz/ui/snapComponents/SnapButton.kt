@@ -1,5 +1,6 @@
 package com.snapbizz.ui.snapComponents
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,8 +18,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.Image
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.OutlinedButton
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import com.snapbizz.common.config.SnapThemeConfig
+import com.snapbizz.ui.theme.SnapTextStyle
 import kotlinx.coroutines.launch
 
 @Composable
@@ -81,6 +86,33 @@ fun SnapButton(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SnapOutlinedButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    textColor: Color = SnapThemeConfig.OnPrimary,
+    borderColor: Color = SnapThemeConfig.Primary,
+    backgroundColor: Color = Color.Transparent,
+    contentPadding: Modifier = Modifier,
+    textStyle: TextUnit = SnapTextStyle.Default.fontSize
+) {
+    OutlinedButton(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = modifier.then(contentPadding),
+        colors = ButtonDefaults.outlinedButtonColors(
+            backgroundColor = backgroundColor,
+            contentColor = textColor,
+            disabledContentColor = textColor.copy(alpha = 0.4f)
+        ),
+        border = BorderStroke(1.dp, borderColor)
+    ) {
+        SnapText(modifier = Modifier.padding(8.dp,4.dp), text = text, fontSize = textStyle, color = SnapThemeConfig.OnPrimary)
     }
 }
 

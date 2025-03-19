@@ -12,6 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -132,8 +133,9 @@ private fun provideHttpClient(
 
     val authInterceptor = Interceptor { chain ->
         val originalRequest = chain.request()
-        SnapPreferences.SYNC_TOKEN = snapDataStore.getSyncToken().toString()
-
+        CoroutineScope(provideDispatcher().io).launch {
+            SnapPreferences.SYNC_TOKEN = snapDataStore.getSyncToken()?.first().toString()
+        }
         val newRequest = originalRequest.newBuilder()
             .header("content_type", "application/json;charset=UTF-8")
             .header("authorization", SnapPreferences.SYNC_TOKEN)
