@@ -37,7 +37,7 @@ import com.snapbizz.ui.theme.SnapTextStyle
 @Composable
 fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
     val viewModel = hiltViewModel<OnBoardingViewModel>()
-    val isLoading by viewModel.loading.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     LaunchedEffect(userJson) {
         viewModel.setLoader(true)
         userJson.let { Gson().fromJson(it, StoreDetailsResponse::class.java) }.let { storeDetails ->
@@ -46,7 +46,6 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
         }
     }
     val storeDetails by viewModel.storeDetails.collectAsState()
-    val error by viewModel.error.collectAsState()
     val syncMessages by viewModel.syncMessages.collectAsState()
 
     val scrollState = rememberScrollState()
@@ -57,8 +56,8 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
     }
     val context = LocalContext.current
 
-    LaunchedEffect(error) {
-        error?.let {
+    LaunchedEffect(uiState) {
+        uiState.message?.let {
             context.showMessage(it)
             viewModel.clearError()
         }

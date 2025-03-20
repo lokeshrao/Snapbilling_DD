@@ -1,22 +1,21 @@
 package com.snapbizz.ui.snapComponents
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import com.snapbizz.common.config.SnapThemeConfig
@@ -24,7 +23,7 @@ import com.snapbizz.common.config.SnapThemeConfig
 @Composable
 fun SnapEditText(
     value: String,
-    onValueChange: ((String) -> Unit)?=null,
+    onValueChange: ((String) -> Unit)? = null,
     modifier: Modifier = Modifier,
     label: String? = null,
     hint: String = "",
@@ -37,7 +36,9 @@ fun SnapEditText(
     onTrailingIconClick: (() -> Unit)? = null,
     isPassword: Boolean = false,
     enabled: Boolean = true,
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
+    var passwordVisible by remember { mutableStateOf(!isPassword) }
 
     Column(modifier = modifier.fillMaxWidth()) {
         label?.let {
@@ -87,12 +88,11 @@ fun SnapEditText(
 
                     BasicTextField(
                         value = value,
-                        onValueChange = {
-                            onValueChange?.invoke(it)
-                        },
+                        onValueChange = { onValueChange?.invoke(it) },
                         textStyle = TextStyle(fontSize = 16.sp, color = textColor),
                         modifier = Modifier.fillMaxWidth(),
-                        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+                        visualTransformation = if (!passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+                        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                         enabled = enabled
                     )
                 }

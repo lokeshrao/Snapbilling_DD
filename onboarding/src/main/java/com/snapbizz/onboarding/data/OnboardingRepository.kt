@@ -1,6 +1,7 @@
 package com.snapbizz.onboarding.data
 
 import android.os.Build
+import com.snapbizz.common.config.SnapResult
 import com.snapbizz.common.config.models.StoreDetailsResponse
 import com.snapbizz.core.utils.ResourceProvider
 import com.snapbizz.core.utils.SnapConstants.DEVICE_TYPE
@@ -14,36 +15,35 @@ class OnboardingRepositoryImpl @Inject constructor(
     private val resourceProvider: ResourceProvider
 )  {
 
-    suspend fun sendOtp(phoneNo: Long, deviceId: String): Result<Unit> {
+    suspend fun sendOtp(phoneNo: Long, deviceId: String): SnapResult<Unit> {
         return try {
             val existingStoreResponse = apiService?.checkExistingStore(phoneNo, deviceId)?.execute()
             val storeResult = existingStoreResponse?.body()
 
             if (existingStoreResponse?.isSuccessful != true) {
-                return Result.failure(Exception(resourceProvider.getString(R.string.otp_send_failure)))
+                return SnapResult.Error(resourceProvider.getString(R.string.otp_send_failure))
             }
-            when {
-                storeResult?.status.equals("Found") -> {
-                    if (storeResult?.storeTypes?.contains(STORE_TYPE) == true) {
+
+            when (storeResult?.status) {
+                "Found" -> {
+                    if (storeResult.storeTypes?.contains(STORE_TYPE) == true) {
                         generateOtp(phoneNo, deviceId)
+                        SnapResult.Success(Unit)
                     } else {
-                        Result.failure(Exception(resourceProvider.getString(R.string.registration_error)))
+                        SnapResult.Error(resourceProvider.getString(R.string.registration_error))
                     }
                 }
-
-                storeResult?.status.equals("Not Found") -> {
-                    Result.failure(Exception(resourceProvider.getString(R.string.store_not_found_info)))
+                "Not Found" -> {
+                    SnapResult.Error(resourceProvider.getString(R.string.store_not_found_info))
                 }
-
                 else -> {
-                    Result.failure(Exception(resourceProvider.getString(R.string.otp_send_failure)))
+                    SnapResult.Error(resourceProvider.getString(R.string.otp_send_failure))
                 }
             }
         } catch (e: Exception) {
-            Result.failure(Exception(resourceProvider.getString(R.string.otp_send_failure)))
+            SnapResult.Error(resourceProvider.getString(R.string.otp_send_failure))
         }
     }
-
     private suspend fun generateOtp(phoneNo: Long, deviceId: String): Result<Unit> {
         val otpInputDetails = ApiGenerateOTPInputDetails().apply {
             this.deviceId = deviceId
@@ -76,34 +76,28 @@ class OnboardingRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun verifyOtp(
-        phoneNo: Long, otp: Int, deviceId: String
-    ): Result<StoreDetailsResponse> {
+    suspend fun verifyOtp(phoneNo: Long, otp: Int, deviceId: String): SnapResult<StoreDetailsResponse> {
         return try {
-            ApiDeviceRegistrationInput().apply {
+            val input = ApiDeviceRegistrationInput().apply {
                 this.deviceId = deviceId
                 this.storePhone = phoneNo
                 this.otp = otp
-            }.let {
-                val response = apiService?.verify(it)?.execute()
-                val result = response?.body()
-                if (response?.isSuccessful == true && result?.status?.equals("Success") == true) {
-                    if (result.storeType?.contains(STORE_TYPE) == true) {
-                        Result.success(result)
-                    } else {
-                        Result.failure(Exception(resourceProvider.getString(R.string.registration_error)))
-                    }
+            }
+
+            val response = apiService?.verify(input)?.execute()
+            val result = response?.body()
+
+            if (response?.isSuccessful == true && result?.status == "Success") {
+                if (result.storeType?.contains(STORE_TYPE) == true) {
+                    SnapResult.Success(result)
                 } else {
-                    Result.failure(
-                        Exception(
-                            result?.status
-                                ?: resourceProvider.getString(R.string.otp_verification_failure)
-                        )
-                    )
+                    SnapResult.Error(resourceProvider.getString(R.string.registration_error))
                 }
+            } else {
+                SnapResult.Error(result?.status ?: resourceProvider.getString(R.string.otp_verification_failure))
             }
         } catch (e: Exception) {
-            Result.failure(Exception(resourceProvider.getString(R.string.otp_verification_failure)))
+            SnapResult.Error(resourceProvider.getString(R.string.otp_verification_failure))
         }
     }
 

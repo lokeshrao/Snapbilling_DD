@@ -47,7 +47,7 @@ class DownSyncHelper @Inject constructor(
         getDoctorsSyncConfig(snapDatabase)
     )
 
-    suspend fun doDownloadSync(syncStatus: MutableStateFlow<String?>): Result<Unit> {
+    suspend fun doDownloadSync(syncStatus: MutableStateFlow<String>): Result<Unit> {
         return try {
             clearAllTables()
             for (config in tableConfigs) {

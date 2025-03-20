@@ -50,4 +50,9 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+
+    implementation("androidx.compose.foundation:foundation:1.7.8")
+
+
+
 }
