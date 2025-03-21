@@ -31,6 +31,7 @@ import com.snapbizz.onboarding.R
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapDialog
 import com.snapbizz.ui.snapComponents.SnapEditText
+import com.snapbizz.ui.snapComponents.SnapProgressDialog
 import com.snapbizz.ui.snapComponents.SnapText
 import com.snapbizz.ui.theme.SnapTextStyle
 
@@ -159,9 +160,9 @@ fun RegisterScreen(userJson: String, onNavigateToLogin: () -> Unit) {
             )
         }
     }
-//    if (isLoading) {
-//        HPHProgressDialog(syncMessages)
-//    }
+    if (uiState.isLoading) {
+        SnapProgressDialog(syncMessages)
+    }
 }
 
 @Composable
