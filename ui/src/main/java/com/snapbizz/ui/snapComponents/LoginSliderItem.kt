@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun ImageWithText(
@@ -26,10 +27,11 @@ fun ImageWithText(
             contentDescription = "Displayed Image",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(100.dp),
         )
 
         SnapText(
+            fontSize = 14.sp,
             text = text,
             modifier = Modifier.padding(top = 8.dp)
         )

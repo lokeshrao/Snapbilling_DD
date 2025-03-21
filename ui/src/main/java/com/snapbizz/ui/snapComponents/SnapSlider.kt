@@ -55,7 +55,7 @@ fun SnapSlider(
                 Modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(pagerState.pageCount) { iteration ->

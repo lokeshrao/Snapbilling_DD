@@ -59,6 +59,8 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+
 
 
 

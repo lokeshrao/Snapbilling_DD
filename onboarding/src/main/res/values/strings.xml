@@ -241,7 +241,7 @@ writing to us at:
 \n\nBy clicking, “I Agree” I have read, understood and
 agree to the terms and conditions in this agreement.
 </string>
-    <string name="check_agreement">Click checkbox to indicate that you have read and agree to the terms presented in the Terms and Conditions agreement</string>
+    <string name="check_agreement">I have read and agree to the  Terms and Conditions.</string>
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
     <string name="close">Close</string>

@@ -26,12 +26,12 @@ fun AxisBanner(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(50.dp)
     ) {
         Image(
             painter = painterResource(id = backgroundImage),
             contentDescription = "Header Background",
-            modifier = Modifier.fillMaxWidth().height(60.dp),
+            modifier = Modifier.fillMaxWidth().height(50.dp),
             contentScale = ContentScale.FillBounds
         )
 
@@ -40,7 +40,7 @@ fun AxisBanner(
             contentDescription = "Overlay Image",
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .size(90.dp).padding(start = 10.dp)
+                .size(80.dp).padding(start = 10.dp)
         )
     }
 }
