@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.snapbizz.common.config.SnapThemeConfig
 
 @Composable
 fun SnapDialog(
@@ -29,19 +30,17 @@ fun SnapDialog(
     dismissButtonText: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    isSecondaryVisible:Boolean= true
+    isSecondaryVisible: Boolean = true
 ) {
     Dialog(
-        onDismissRequest = { onDismissRequest() },
-        properties = DialogProperties(
+        onDismissRequest = { onDismissRequest() }, properties = DialogProperties(
             usePlatformDefaultWidth = false
         )
     ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            elevation = 8.dp
+                .padding(16.dp), elevation = 8.dp
         ) {
             Column(
                 modifier = Modifier
@@ -49,8 +48,7 @@ fun SnapDialog(
                     .padding(16.dp)
             ) {
                 SnapText(
-                    text = header,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    text = header, modifier = Modifier.padding(bottom = 8.dp)
                 )
 
                 val scrollState = remember { ScrollState(0) }
@@ -72,13 +70,14 @@ fun SnapDialog(
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    if(isSecondaryVisible) {
-                        SnapOutlinedButton(
+                    if (isSecondaryVisible) {
+                        SnapButton(
                             text = dismissButtonText,
                             onClick = {
                                 onDismiss()
                                 onDismissRequest()
                             },
+                            backgroundColor = SnapThemeConfig.Secondary,
                             modifier = Modifier
                                 .weight(1f)
                                 .wrapContentWidth()
@@ -86,12 +85,10 @@ fun SnapDialog(
                         Spacer(modifier = Modifier.width(16.dp))
                     }
                     SnapButton(
-                        text = confirmButtonText,
-                        onClick = {
+                        text = confirmButtonText, onClick = {
                             onConfirm()
                             onDismissRequest()
-                        },
-                        modifier = Modifier
+                        }, modifier = Modifier
                             .weight(1f)
                             .wrapContentWidth()
                     )

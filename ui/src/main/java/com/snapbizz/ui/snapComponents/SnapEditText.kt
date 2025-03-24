@@ -25,7 +25,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,7 +46,7 @@ fun SnapEditText(
     onValueChange: ((String) -> Unit)? = null,
     label: String? = null,
     hint: String = "",
-    backgroundColor: Color = SnapThemeConfig.PrimaryBg,
+    backgroundColor: Color = SnapThemeConfig.ContainerBg,
     textColor: Color = SnapThemeConfig.Text,
     hintColor: Color = SnapThemeConfig.Hint,
     cornerRadius: Int = 8,

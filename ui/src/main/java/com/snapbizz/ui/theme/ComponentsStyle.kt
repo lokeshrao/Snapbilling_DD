@@ -13,7 +13,7 @@ object SnapButtonStyle {
 
 object SnapTextStyle {
     val Default = TextStyle(
-        fontSize = 16.sp,
+        fontSize = 14.sp,
         color = Color.Black,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Normal

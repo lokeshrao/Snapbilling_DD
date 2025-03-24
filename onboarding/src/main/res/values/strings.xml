@@ -19,6 +19,7 @@
     <string name="sync_completed">Sync Completed</string>
 
     <string name="registration_error_prefix">Registration Error</string>
+    <string name="registration_page_details">Confirm your Details</string>
     <string name="registration_title">DD Registration</string>
     <string name="owner_details">Owner Details</string>
     <string name="owner_name">Owner Name</string>

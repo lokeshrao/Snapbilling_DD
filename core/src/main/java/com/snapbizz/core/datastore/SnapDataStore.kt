@@ -108,7 +108,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
-    fun getStoreDetails(context: Context): Flow<StoreDetailsResponse> {
+    fun getStoreDetails(): Flow<StoreDetailsResponse> {
         return snapstore.data.map { preferences ->
             StoreDetailsResponse(
                 retailerDetails = RetailerDetails(
@@ -129,7 +129,8 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
                     pincode = preferences[STORE_ZIP] ?: 0,
                     storeId = preferences[STORE_ID] ?: 0L
                 ),
-                accessToken = preferences[STORE_AUTH_KEY] ?: ""
+                accessToken = preferences[STORE_AUTH_KEY] ?: "",
+                posId = preferences[POS_ID]?:0
             )
         }
     }

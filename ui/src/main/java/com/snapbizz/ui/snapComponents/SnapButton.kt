@@ -1,30 +1,40 @@
 package com.snapbizz.ui.snapComponents
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.*
+import androidx.compose.material.OutlinedButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.foundation.Image
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedButton
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import com.snapbizz.common.config.SnapThemeConfig
-import com.snapbizz.ui.theme.SnapTextStyle
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,8 +45,9 @@ fun SnapButton(
     backgroundColor: Color = SnapThemeConfig.Primary,
     textColor: Color = SnapThemeConfig.OnPrimary,
     isLoading: Boolean = false,
+    isEnabled: Boolean=true,
     iconResId: Int? = null,
-    cornerRadius: Int = 12,
+    cornerRadius: Int = 8,
     debounce: Boolean = false,
     debounceTimeMs: Long = 3000
 ) {
@@ -47,8 +58,8 @@ fun SnapButton(
         modifier = modifier
             .height(40.dp)
             .clip(RoundedCornerShape(cornerRadius.dp))
-            .background(backgroundColor)
-            .clickable(enabled = !isLoading) {
+            .background(if(isEnabled) backgroundColor else Color.Gray)
+            .clickable(enabled = !isLoading&&isEnabled) {
                 val currentTime = System.currentTimeMillis()
                 if (!debounce || currentTime - lastClickTime > debounceTimeMs) {
                     lastClickTime = currentTime
@@ -96,25 +107,33 @@ fun SnapOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     textColor: Color = SnapThemeConfig.OnPrimary,
-    borderColor: Color = SnapThemeConfig.Primary,
     backgroundColor: Color = Color.Transparent,
-    contentPadding: Modifier = Modifier,
-    textStyle: TextUnit = SnapTextStyle.Default.fontSize
+    borderColor: Color = SnapThemeConfig.Primary,
 ) {
     OutlinedButton(
         onClick = onClick,
         enabled = enabled,
-        modifier = modifier.then(contentPadding),
+        modifier = modifier
+            .height(40.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(8.dp)),
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = backgroundColor,
             contentColor = textColor,
             disabledContentColor = textColor.copy(alpha = 0.4f)
         ),
-        border = BorderStroke(1.dp, borderColor)
     ) {
-        SnapText(modifier = Modifier.padding(8.dp,4.dp), text = text, fontSize = textStyle, color = SnapThemeConfig.OnPrimary)
+        BasicText(
+            text = text,
+            style = TextStyle(
+                fontSize = 14.sp,
+                color = textColor,
+                textAlign = TextAlign.Center
+            )
+        )
     }
 }
+
 
 @Preview
 @Composable
