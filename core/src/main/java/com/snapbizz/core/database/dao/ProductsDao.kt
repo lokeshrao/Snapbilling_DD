@@ -3,16 +3,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.RawQuery
 import androidx.room.Update
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.snapbizz.core.database.entities.Products
 
 @Dao
 interface ProductsDao : GenericDao<Products> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(product: Products): Long
+    suspend fun insertAsync(product: Products): Long
 
     @Update
     suspend fun update(product: Products)
@@ -28,6 +26,9 @@ interface ProductsDao : GenericDao<Products> {
 
     @Query("DELETE FROM PRODUCTS")
     fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSync(product: Products): Long
 
 }
 interface Identifiable {

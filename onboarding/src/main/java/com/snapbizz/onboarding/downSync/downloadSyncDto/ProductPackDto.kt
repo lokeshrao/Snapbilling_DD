@@ -44,10 +44,7 @@ data class ProductPacksDto(
     var mrp: Long = 0,
 
     @SerializedName("exp_date")
-    var expDate: Date? = null,
-
-    @SerializedName("farmer_share")
-    var farmerShare: Long? = null
+    var expDate: Date? = null
 )
 
 fun productPacksDtoToEntity(apiProductPacks: ProductPacksDto): ProductPacks {
@@ -67,8 +64,7 @@ fun productPacksDtoToEntity(apiProductPacks: ProductPacksDto): ProductPacks {
         mrp = apiProductPacks.mrp,
         expDate = apiProductPacks.expDate,
         isSyncPending = false,
-        isSnapOrderSync = false,
-        farmerShare = apiProductPacks.farmerShare
+        isSnapOrderSync = false
     )
 }
 
@@ -97,8 +93,7 @@ fun productPacksToDto(productPacks: ProductPacks): ProductPacksDto {
         updatedAt = productPacks.updatedAt,
         barcode = productPacks.barcode?:0,
         mrp = productPacks.mrp?:0,
-        expDate = productPacks.expDate,
-        farmerShare = productPacks.farmerShare
+        expDate = productPacks.expDate
     )
 }
 fun productPacksListToDto(productPacksList: List<ProductPacks>): List<ProductPacksDto> {

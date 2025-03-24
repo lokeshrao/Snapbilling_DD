@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface ProductPacksDao : GenericDao<ProductPacks> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(productPack: ProductPacks): Long
+    suspend fun insertAsync(productPack: ProductPacks): Long
 
     @Update
     suspend fun update(productPack: ProductPacks)
@@ -27,6 +27,9 @@ interface ProductPacksDao : GenericDao<ProductPacks> {
 
     @Query("UPDATE PRODUCT_PACKS SET SEARCH_DATA = :searchData WHERE PRODUCT_CODE = :productCode")
     suspend fun updateSearchData(productCode: Long, searchData: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSync(productPack: ProductPacks): Long
 
 
 //    @Query(

@@ -28,7 +28,6 @@ data class ProductPacks(
     @ColumnInfo(name = "IS_SNAP_ORDER_SYNC") val isSnapOrderSync: Boolean?,
     @ColumnInfo(name = "EXP_DATE") val expDate: Date?,
     @ColumnInfo(name = "IS_SYNC_PENDING") var isSyncPending: Boolean,
-    @ColumnInfo(name = "FARMER_SHARE") val farmerShare :Long?=null,
     @ColumnInfo(name = "SEARCH_DATA") val search :String?=null,
 ) : Identifiable {
     override fun getPrimaryKeyValue(): Any = id?:0

@@ -1,15 +1,27 @@
 package com.snapbizz.inventory.data
 
-import com.snapbizz.core.database.dao.InventoryDao
-import com.snapbizz.core.database.entities.Inventory
-import java.util.Date
+import com.snapbizz.core.database.SnapDatabase
 import javax.inject.Inject
 
 class InventoryRepository @Inject constructor(
-    private val inventoryDao: InventoryDao
+    private val snapDatabase: SnapDatabase
 ) {
+    fun addNewProducts(value: InventoryInfo?): Boolean {
+        return snapDatabase.runInTransaction<Boolean> {
+            val product = convertToProduct(value)?.let {
+                snapDatabase.productsDao().insertSync(it)
+            } ?: -1L
+            val productPacks = convertToProductPacks(value)?.let {
+                snapDatabase.productPacksDao().insertSync(it)
+            } ?: -1L
+            val productCustomization = convertToProductCustomization(value)?.let {
+                snapDatabase.productCustomizationDao().insertSync(it)
+            } ?: -1L
+            val inventory = convertToInventory(value)?.let {
+                snapDatabase.inventoryDao().insertSync(it)
+            } ?: -1L
 
-    fun addNewProducts(value: Inventory): Long {
-        return inventoryDao.insert(value)
+            return@runInTransaction product > 0 && productPacks > 0 && productCustomization > 0 && inventory > 0
+        }
     }
 }

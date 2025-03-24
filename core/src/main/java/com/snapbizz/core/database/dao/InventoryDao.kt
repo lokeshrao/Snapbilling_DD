@@ -17,7 +17,10 @@ interface InventoryDao : GenericDao<Inventory> {
     fun getByProductCode(productCode: Long): Inventory?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(inventory: Inventory): Long
+    fun insertAsync(inventory: Inventory): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSync(inventory: Inventory): Long
 
     @Update
     fun update(inventory: Inventory)
