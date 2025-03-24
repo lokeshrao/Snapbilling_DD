@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.snapbizz.axis.HomeScreen
+import com.snapbizz.inventory.InventoryScreen
 import com.snapbizz.onboarding.registration.OtpScreen
 import com.snapbizz.onboarding.registration.RegisterScreen
 
@@ -14,12 +15,13 @@ fun Navigation(startingDestination: Screen) {
     var startingPage = startingDestination
     NavHost(navController = navController, startDestination = startingPage.route) {
         composable(Screen.OTP.route) {
-            OtpScreen(onNavigateToRegister = { userData ->
-                navController.navigate(Screen.REGISTER.route.replace("{userJson}", userData)) {
-                    popUpTo(Screen.OTP.route) { inclusive = true }
-                    launchSingleTop = true
-                }
-            })
+            InventoryScreen()
+//            OtpScreen(onNavigateToRegister = { userData ->
+//                navController.navigate(Screen.REGISTER.route.replace("{userJson}", userData)) {
+//                    popUpTo(Screen.OTP.route) { inclusive = true }
+//                    launchSingleTop = true
+//                }
+//            })
         }
         composable(Screen.HOME.route) {
             HomeScreen {
