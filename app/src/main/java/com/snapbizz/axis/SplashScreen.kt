@@ -40,17 +40,11 @@ fun SplashScreen(onTimeOut: () -> Unit) {
 
     PermissionHandler(
         permissions = listOf(
-            Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.READ_PHONE_STATE
         ), onAllPermissionsGranted = {
             isPermissionGranted = true
         }, onPermissionsDenied = { deniedPermissions ->
             coroutineScope.launch {
-                if (Manifest.permission.WRITE_EXTERNAL_STORAGE in deniedPermissions) {
-                    Toast.makeText(
-                        context, "WRITE_EXTERNAL_STORAGE is deprecated.", Toast.LENGTH_LONG
-                    ).show()
-                    isPermissionGranted = true
-                }
                 if (Manifest.permission.READ_PHONE_STATE in deniedPermissions) {
                     Toast.makeText(
                         context,

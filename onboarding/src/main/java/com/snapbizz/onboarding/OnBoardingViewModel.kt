@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,7 +54,7 @@ class OnBoardingViewModel @Inject constructor(
 
     fun setOtp(otp: String) = updateOtpState { copy(otp = otp) }
 
-    fun setLoader(show: Boolean) = updateOtpState { copy(isLoading = show) }
+    fun clearError() = updateOtpState { copy(message = null) }
 
     fun getDeviceId(context: Context) {
         val deviceId = SnapCommonUtils.getDeviceId(context)
@@ -63,14 +64,13 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
-    fun clearError() = updateOtpState { copy(message = null) }
-
     private fun sendOtp() {
         updateOtpState { copy(isLoading = true) }
         viewModelScope.launch(dispatcherProvider.io) {
-            val result = validatePhone(uiState.value.phoneNo)?.let {
+            val result = uiState.value.validatePhone(resourceProvider)?.let {
                 onBoardingRepo.sendOtp(it, uiState.value.deviceId)
             } ?: SnapResult.Error(resourceProvider.getString(R.string.invalid_phone_number))
+
             when (result) {
                 is SnapResult.Success -> updateOtpState {
                     copy(
@@ -94,10 +94,9 @@ class OnBoardingViewModel @Inject constructor(
     private fun onVerifyOtp() {
         updateOtpState { copy(isLoading = true) }
         viewModelScope.launch(dispatcherProvider.io) {
-            val result =
-                validatePhoneAndOtp(uiState.value.phoneNo, uiState.value.otp)?.let { (phone, otp) ->
-                    onBoardingRepo.verifyOtp(phone, otp, uiState.value.deviceId)
-                } ?: SnapResult.Error(resourceProvider.getString(R.string.otp_verification_failure))
+            val result = uiState.value.validatePhoneAndOtp(resourceProvider)?.let { (phone, otp) ->
+                onBoardingRepo.verifyOtp(phone, otp, uiState.value.deviceId)
+            } ?: SnapResult.Error(resourceProvider.getString(R.string.otp_verification_failure))
 
             when (result) {
                 is SnapResult.Loading -> updateOtpState { copy(isLoading = true) }
@@ -105,7 +104,7 @@ class OnBoardingViewModel @Inject constructor(
                     copy(
                         isLoading = false, isVerified = true, message = result.data.status
                     )
-                }.also { _storeDetails.value = result.data }
+                }.also { setStoreDetails(result.data) }
 
                 is SnapResult.Error -> updateOtpState {
                     copy(
@@ -116,57 +115,9 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
-    private fun validatePhone(phoneNo: String): Long? {
-        return phoneNo.takeIf { it.length == 10 }?.toLongOrNull()?.also {
-            updateOtpState { copy(message = null) }
-        } ?: run {
-            updateOtpState { copy(message = resourceProvider.getString(R.string.invalid_phone_number)) }
-            null
-        }
-    }
-
-    private fun validatePhoneAndOtp(phoneNo: String, otp: String): Pair<Long, Int>? {
-        val otpDigit = otp.toIntOrNull()
-        return when {
-            !isValidPhoneNumber(phoneNo) -> {
-                updateOtpState { copy(message = resourceProvider.getString(R.string.invalid_phone_number)) }
-                null
-            }
-
-            otpDigit == null -> {
-                updateOtpState { copy(message = resourceProvider.getString(R.string.otp_cannot_be_blank)) }
-                null
-            }
-
-            else -> {
-                phoneNo.toLongOrNull()?.let { phone ->
-                    Pair(phone, otpDigit)
-                } ?: run {
-                    updateOtpState { copy(message = resourceProvider.getString(R.string.invalid_phone_number_format)) }
-                    null
-                }
-            }
-        }
-    }
-
-    private fun isValidPhoneNumber(phoneNo: String) =
-        phoneNo.length == 10 && phoneNo.all { it.isDigit() }
-
-    private fun handleVerifyOtpResult(result: Result<StoreDetailsResponse>) {
-        updateOtpState {
-            copy(
-                isVerified = result.isSuccess,
-                message = result.exceptionOrNull()?.message ?: result.getOrNull()?.status
-            )
-        }
-        result.getOrNull()?.let { _storeDetails.value = it }
-    }
-
     fun setStoreDetails(storeDetailsResponse: StoreDetailsResponse) {
-        _storeDetails.value = storeDetailsResponse
         viewModelScope.launch(dispatcherProvider.io) {
-            snapDataStore.saveStoreDetails(storeDetails.value, posId.value)
-            snapDataStore.loadPrefs()
+            snapDataStore.saveStoreDetails(storeDetailsResponse, posId.value)
         }
     }
 
@@ -203,6 +154,15 @@ class OnBoardingViewModel @Inject constructor(
             onVerifyOtp()
         } else {
             sendOtp()
+        }
+    }
+
+    fun loadStoreDetails() {
+        updateOtpState { copy(isLoading = true) }
+        viewModelScope.launch(dispatcherProvider.io) {
+            _storeDetails.value = snapDataStore.getStoreDetails().first()
+            snapDataStore.loadPrefs()
+            updateOtpState { copy(isLoading = false) }
         }
     }
 }

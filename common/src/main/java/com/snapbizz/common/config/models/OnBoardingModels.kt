@@ -19,7 +19,8 @@ data class StoreDetailsResponse(
 
     @SerializedName("store_type") val storeType: List<String>? = null,
 
-    @SerializedName("status") val status: String? = null
+    @SerializedName("status") val status: String? = null,
+    val posId: Int?=null
 )
 
 data class RetailerDetails(
