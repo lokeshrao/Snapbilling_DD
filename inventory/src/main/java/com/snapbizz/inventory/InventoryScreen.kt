@@ -37,6 +37,16 @@ fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
         ) {
 
             SnapEditText(
+                value = products?.productName?.value.toString(),
+                label = "Product Name",
+                keyboardType = KeyboardType.Text,
+                onValueChange = { products?.productName?.value = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = paddingSmall)
+            )
+
+            SnapEditText(
                 value = products?.productCode?.value.toString(),
                 label = "Product Id",
                 keyboardType = KeyboardType.Phone,
@@ -47,10 +57,38 @@ fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
             )
 
             SnapEditText(
+                value = products?.productMrp?.value.toString(),
+                label = "Mrp",
+                keyboardType = KeyboardType.Phone,
+                onValueChange = { products?.productMrp?.value = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = paddingSmall)
+            )
+
+            SnapEditText(
                 value = products?.quantity?.value.toString(),
                 label = "Stock",
                 keyboardType = KeyboardType.Phone,
                 onValueChange = { products?.quantity?.value = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = paddingSmall)
+            )
+            SnapEditText(
+                value = products?.productPP?.value.toString(),
+                label = "PP",
+                keyboardType = KeyboardType.Phone,
+                onValueChange = { products?.productPP?.value = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = paddingSmall)
+            )
+            SnapEditText(
+                value = products?.productUom?.value.toString(),
+                label = "UOM",
+                keyboardType = KeyboardType.Text,
+                onValueChange = { products?.productUom?.value = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = paddingSmall)

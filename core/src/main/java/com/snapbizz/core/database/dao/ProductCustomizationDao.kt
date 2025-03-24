@@ -10,7 +10,7 @@ import com.snapbizz.core.database.entities.ProductCustomization
 interface ProductCustomizationDao : GenericDao<ProductCustomization> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(productCustomization: ProductCustomization): Long
+    suspend fun insertAsync(productCustomization: ProductCustomization): Long
 
     @Update
     suspend fun update(productCustomization: ProductCustomization)
@@ -26,4 +26,7 @@ interface ProductCustomizationDao : GenericDao<ProductCustomization> {
 
     @Query("DELETE FROM PRODUCT_CUSTOMIZATION")
     suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSync(productCustomization: ProductCustomization): Long
 }
