@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,21 +27,22 @@ fun AxisBanner(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp)
+            .height(40.dp)
     ) {
         Image(
             painter = painterResource(id = backgroundImage),
             contentDescription = "Header Background",
-            modifier = Modifier.fillMaxWidth().height(50.dp),
+            modifier = Modifier.fillMaxWidth().height(40.dp),
             contentScale = ContentScale.FillBounds
         )
 
         Image(
             painter = painterResource(id = overlayImage),
             contentDescription = "Overlay Image",
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .size(80.dp).padding(start = 10.dp)
+                .width(120.dp).height(35.dp).padding(start = 10.dp)
         )
     }
 }

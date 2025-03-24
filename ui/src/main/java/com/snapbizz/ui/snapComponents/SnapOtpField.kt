@@ -35,9 +35,8 @@ fun SnapOtpField(
         SnapText(
             textAlign = TextAlign.Start,
             text = label,
-            fontSize = 14.sp,
             color = SnapThemeConfig.Text,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp) // Space between label and OTP boxes
+            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp) // Space between label and OTP boxes
         )
 
         BasicTextField(
@@ -79,16 +78,16 @@ private fun CharView(
 
     Box(
         modifier = Modifier
-            .size(50.dp)  // Square box
+            .size(40.dp)  // Square box
             .background(Color.White, RoundedCornerShape(8.dp))
             .border(
                 1.dp, if (isFocused) SnapThemeConfig.Primary else Color.Gray, RoundedCornerShape(8.dp)
             ),
-        contentAlignment = Alignment.Center 
+        contentAlignment = Alignment.Center
     ) {
         SnapText(
             text = char,
-            fontSize = 20.sp,
+            fontSize = 16.sp,
             color = SnapThemeConfig.Text,
             textAlign = TextAlign.Center
         )

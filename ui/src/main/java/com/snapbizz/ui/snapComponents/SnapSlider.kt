@@ -49,13 +49,12 @@ fun SnapSlider(
         ) { page ->
             pages[page]()
         }
-
         if (pages.size > 1) {
             Row(
                 Modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                    .padding(top=14.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(pagerState.pageCount) { iteration ->
@@ -63,10 +62,10 @@ fun SnapSlider(
                         if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
                     Box(
                         modifier = Modifier
-                            .padding(4.dp)
+                            .padding(2.dp)
                             .clip(CircleShape)
                             .background(color)
-                            .size(8.dp)
+                            .size(4.dp)
                     )
                 }
             }

@@ -52,7 +52,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
 
     implementation("androidx.compose.foundation:foundation:1.7.8")
-
+    debugImplementation(libs.ui.tooling)
 
 
 }

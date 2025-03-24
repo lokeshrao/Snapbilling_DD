@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +45,7 @@ fun SnapButton(
 
     Box(
         modifier = modifier
-            .height(50.dp)
+            .height(40.dp)
             .clip(RoundedCornerShape(cornerRadius.dp))
             .background(backgroundColor)
             .clickable(enabled = !isLoading) {
@@ -56,21 +57,20 @@ fun SnapButton(
                     }
                 }
             }
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (isLoading) {
-            Box(
-                modifier = Modifier.size(24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                BasicText(text = "⏳", style = TextStyle(fontSize = 16.sp, color = textColor))
-            }
-        } else {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    color = textColor,
+                    strokeWidth = 2.dp
+                )
+            } else {
                 if (iconResId != null) {
                     Image(
                         painter = painterResource(id = iconResId),
@@ -82,7 +82,7 @@ fun SnapButton(
                 }
                 BasicText(
                     text = text,
-                    style = TextStyle(fontSize = 16.sp, color = textColor, textAlign = TextAlign.Center)
+                    style = TextStyle(fontSize = 14.sp, color = textColor, textAlign = TextAlign.Center)
                 )
             }
         }

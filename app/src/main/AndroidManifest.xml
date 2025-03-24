@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:name=".application.SnapApplication"
+        android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.SnapbillingDD"
         tools:targetApi="31">
         <activity

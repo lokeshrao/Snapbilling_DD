@@ -50,7 +50,7 @@ fun SnapEditText(
     backgroundColor: Color = SnapThemeConfig.PrimaryBg,
     textColor: Color = SnapThemeConfig.Text,
     hintColor: Color = SnapThemeConfig.Hint,
-    cornerRadius: Int = 12,
+    cornerRadius: Int = 8,
     leadingIconResId: Int? = null,
     trailingIconResId: Int? = null,
     onTrailingIconClick: (() -> Unit)? = null,
@@ -75,7 +75,6 @@ fun SnapEditText(
         label?.let {
             SnapText(
                 text = it,
-                fontSize = 14.sp,
                 color = Color.DarkGray,
                 modifier = Modifier.padding(vertical = 4.dp)
             )
@@ -84,7 +83,7 @@ fun SnapEditText(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(40.dp)
                 .clip(RoundedCornerShape(cornerRadius.dp))
                 .background(backgroundColor)
                 .border(
@@ -127,7 +126,7 @@ fun SnapEditText(
                         BasicTextField(
                             value = value,
                             onValueChange = { onValueChange?.invoke(it) },
-                            textStyle = TextStyle(fontSize = 16.sp, color = textColor),
+                            textStyle = TextStyle(fontSize = 14.sp, color = textColor),
                             modifier = Modifier.fillMaxWidth(),
                             visualTransformation = if (!passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),

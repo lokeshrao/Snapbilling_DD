@@ -1,4 +1,5 @@
 package com.snapbizz.ui.snapComponents
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snapbizz.common.config.SnapThemeConfig
@@ -27,21 +29,23 @@ fun SnapCheckBox(
     modifier: Modifier = Modifier,
     label: String? = null,
     checkedColor: Color = SnapThemeConfig.Primary,
-    uncheckedColor: Color = Color.Gray,
+    uncheckedColor: Color = SnapThemeConfig.Text,
     textColor: Color = SnapThemeConfig.Text
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .clickable { onCheckedChange(!isChecked) }
-    ) {
+        modifier = modifier.clickable { onCheckedChange(!isChecked) }) {
         Box(
             modifier = Modifier
-                .size(24.dp)
-                .border(2.dp, if (isChecked) checkedColor else uncheckedColor, RoundedCornerShape(4.dp))
-                .background(if (isChecked) checkedColor else Color.Transparent, RoundedCornerShape(4.dp))
+                .size(16.dp)
+                .border(
+                    1.dp, if (isChecked) checkedColor else uncheckedColor, RoundedCornerShape(4.dp)
+                )
+                .background(
+                    if (isChecked) checkedColor else Color.Transparent, RoundedCornerShape(4.dp)
+                )
                 .clickable { onCheckedChange(!isChecked) },
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             if (isChecked) {
                 Icon(
@@ -57,8 +61,10 @@ fun SnapCheckBox(
             SnapText(
                 text = it,
                 color = textColor,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .align(Alignment.CenterVertically),
+                textAlign = TextAlign.Start,
             )
         }
     }

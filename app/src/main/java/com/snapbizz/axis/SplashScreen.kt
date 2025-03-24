@@ -36,10 +36,6 @@ fun SplashScreen(onTimeOut: () -> Unit) {
         (context as? ComponentActivity)?.window?.let {
             WindowCompat.setDecorFitsSystemWindows(it, false)
         }
-            val screenWidthPx = Resources.getSystem().displayMetrics.widthPixels
-            val screenHeightPx = Resources.getSystem().displayMetrics.heightPixels
-            Log.e("size","$screenHeightPx +"   +"$screenWidthPx")
-
     }
 
     PermissionHandler(

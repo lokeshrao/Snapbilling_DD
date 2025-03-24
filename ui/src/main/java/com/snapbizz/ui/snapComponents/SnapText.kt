@@ -16,7 +16,7 @@ fun SnapText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = SnapThemeConfig.Text,
-    fontSize: TextUnit = 16.sp,
+    fontSize: TextUnit = 12.sp,
     textAlign: TextAlign = TextAlign.Center,
     fontWeight: FontWeight = FontWeight.Normal
 ) {

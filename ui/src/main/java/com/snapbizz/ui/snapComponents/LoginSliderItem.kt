@@ -31,7 +31,6 @@ fun ImageWithText(
         )
 
         SnapText(
-            fontSize = 14.sp,
             text = text,
             modifier = Modifier.padding(top = 8.dp)
         )
