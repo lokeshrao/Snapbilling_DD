@@ -1,6 +1,7 @@
 package com.snapbizz.axis.application
 
 import android.app.Application
+import com.snapbizz.core.database.SnapGlobalDatabase
 import com.snapbizz.core.database.dao.LogDao
 import com.snapbizz.core.datastore.SnapDataStore
 import com.snapbizz.core.datastore.SnapDataStoreEntryPoint
@@ -25,6 +26,10 @@ class SnapApplication : Application(){
     override fun onCreate() {
         super.onCreate()
         FirebaseManager.initFirebase(this)
+        CoroutineScope(Job()+ Dispatchers.IO).launch {
+            var i = SnapGlobalDatabase.getDatabase(this@SnapApplication)
+            var ij = i.gstDao().getGstById(1)
+        }
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).launch {
                 val snapDataStore :SnapDataStore = EntryPointAccessors.fromApplication(this@SnapApplication, SnapDataStoreEntryPoint::class.java).snapDataStore

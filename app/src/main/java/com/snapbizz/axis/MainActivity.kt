@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                         }
                     } else {
                         SnapScaffold(Modifier.padding(insets)) {
-                            Navigation(Screen.REGISTER)
+                            Navigation(Screen.OTP)
                         }
                     }
                 }
