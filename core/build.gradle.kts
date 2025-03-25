@@ -78,4 +78,7 @@ dependencies {
 
     api(libs.androidx.hilt.navigation.compose)
 
+    api("androidx.paging:paging-compose:3.3.6")
+    api("androidx.room:room-paging:2.6.1")
+
 }
