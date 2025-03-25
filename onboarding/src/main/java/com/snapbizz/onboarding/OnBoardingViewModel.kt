@@ -64,6 +64,10 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
+    fun updatePosId(posId: String) {
+        _storeDetails.update { it?.copy(posId = posId.toIntOrNull()) }
+    }
+
     private fun sendOtp() {
         updateOtpState { copy(isLoading = true) }
         viewModelScope.launch(dispatcherProvider.io) {

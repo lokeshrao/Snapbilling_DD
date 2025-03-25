@@ -21,7 +21,7 @@
     <string name="registration_error_prefix">Registration Error</string>
     <string name="registration_page_details">Confirm your Details</string>
     <string name="registration_title">DD Registration</string>
-    <string name="owner_details">Owner Details</string>
+    <string name="owner_details">Owner Profile</string>
     <string name="owner_name">Owner Name</string>
     <string name="email">Email</string>
     <string name="store_details">Store Details</string>

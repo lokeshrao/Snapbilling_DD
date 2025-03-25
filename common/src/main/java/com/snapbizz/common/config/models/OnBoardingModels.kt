@@ -20,7 +20,7 @@ data class StoreDetailsResponse(
     @SerializedName("store_type") val storeType: List<String>? = null,
 
     @SerializedName("status") val status: String? = null,
-    val posId: Int?=null
+    var posId: Int?=null
 )
 
 data class RetailerDetails(

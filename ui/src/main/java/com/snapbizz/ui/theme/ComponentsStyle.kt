@@ -19,6 +19,13 @@ object SnapTextStyle {
         fontWeight = FontWeight.Normal
     )
 
+    val Medium = TextStyle(
+        fontSize = 16.sp,
+        color = Color.Black,
+        textAlign = TextAlign.Center,
+        fontWeight = FontWeight.Bold
+    )
+
     val Bold = TextStyle(
         fontSize = 18.sp,
         color = Color.Black,
