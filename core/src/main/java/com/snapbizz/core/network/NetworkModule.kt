@@ -43,7 +43,6 @@ object NetworkModule {
     }
 
     private fun getRetrofitInstance(baseUrl: String,okHttpClient: OkHttpClient, forceCreate: Boolean = false): Retrofit {
-        Log.d("NetworkModule", "Providing Retrofit instance")
         return if (forceCreate || retrofitInstance == null || currentBaseUrl != baseUrl) {
             synchronized(this) {
                 if (forceCreate || retrofitInstance == null || currentBaseUrl != baseUrl) {
