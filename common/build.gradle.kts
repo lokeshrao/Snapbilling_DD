@@ -39,4 +39,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics.android)
     implementation(libs.androidx.ui.text.android)
     implementation(libs.converter.gson)
+    api("androidx.paging:paging-compose:3.3.6")
+    api("androidx.room:room-paging:2.6.1")
 }

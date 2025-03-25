@@ -38,8 +38,8 @@ fun Navigation(startingDestination: Screen) {
             })
         }
         composable(Screen.INVENTORY.route) { backStackEntry ->
-            GlobalProductScreen()
-//            InventoryScreen()
+//            GlobalProductScreen()
+            InventoryScreen()
         }
     }
 }

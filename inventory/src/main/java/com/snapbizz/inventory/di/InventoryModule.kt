@@ -1,14 +1,10 @@
 package com.snapbizz.inventory.di
 
-import android.content.Context
-import com.snapbizz.core.database.SnapGlobalDatabase
-import com.snapbizz.inventory.screen.GlobalDbRepository
-import com.snapbizz.inventory.screen.IGlobalDbRepository
+import com.snapbizz.common.config.InventoryRepository
+import com.snapbizz.inventory.data.InventoryRepositoryImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -17,5 +13,5 @@ import javax.inject.Singleton
 interface InventoryModule {
     @Binds
     @Singleton
-    fun provideGlobalDbRepository(repository: GlobalDbRepository): IGlobalDbRepository
+    fun provideInventoryRepository(repository: InventoryRepositoryImpl): InventoryRepository
 }
