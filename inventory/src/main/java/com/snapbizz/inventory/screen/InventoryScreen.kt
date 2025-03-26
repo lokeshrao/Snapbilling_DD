@@ -1,6 +1,7 @@
-package com.snapbizz.inventory
+package com.snapbizz.inventory.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,14 +18,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.common.models.ProductInfo
-import com.snapbizz.core.utils.Dimens.paddingSmall
+import com.snapbizz.inventory.InventoryViewModel
 import com.snapbizz.ui.SnackbarManager
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapEditText
@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
-    val products by viewModel.products.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var isNewProduct by rememberSaveable { mutableStateOf(false) }
     val message by viewModel.message.collectAsState()
@@ -44,6 +43,7 @@ fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
     val productInfo = viewModel.allProducts.collectAsLazyPagingItems()
     val coroutineScope = rememberCoroutineScope()
     var searchJob by remember { mutableStateOf<Job?>(null) }
+    var productData: ProductInfo by remember { mutableStateOf(ProductInfo()) }
     LaunchedEffect(message) {
         if (message?.isNotEmpty() == true) {
             SnackbarManager.showSnackbar(message?:"")
@@ -83,86 +83,32 @@ fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
 
             if (isNewProduct.not()) {
                 SnapPaginatedList(items = productInfo) { product ->
-                    ProductItemInventory(product)
+                    ProductItemInventory(product) {selectedProd->
+                        if (selectedProd != null) {
+                            productData = selectedProd
+                        }
+                        isNewProduct = true
+                    }
                 }
             } else {
-                SnapEditText(
-                    value = products?.productName?.value.toString(),
-                    label = "Product Name",
-                    keyboardType = KeyboardType.Text,
-                    onValueChange = { products?.productName?.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = paddingSmall)
-                )
-
-                SnapEditText(
-                    value = products?.productCode?.value.toString(),
-                    label = "Product Id",
-                    keyboardType = KeyboardType.Phone,
-                    onValueChange = { products?.productCode?.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = paddingSmall)
-                )
-
-                SnapEditText(
-                    value = products?.productMrp?.value.toString(),
-                    label = "Mrp",
-                    keyboardType = KeyboardType.Phone,
-                    onValueChange = { products?.productMrp?.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = paddingSmall)
-                )
-
-                SnapEditText(
-                    value = products?.quantity?.value.toString(),
-                    label = "Stock",
-                    keyboardType = KeyboardType.Phone,
-                    onValueChange = { products?.quantity?.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = paddingSmall)
-                )
-                SnapEditText(
-                    value = products?.productPP?.value.toString(),
-                    label = "PP",
-                    keyboardType = KeyboardType.Phone,
-                    onValueChange = { products?.productPP?.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = paddingSmall)
-                )
-                SnapEditText(
-                    value = products?.productUom?.value.toString(),
-                    label = "UOM",
-                    keyboardType = KeyboardType.Text,
-                    onValueChange = { products?.productUom?.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = paddingSmall)
-                )
-                SnapButton(
-                    text = "Save",
-                    onClick = {
-                        isNewProduct = false
-                        viewModel.insertProduct()
-                    })
+                AddEditInventoryScreen(productData,onProductSave = {
+                    viewModel.insertProduct(it)
+                    isNewProduct = false
+                })
             }
         }
-
     }
 }
 
 @Composable
-fun ProductItemInventory(product: ProductInfo?) {
+fun ProductItemInventory(product: ProductInfo?, onClick: (ProductInfo?) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(SnapThemeConfig.SurfaceBg)
             .padding(16.dp)
+            .clickable{onClick(product)}
     ) {
         SnapText(text = product?.name.toString(), textAlign = TextAlign.Start)
         SnapText(text = "Price: ₹${product?.mrp ?: ""}")

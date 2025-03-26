@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.utils.DispatcherProvider
-import com.snapbizz.inventory.data.ProductDetailsInfo
 import com.snapbizz.inventory.data.InventoryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,12 +20,6 @@ class InventoryViewModel @Inject constructor(
     private val inventoryRepositoryImpl: InventoryRepositoryImpl
 ): ViewModel() {
 
-    private val _products = MutableStateFlow<ProductDetailsInfo?>(ProductDetailsInfo())
-    val products: StateFlow<ProductDetailsInfo?> = _products
-
-    private val _productsInfo = MutableStateFlow<List<ProductInfo?>>(emptyList())
-    val productsInfo: StateFlow<List<ProductInfo?>> = _productsInfo
-
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -35,9 +28,9 @@ class InventoryViewModel @Inject constructor(
 
     private val searchQuery = MutableStateFlow("")
 
-    fun insertProduct() {
+    fun insertProduct(info: ProductInfo?) {
         viewModelScope.launch(dispatcherProvider.io) {
-            inventoryRepositoryImpl.addNewProducts(_products.value).let {
+            inventoryRepositoryImpl.addNewProducts(info).let {
                 _message.value = if (it) "Added" else "Error"
             }
         }

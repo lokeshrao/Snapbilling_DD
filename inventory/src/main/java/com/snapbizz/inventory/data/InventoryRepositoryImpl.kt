@@ -23,7 +23,7 @@ class InventoryRepositoryImpl @Inject constructor(
             }).flow
     }
 
-    override fun addNewProducts(value: ProductDetailsInfo?): Boolean {
+    override fun addNewProducts(value: ProductInfo?): Boolean {
         return snapDatabase.runInTransaction<Boolean> {
             val product = convertToProduct(value)?.let {
                 snapDatabase.productsDao().insertSync(it)

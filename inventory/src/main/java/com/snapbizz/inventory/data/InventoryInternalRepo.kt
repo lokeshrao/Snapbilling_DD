@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface InventoryInternalRepo {
     fun getGlobalProducts(query: String): Flow<PagingData<GlobalProduct>>
-    fun addNewProducts(value: ProductDetailsInfo?): Boolean
+    fun addNewProducts(value: ProductInfo?): Boolean
     fun getAllProductDetails(query: String?): Flow<PagingData<ProductInfo>>
 }
