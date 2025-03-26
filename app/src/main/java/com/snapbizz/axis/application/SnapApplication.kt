@@ -3,10 +3,9 @@ package com.snapbizz.axis.application
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import androidx.work.WorkerFactory
 import com.snapbizz.core.database.dao.LogDao
 import com.snapbizz.core.datastore.SnapDataStore
-import com.snapbizz.core.datastore.SnapDataStoreEntryPoint
+import com.snapbizz.core.datastore.di.SnapStoreProvider
 import com.snapbizz.core.helpers.FirebaseManager
 import com.snapbizz.core.helpers.SnapLogger
 import com.snapbizz.core.helpers.Source
@@ -40,7 +39,7 @@ class SnapApplication : Application(), Configuration.Provider {
         FirebaseManager.initFirebase(this)
         CoroutineScope(Dispatchers.IO).launch {
             val snapDataStore: SnapDataStore = EntryPointAccessors.fromApplication(
-                this@SnapApplication, SnapDataStoreEntryPoint::class.java
+                this@SnapApplication, SnapStoreProvider::class.java
             ).snapDataStore
             snapDataStore.let {
                 loadConfigOnInit(it)

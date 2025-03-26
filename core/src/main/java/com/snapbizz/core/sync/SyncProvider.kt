@@ -6,7 +6,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+@Module
+@InstallIn(SingletonComponent::class)
+object SyncProvider {
 
-
-class SyncRepository() {
+    @Provides
+    @Singleton
+    fun provideSyncRepo(): SyncRepository = SyncRepository()
 }

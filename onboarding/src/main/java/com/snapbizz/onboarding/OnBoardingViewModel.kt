@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snapbizz.common.config.SnapResult
-import com.snapbizz.common.config.models.StoreDetailsResponse
+import com.snapbizz.common.models.StoreDetailsResponse
 import com.snapbizz.core.datastore.SnapDataStore
 import com.snapbizz.core.utils.DispatcherProvider
 import com.snapbizz.core.utils.ResourceProvider

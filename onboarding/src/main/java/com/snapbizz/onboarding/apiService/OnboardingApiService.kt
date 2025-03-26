@@ -1,6 +1,6 @@
 package com.snapbizz.onboarding.apiService
 
-import com.snapbizz.common.config.models.StoreDetailsResponse
+import com.snapbizz.common.models.StoreDetailsResponse
 import com.snapbizz.onboarding.data.ApiDeviceRegistrationInput
 import com.snapbizz.onboarding.data.ApiGenerateOTPInputDetails
 import com.snapbizz.onboarding.data.ExistingStoreResponse

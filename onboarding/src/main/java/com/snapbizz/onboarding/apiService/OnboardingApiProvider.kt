@@ -17,8 +17,4 @@ object OnboardingApiProvider {
     fun provideOnboardingApiService(retrofit: Lazy<Retrofit?>): OnboardingApiService? {
         return if (SnapThemeConfig.features.cart) retrofit.value?.create(OnboardingApiService::class.java) else null
     }
-
-
-
-
 }

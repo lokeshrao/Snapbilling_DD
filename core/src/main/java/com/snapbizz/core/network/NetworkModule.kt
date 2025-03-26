@@ -1,8 +1,7 @@
 package com.snapbizz.core.network
-import android.util.Log
-import com.snapbizz.common.config.models.ApiGenerateJWTTokenInput
-import com.snapbizz.common.config.models.ApiGenerateJWTTokenResponse
-import com.snapbizz.common.config.models.SyncApiService
+import com.snapbizz.common.models.ApiGenerateJWTTokenInput
+import com.snapbizz.common.models.ApiGenerateJWTTokenResponse
+import com.snapbizz.common.models.SyncApiService
 import com.snapbizz.core.datastore.SnapDataStore
 import com.snapbizz.core.utils.ApiURL
 import com.snapbizz.core.utils.Dispatchers.provideDispatcher
@@ -12,7 +11,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

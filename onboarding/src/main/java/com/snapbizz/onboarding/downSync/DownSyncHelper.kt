@@ -3,7 +3,7 @@ package com.snapbizz.onboarding.downSync
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.snapbizz.common.config.models.SyncApiService
+import com.snapbizz.common.models.SyncApiService
 import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.database.dao.GenericDao
 import com.snapbizz.core.helpers.LogModule
