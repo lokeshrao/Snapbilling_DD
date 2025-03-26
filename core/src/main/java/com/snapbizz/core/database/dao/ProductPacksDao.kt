@@ -7,7 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.snapbizz.common.config.models.ProductInfo
+import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.database.entities.ProductPacks
 import kotlinx.coroutines.flow.Flow
 

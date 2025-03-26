@@ -4,10 +4,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.snapbizz.common.config.InventoryRepository
-import com.snapbizz.common.config.models.ProductInfo
+import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.database.SnapGlobalDatabase
-import com.snapbizz.core.database.entities.ProductPacks
 import com.snapbizz.core.database.entities.global.GlobalProduct
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

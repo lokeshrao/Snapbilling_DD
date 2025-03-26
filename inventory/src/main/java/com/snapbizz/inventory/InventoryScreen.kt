@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,12 +21,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.snapbizz.common.config.SnapThemeConfig
-import com.snapbizz.common.config.models.ProductInfo
-import com.snapbizz.core.database.entities.ProductPacks
-import com.snapbizz.core.database.entities.global.GlobalProduct
+import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.utils.Dimens.paddingSmall
 import com.snapbizz.ui.SnackbarManager
 import com.snapbizz.ui.snapComponents.SnapButton

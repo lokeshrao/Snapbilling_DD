@@ -1,8 +1,7 @@
 package com.snapbizz.inventory.data
 
 import androidx.paging.PagingData
-import com.snapbizz.common.config.models.ProductInfo
-import com.snapbizz.core.database.entities.ProductPacks
+import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.database.entities.global.GlobalProduct
 import kotlinx.coroutines.flow.Flow
 

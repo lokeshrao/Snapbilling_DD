@@ -1,7 +1,6 @@
-package com.snapbizz.common.config.models
+package com.snapbizz.common.models
 
 import androidx.room.ColumnInfo
-import java.util.Date
 
 //data class ProductInfo(
 //    var productCode: Long?,

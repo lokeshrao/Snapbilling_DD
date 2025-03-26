@@ -3,9 +3,7 @@ package com.snapbizz.inventory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.snapbizz.common.config.models.ProductInfo
-import com.snapbizz.core.helpers.LogModule
-import com.snapbizz.core.helpers.SnapLogger
+import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.utils.DispatcherProvider
 import com.snapbizz.inventory.data.ProductDetailsInfo
 import com.snapbizz.inventory.data.InventoryRepositoryImpl
