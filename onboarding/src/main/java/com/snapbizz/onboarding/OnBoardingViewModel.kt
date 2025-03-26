@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -136,6 +137,7 @@ class OnBoardingViewModel @Inject constructor(
                             isLoading = false
                         )
                     }
+                    viewModelScope.launch(dispatcherProvider.io) { downSyncHelper.updateSearchData() }
                     viewModelScope.launch(dispatcherProvider.main) { success() }
                 }
             }.onFailure {

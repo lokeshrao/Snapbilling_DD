@@ -81,12 +81,7 @@ FROM PRODUCT_PACKS pp
     ORDER BY p.PRODUCT_CODE
 """
     )
-    fun searchProducts(
-        query: String?
-    ): PagingSource<Int, ProductInfo>
-
-    @Query("SELECT * FROM PRODUCT_PACKS")
-    fun getProductPacks():PagingSource<Int, ProductPacks>
+    fun searchProducts(query: String?): PagingSource<Int, ProductInfo>
 
 
 //

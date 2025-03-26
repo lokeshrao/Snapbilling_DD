@@ -43,11 +43,11 @@ class InventoryRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAllProductDetails(query: String): Flow<PagingData<ProductPacks>> {
+    override fun getAllProductDetails(query: String?): Flow<PagingData<ProductInfo>> {
         return Pager(
             config = PagingConfig(pageSize = 10, enablePlaceholders = false),
             pagingSourceFactory = {
-                snapDatabase.productPacksDao().getProductPacks()
+                snapDatabase.productPacksDao().searchProducts(query)
             }).flow
     }
 }

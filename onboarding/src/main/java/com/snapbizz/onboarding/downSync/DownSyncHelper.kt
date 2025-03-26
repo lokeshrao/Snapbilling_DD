@@ -154,4 +154,12 @@ class DownSyncHelper @Inject constructor(
             SnapLogger.log("Sync","Error clearing all tables: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
         }
     }
+
+    suspend fun updateSearchData() {
+        try {
+            snapDatabase.productPacksDao().updateSearchData()
+        } catch (ex: Exception) {
+
+        }
+    }
 }

@@ -3,6 +3,9 @@ package com.snapbizz.inventory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.snapbizz.common.config.models.ProductInfo
+import com.snapbizz.core.helpers.LogModule
+import com.snapbizz.core.helpers.SnapLogger
 import com.snapbizz.core.utils.DispatcherProvider
 import com.snapbizz.inventory.data.ProductDetailsInfo
 import com.snapbizz.inventory.data.InventoryRepositoryImpl
@@ -22,6 +25,9 @@ class InventoryViewModel @Inject constructor(
 
     private val _products = MutableStateFlow<ProductDetailsInfo?>(ProductDetailsInfo())
     val products: StateFlow<ProductDetailsInfo?> = _products
+
+    private val _productsInfo = MutableStateFlow<List<ProductInfo?>>(emptyList())
+    val productsInfo: StateFlow<List<ProductInfo?>> = _productsInfo
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading

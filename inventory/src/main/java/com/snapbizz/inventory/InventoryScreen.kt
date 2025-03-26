@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +28,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.common.config.models.ProductInfo
 import com.snapbizz.core.database.entities.ProductPacks
+import com.snapbizz.core.database.entities.global.GlobalProduct
 import com.snapbizz.core.utils.Dimens.paddingSmall
 import com.snapbizz.ui.SnackbarManager
 import com.snapbizz.ui.snapComponents.SnapButton
@@ -43,7 +46,7 @@ fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
     var isNewProduct by rememberSaveable { mutableStateOf(false) }
     val message by viewModel.message.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
-    val productInfo: LazyPagingItems<ProductPacks> = viewModel.allProducts.collectAsLazyPagingItems()
+    val productInfo = viewModel.allProducts.collectAsLazyPagingItems()
     val coroutineScope = rememberCoroutineScope()
     var searchJob by remember { mutableStateOf<Job?>(null) }
     LaunchedEffect(message) {
@@ -158,7 +161,7 @@ fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun ProductItemInventory(product: ProductPacks?) {
+fun ProductItemInventory(product: ProductInfo?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,7 +169,7 @@ fun ProductItemInventory(product: ProductPacks?) {
             .background(SnapThemeConfig.SurfaceBg)
             .padding(16.dp)
     ) {
-        SnapText(text = product?.productCode.toString() ?: "", textAlign = TextAlign.Start)
+        SnapText(text = product?.name.toString(), textAlign = TextAlign.Start)
         SnapText(text = "Price: ₹${product?.mrp ?: ""}")
     }
 }
