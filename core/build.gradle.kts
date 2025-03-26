@@ -81,4 +81,7 @@ dependencies {
     api("androidx.paging:paging-compose:3.3.6")
     api("androidx.room:room-paging:2.6.1")
 
+    api("androidx.work:work-runtime-ktx:2.10.0")
+    api("androidx.hilt:hilt-work:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
 }
