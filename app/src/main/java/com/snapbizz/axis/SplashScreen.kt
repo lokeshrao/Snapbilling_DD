@@ -1,15 +1,20 @@
 package com.snapbizz.axis
 
 import android.Manifest
-import android.content.res.Resources
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,13 +22,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.view.WindowCompat
-import com.snapbizz.ui.R
 import com.snapbizz.core.datastore.SnapDataStore
-import com.snapbizz.core.datastore.SnapDataStoreEntryPoint
+import com.snapbizz.core.datastore.di.SnapStoreProvider
 import com.snapbizz.core.helpers.Source
 import com.snapbizz.core.helpers.fetchAndApplyConfig
+import com.snapbizz.ui.R
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SplashScreen(onTimeOut: () -> Unit) {
@@ -67,7 +75,7 @@ fun SplashScreen(onTimeOut: () -> Unit) {
         Image(
             painter = painterResource(id = R.drawable.splash),
             contentDescription = "Logo",
-            contentScale = ContentScale.Crop, // Ensures image fills the screen
+            contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -77,7 +85,7 @@ fun SplashScreen(onTimeOut: () -> Unit) {
             PermissionHandler(listOf(Manifest.permission.POST_NOTIFICATIONS), {}, {})
         }
         val snapDataStore: SnapDataStore = EntryPointAccessors.fromApplication(
-            context.applicationContext, SnapDataStoreEntryPoint::class.java
+            context.applicationContext, SnapStoreProvider::class.java
         ).snapDataStore
         getRemoteConfig(coroutineScope, snapDataStore) { onTimeOut() }
     }

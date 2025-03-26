@@ -4,8 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.snapbizz.axis.HomeScreen
-import com.snapbizz.inventory.InventoryScreen
 import com.snapbizz.inventory.screen.GlobalProductScreen
 import com.snapbizz.onboarding.registration.OtpScreen
 import com.snapbizz.onboarding.registration.RegisterScreen
@@ -22,11 +20,6 @@ fun Navigation(startingDestination: Screen) {
                     launchSingleTop = true
                 }
             })
-        }
-        composable(Screen.HOME.route) {
-            HomeScreen {
-                navController.navigate(Screen.OTP.route)
-            }
         }
         composable(Screen.REGISTER.route) { backStackEntry ->
             RegisterScreen(navigateForward = {

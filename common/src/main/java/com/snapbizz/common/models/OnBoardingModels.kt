@@ -1,4 +1,4 @@
-package com.snapbizz.common.config.models
+package com.snapbizz.common.models
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject

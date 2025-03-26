@@ -2,7 +2,7 @@ package com.snapbizz.onboarding.data
 
 import android.os.Build
 import com.snapbizz.common.config.SnapResult
-import com.snapbizz.common.config.models.StoreDetailsResponse
+import com.snapbizz.common.models.StoreDetailsResponse
 import com.snapbizz.core.utils.ResourceProvider
 import com.snapbizz.core.utils.SnapConstants.DEVICE_TYPE
 import com.snapbizz.core.utils.SnapConstants.STORE_TYPE

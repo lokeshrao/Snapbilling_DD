@@ -11,9 +11,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import com.snapbizz.common.config.models.RetailerDetails
-import com.snapbizz.common.config.models.StoreDetails
-import com.snapbizz.common.config.models.StoreDetailsResponse
+import com.snapbizz.common.models.RetailerDetails
+import com.snapbizz.common.models.StoreDetails
+import com.snapbizz.common.models.StoreDetailsResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
@@ -24,12 +24,6 @@ import com.snapbizz.core.utils.SnapPreferences
 import kotlinx.coroutines.flow.first
 
 private val Context.snapstore by preferencesDataStore("snapstore")
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface SnapDataStoreEntryPoint {
-    val snapDataStore: SnapDataStore
-}
 
 @Singleton
 class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {

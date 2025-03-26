@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ResourceModule {
+object ResourceProvider {
     @Provides
     fun provideResourceProvider(@ApplicationContext context: Context): ResourceProvider {
         return ResourceProviderImpl(context)
