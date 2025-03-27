@@ -50,6 +50,9 @@ fun InventoryScreen(viewModel: InventoryViewModel = hiltViewModel()) {
             viewModel.clearError()
         }
     }
+    LaunchedEffect(Unit) {
+        viewModel.getInvoiceWithItems()
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

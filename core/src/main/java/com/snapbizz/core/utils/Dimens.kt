@@ -10,6 +10,7 @@ object Dimens {
     val paddingZero: Dp = 0.dp
     val paddingTooSmall: Dp = 4.dp
     val paddingSmall: Dp = 8.dp
+    val paddingSmallMedium: Dp = 12.dp
     val paddingMedium: Dp = 16.dp
     val paddingLarge: Dp = 24.dp
     val paddingExtraLarge: Dp = 32.dp
@@ -52,6 +53,7 @@ object Dimens {
     val textSizeExtraExtraLarge: TextUnit = 28.sp
 
     // Icon sizes
+    val iconSizeExtraSmall: Dp = 20.dp
     val iconSizeSmall: Dp = 24.dp
     val iconSizeMedium: Dp = 32.dp
     val iconSizeLarge: Dp = 48.dp
@@ -102,6 +104,7 @@ object Dimens {
 
     // Border
     val borderWidth: Dp = 1.dp
+    val borderWidth_2: Dp = 2.dp
     val borderRadius: Dp = 8.dp
 
 
@@ -133,6 +136,7 @@ object Dimens {
 
 
     val cornerSmall:Dp = 8.dp
+    val cornerMedium:Dp = 12.dp
     val cornerLarge:Dp = 16.dp
     val cornerExtraLarge:Dp = 24.dp
 

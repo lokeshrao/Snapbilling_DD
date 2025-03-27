@@ -49,4 +49,10 @@ class InventoryViewModel @Inject constructor(
         _message.value = null
     }
 
+    fun getInvoiceWithItems() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            inventoryRepositoryImpl.getInvoicesWithItems()
+        }
+    }
+
 }

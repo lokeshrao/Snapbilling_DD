@@ -23,21 +23,32 @@ import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.snapbizz.common.config.SnapThemeConfig
+import com.snapbizz.ui.theme.SnapEditTextStyle
+import com.snapbizz.ui.theme.SnapEditTextStyle.backGroundColor
+import com.snapbizz.ui.theme.SnapEditTextStyle.boxBorder
+import com.snapbizz.ui.theme.SnapEditTextStyle.cornerRadius
+import com.snapbizz.ui.theme.SnapEditTextStyle.cursorColor
+import com.snapbizz.ui.theme.SnapEditTextStyle.fieldHeight
+import com.snapbizz.ui.theme.SnapEditTextStyle.focusBorderColor
+import com.snapbizz.ui.theme.SnapEditTextStyle.hintColor
+import com.snapbizz.ui.theme.SnapEditTextStyle.hintFontSize
+import com.snapbizz.ui.theme.SnapEditTextStyle.horizontalPadding
+import com.snapbizz.ui.theme.SnapEditTextStyle.iconPaddingEnd
+import com.snapbizz.ui.theme.SnapEditTextStyle.iconSize
+import com.snapbizz.ui.theme.SnapEditTextStyle.labelColor
+import com.snapbizz.ui.theme.SnapEditTextStyle.labelPadding
+import com.snapbizz.ui.theme.SnapEditTextStyle.selectionBackgroundColor
+import com.snapbizz.ui.theme.SnapEditTextStyle.selectionHandleColor
+import com.snapbizz.ui.theme.SnapEditTextStyle.textStyle
+import com.snapbizz.ui.theme.SnapEditTextStyle.unfocusedBorderColor
 
 @Composable
 fun SnapEditText(
@@ -46,23 +57,12 @@ fun SnapEditText(
     onValueChange: ((String) -> Unit)? = null,
     label: String? = null,
     hint: String = "",
-    backgroundColor: Color = SnapThemeConfig.ContainerBg,
-    textColor: Color = SnapThemeConfig.Text,
-    hintColor: Color = SnapThemeConfig.Hint,
-    cornerRadius: Int = 8,
     leadingIconResId: Int? = null,
     trailingIconResId: Int? = null,
     onTrailingIconClick: (() -> Unit)? = null,
-    isPassword: Boolean = false,
     enabled: Boolean = true,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    focusBorderColor: Color = SnapThemeConfig.Primary,
-    unfocusedBorderColor: Color = Color.Gray,
-    cursorColor: Color = SnapThemeConfig.Primary,
-    selectionHandleColor: Color = SnapThemeConfig.Primary,
-    selectionBackgroundColor: Color = SnapThemeConfig.Primary.copy(alpha = 0.3f)
+    keyboardType: KeyboardType = SnapEditTextStyle.keyboardType
 ) {
-    val passwordVisible by remember { mutableStateOf(!isPassword) }
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val customSelectionColors = TextSelectionColors(
@@ -74,23 +74,22 @@ fun SnapEditText(
         label?.let {
             SnapText(
                 text = it,
-                color = Color.DarkGray,
-                modifier = Modifier.padding(vertical = 4.dp)
+                color = labelColor,
+                modifier = Modifier.padding(vertical =  labelPadding)
             )
         }
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.dp)
-                .clip(RoundedCornerShape(cornerRadius.dp))
-                .background(backgroundColor)
-                .border(
-                    1.dp,
+                .height(fieldHeight)
+                .clip(RoundedCornerShape(cornerRadius))
+                .background(backGroundColor)
+                .border(boxBorder,
                     if (isFocused) focusBorderColor else unfocusedBorderColor,
-                    RoundedCornerShape(cornerRadius.dp)
+                    RoundedCornerShape(cornerRadius)
                 )
-                .padding(horizontal = 12.dp)
+                .padding(horizontal = horizontalPadding)
                 .focusable(interactionSource = interactionSource)
             ,
             contentAlignment = Alignment.CenterStart
@@ -104,8 +103,8 @@ fun SnapEditText(
                         painter = painterResource(id = it),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(24.dp)
-                            .padding(end = 8.dp)
+                            .size(iconSize)
+                            .padding(end = iconPaddingEnd)
                     )
                 }
 
@@ -114,7 +113,7 @@ fun SnapEditText(
                         SnapText(
                             text = hint,
                             color = hintColor,
-                            fontSize = 14.sp,
+                            fontSize = hintFontSize,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .align(Alignment.CenterStart)
@@ -125,9 +124,9 @@ fun SnapEditText(
                         BasicTextField(
                             value = value,
                             onValueChange = { onValueChange?.invoke(it) },
-                            textStyle = TextStyle(fontSize = 14.sp, color = textColor),
+                            textStyle = textStyle,
                             modifier = Modifier.fillMaxWidth(),
-                            visualTransformation = if (!passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+                            visualTransformation = VisualTransformation.None,
                             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                             enabled = enabled,
                             interactionSource = interactionSource,
@@ -141,7 +140,7 @@ fun SnapEditText(
                         painter = painterResource(id = it),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(iconSize)
                             .clickable { onTrailingIconClick?.invoke() }
                     )
                 }

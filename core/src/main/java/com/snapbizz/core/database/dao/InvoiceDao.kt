@@ -2,6 +2,9 @@ package com.snapbizz.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
+import com.snapbizz.core.database.InvoiceInfo
+import com.snapbizz.core.database.InvoiceWithItems
 import com.snapbizz.core.database.entities.Invoice
 
 @Dao
@@ -27,6 +30,10 @@ interface InvoiceDao : GenericDao<Invoice> {
         "SELECT COALESCE(SUM(NET_AMOUNT-TOTAL_DISCOUNT), 0) AS totalAmount FROM INVOICES i LEFT JOIN CUSTOMERS c ON i.CUSTOMER_PHONE = c.PHONE " + "WHERE (:query IS NULL OR _id LIKE '%' || :query || '%' " + "OR c.NAME LIKE '%' || :query || '%' " + "OR CUSTOMER_PHONE LIKE '%' || :query || '%') " + "AND i.CREATED_AT BETWEEN :startDate AND :endDate"
     )
     fun getBillsSummary(query: String?, startDate: Long, endDate: Long): Long?
+
+    @Transaction
+    @Query("SELECT * FROM INVOICES WHERE _id = :invoiceId")
+    fun getInvoiceWithItems(invoiceId: Long): InvoiceWithItems
 
 //    @Query(
 //        "SELECT i.*, c.NAME From INVOICES i Left Join CUSTOMERS c on i.CUSTOMER_PHONE = c.PHONE " + "WHERE (:query IS NULL OR _id LIKE '%' || :query || '%' " + "OR c.NAME LIKE '%' || :query || '%' " + "OR CUSTOMER_PHONE LIKE '%' || :query || '%') " + "AND i.CREATED_AT BETWEEN :startDate AND :endDate " + " ORDER BY i.BILL_STARTED_AT DESC LIMIT :limit OFFSET :offset "
