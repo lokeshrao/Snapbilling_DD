@@ -2,26 +2,13 @@ package com.snapbizz.core.database.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.database.entities.ProductPacks
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductPacksDao : GenericDao<ProductPacks> {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAsync(productPack: ProductPacks): Long
-
-    @Update
-    suspend fun update(productPack: ProductPacks)
-
-    @Delete
-    suspend fun delete(productPack: ProductPacks)
 
     @Query("SELECT * FROM PRODUCT_PACKS WHERE _id = :id")
     suspend fun getProductPackById(id: Long): ProductPacks?
@@ -34,9 +21,6 @@ interface ProductPacksDao : GenericDao<ProductPacks> {
 
     @Query("UPDATE PRODUCT_PACKS SET SEARCH_DATA = :searchData WHERE PRODUCT_CODE = :productCode")
     suspend fun updateSearchData(productCode: Long, searchData: String)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSync(productPack: ProductPacks): Long
 
 
     @Query(

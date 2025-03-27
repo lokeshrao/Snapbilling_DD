@@ -1,10 +1,7 @@
 package com.snapbizz.core.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.snapbizz.core.database.entities.Inventory
 
 @Dao
@@ -15,15 +12,6 @@ interface InventoryDao : GenericDao<Inventory> {
 
     @Query("SELECT * FROM INVENTORY WHERE PRODUCT_CODE = :productCode")
     fun getByProductCode(productCode: Long): Inventory?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAsync(inventory: Inventory): Long
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSync(inventory: Inventory): Long
-
-    @Update
-    fun update(inventory: Inventory)
 
     @Query("DELETE FROM INVENTORY WHERE PRODUCT_CODE = :productCode")
     fun deleteByProductCode(productCode: Long)

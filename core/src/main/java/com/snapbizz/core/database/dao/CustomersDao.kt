@@ -1,20 +1,12 @@
 package com.snapbizz.core.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 import com.snapbizz.core.database.entities.Customer
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CustomerDao : GenericDao<Customer> {
-
-    @Insert
-    suspend fun insert(customer: Customer)
-
-    @Update
-    suspend fun update(customer: Customer)
 
     @Query("SELECT * FROM CUSTOMERS WHERE phone = :phone")
     fun getCustomerByPhone(phone: Long): Flow<Customer?>

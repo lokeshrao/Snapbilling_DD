@@ -112,7 +112,7 @@ class DownSyncHelper @Inject constructor(
 
             config.dtoToEntityMapper?.let { mapper ->
                 val dbDataList = apiDataList.map(mapper)
-                dao.insertOrUpdate(dbDataList)
+                dao.insertOrUpdateAsync(dbDataList)
             }
         } catch (ex: Exception) {
             SnapLogger.log("Sync","Error saving data to DAO for ${config.tableName}: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
@@ -128,9 +128,9 @@ class DownSyncHelper @Inject constructor(
 
             apiDataList.forEach { apiInvoice ->
                 val (invoice, items) = invoiceDtoToEntity(apiInvoice)
-                snapDatabase.invoiceDao().insert(invoice)
+                snapDatabase.invoiceDao().insertOrUpdateAsync(invoice)
                 if (items.isNotEmpty()) {
-                    snapDatabase.itemsDao().insertOrUpdate(items)
+                    snapDatabase.itemsDao().insertOrUpdateAsync(items)
                 }
             }
         } catch (ex: Exception) {

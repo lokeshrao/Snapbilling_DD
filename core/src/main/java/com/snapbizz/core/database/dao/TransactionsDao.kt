@@ -1,18 +1,12 @@
 package com.snapbizz.core.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.snapbizz.core.database.dao.GenericDao
 import com.snapbizz.core.database.entities.InvoiceReference
 import com.snapbizz.core.database.entities.Transactions
 
 @Dao
 interface TransactionsDao : GenericDao<Transactions> {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(transaction: Transactions)
 
     @Query("SELECT * FROM TRANSACTIONS WHERE _id = :id")
     suspend fun getTransactionById(id: Long): Transactions?

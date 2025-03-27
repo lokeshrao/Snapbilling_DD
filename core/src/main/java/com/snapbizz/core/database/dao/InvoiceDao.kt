@@ -1,19 +1,11 @@
 package com.snapbizz.core.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 import com.snapbizz.core.database.entities.Invoice
 
 @Dao
 interface InvoiceDao : GenericDao<Invoice> {
-
-    @Insert
-    suspend fun insert(invoice: Invoice): Long
-
-    @Update
-    suspend fun update(invoice: Invoice)
 
     @Query("SELECT * FROM INVOICES WHERE _id = :id")
     suspend fun getInvoiceById(id: Long): Invoice?

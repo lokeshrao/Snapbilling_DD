@@ -26,16 +26,16 @@ class InventoryRepositoryImpl @Inject constructor(
     override fun addNewProducts(value: ProductInfo?): Boolean {
         return snapDatabase.runInTransaction<Boolean> {
             val product = convertToProduct(value)?.let {
-                snapDatabase.productsDao().insertSync(it)
+                snapDatabase.productsDao().insertOrUpdateSync(it)
             } ?: -1L
             val productPacks = convertToProductPacks(value)?.let {
-                snapDatabase.productPacksDao().insertSync(it)
+                snapDatabase.productPacksDao().insertOrUpdateSync(it)
             } ?: -1L
             val productCustomization = convertToProductCustomization(value)?.let {
-                snapDatabase.productCustomizationDao().insertSync(it)
+                snapDatabase.productCustomizationDao().insertOrUpdateSync(it)
             } ?: -1L
             val inventory = convertToInventory(value)?.let {
-                snapDatabase.inventoryDao().insertSync(it)
+                snapDatabase.inventoryDao().insertOrUpdateSync(it)
             } ?: -1L
 
             return@runInTransaction product > 0 && productPacks > 0 && productCustomization > 0 && inventory > 0
