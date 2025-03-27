@@ -1,4 +1,4 @@
-package com.snapbizz.onboarding.downSync.downloadSyncDto
+package com.snapbizz.core.sync.downloadSyncDto
 
 import com.google.gson.annotations.SerializedName
 import com.snapbizz.core.database.SnapDatabase
@@ -59,7 +59,7 @@ fun getCustomersSyncConfig(snapDb: SnapDatabase): DownSyncConfig<Customer, Custo
     )
 }
 
-fun customerToUpSyncDto(customer: Customer): CustomersDto {
+fun customerEntityToDto(customer: Customer): CustomersDto {
     return CustomersDto(
         address = customer.address,
         name = customer.name,
@@ -76,7 +76,7 @@ fun customerToUpSyncDto(customer: Customer): CustomersDto {
 }
 
 fun convertCustomerListToUpSyncDtoList(customers: List<Customer>): List<CustomersDto> {
-    return customers.map { customer -> customerToUpSyncDto(customer) }
+    return customers.map { customer -> customerEntityToDto(customer) }
 }
 
 //suspend fun upSyncCustomer(

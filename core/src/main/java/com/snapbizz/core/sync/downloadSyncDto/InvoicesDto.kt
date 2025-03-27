@@ -1,11 +1,15 @@
-package com.snapbizz.onboarding.downSync.downloadSyncDto
+package com.snapbizz.core.sync.downloadSyncDto
 
+import androidx.room.Embedded
+import androidx.room.Relation
 import com.google.gson.annotations.SerializedName
 import com.snapbizz.core.database.SnapDatabase
+import com.snapbizz.core.database.dao.Identifiable
 import com.snapbizz.core.database.entities.Invoice
 import com.snapbizz.core.database.entities.Items
 import com.snapbizz.core.utils.DownSyncConfig
 import java.util.Date
+import kotlin.collections.map
 
 data class InvoiceDto(
     @SerializedName("invoice_id") val invoiceId: Long? = null,

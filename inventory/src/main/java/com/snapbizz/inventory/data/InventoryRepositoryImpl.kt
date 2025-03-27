@@ -54,9 +54,9 @@ class InventoryRepositoryImpl @Inject constructor(
             }).flow
     }
 
-    fun getInvoicesWithItems():InvoiceWithItems {
-        var item = snapDatabase.invoiceDao().getInvoiceWithItems(17124000001)
-        SnapLogger.log("InvoiceWith Items", item.toString(), LogModule.HOME)
-        return item
+    fun getInvoicesWithItems():InvoiceWithItems? {
+//        var item = snapDatabase.invoiceDao().getInvoiceWithItems(17124000001)
+//        SnapLogger.log("InvoiceWith Items", item.toString(), LogModule.HOME)
+        return null
     }
 }

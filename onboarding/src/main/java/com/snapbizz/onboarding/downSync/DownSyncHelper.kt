@@ -11,8 +11,18 @@ import com.snapbizz.core.helpers.LogPriority
 import com.snapbizz.core.helpers.SnapLogger
 import com.snapbizz.core.utils.DownSyncConfig
 import com.snapbizz.core.utils.SnapPreferences
-import com.snapbizz.onboarding.downSync.downloadSyncDto.InvoiceDto
-import com.snapbizz.onboarding.downSync.downloadSyncDto.*
+import com.snapbizz.core.sync.downloadSyncDto.InvoiceDto
+import com.snapbizz.core.sync.downloadSyncDto.getAppointmentsSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getCustomerDetailsSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getCustomersSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getInventorySyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getInvoiceSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getProductCustomizationSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getProductPackSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getProductsSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getRepresentativeSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.getTransactionSyncConfig
+import com.snapbizz.core.sync.downloadSyncDto.invoiceDtoToEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -32,7 +42,7 @@ class DownSyncHelper @Inject constructor(
         getProductCustomizationSyncConfig(snapDatabase),
         getAppointmentsSyncConfig(snapDatabase),
         getRepresentativeSyncConfig(snapDatabase),
-        getDoctorsSyncConfig(snapDatabase)
+//        getDoctorsSyncConfig(snapDatabase)
     )
 
     suspend fun doDownloadSync(syncStatus: MutableStateFlow<String>): Result<Unit> {

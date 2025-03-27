@@ -11,7 +11,7 @@ import com.snapbizz.core.helpers.SnapLogger
 import com.snapbizz.core.helpers.Source
 import com.snapbizz.core.helpers.fetchAndApplyConfig
 import com.snapbizz.core.helpers.loadConfigOnInit
-import com.snapbizz.core.sync.StartSyncWorker
+import com.snapbizz.core.sync.startSyncWorker
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -48,8 +48,7 @@ class SnapApplication : Application(), Configuration.Provider {
         }
 
         SnapLogger.init(this, logsDao)
-        StartSyncWorker(this)
-
+        startSyncWorker()
     }
 
 }

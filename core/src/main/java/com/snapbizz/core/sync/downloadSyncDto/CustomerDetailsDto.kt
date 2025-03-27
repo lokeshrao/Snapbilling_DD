@@ -1,4 +1,4 @@
-package com.snapbizz.onboarding.downSync.downloadSyncDto
+package com.snapbizz.core.sync.downloadSyncDto
 
 import com.google.gson.annotations.SerializedName
 import com.snapbizz.core.database.SnapDatabase
@@ -20,6 +20,7 @@ data class CustomerDetailsDto(
     @SerializedName("updated_at") val updatedAt: Date?,
     @SerializedName("reward_points") val rewardPoints: Int?
 )
+
 
 fun customerDetailsDtoToEntity(apiCustomerDetails: CustomerDetailsDto): CustomerDetails {
     return CustomerDetails(

@@ -1,4 +1,4 @@
-package com.snapbizz.onboarding.downSync.downloadSyncDto
+package com.snapbizz.core.sync.downloadSyncDto
 
 import com.google.gson.annotations.SerializedName
 import com.snapbizz.core.database.entities.Representative

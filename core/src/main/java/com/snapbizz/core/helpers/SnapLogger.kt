@@ -107,4 +107,4 @@ object SnapLogger {
 
 enum class LogPriority { HIGH, LOW }
 
-enum class LogModule { HOME,  }
+enum class LogModule { HOME,UPSYNC  }

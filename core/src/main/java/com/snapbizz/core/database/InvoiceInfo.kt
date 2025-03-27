@@ -2,11 +2,17 @@ package com.snapbizz.core.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
+import androidx.room.Entity
 import androidx.room.Relation
 import com.google.gson.annotations.SerializedName
+import com.snapbizz.core.database.dao.Identifiable
 import com.snapbizz.core.database.entities.Invoice
 import com.snapbizz.core.database.entities.Items
+import com.snapbizz.core.sync.downloadSyncDto.GstDetailsDto
+import com.snapbizz.core.sync.downloadSyncDto.InvoiceDto
+import com.snapbizz.core.sync.downloadSyncDto.InvoiceItemDto
 import java.util.Date
+import kotlin.text.toDouble
 
 data class InvoiceInfo(
     @ColumnInfo(name = "_id") @SerializedName("_id") val id: Long = 0,
@@ -73,6 +79,7 @@ data class InvoiceInfo(
     var items: List<Items>? = mutableListOf()
 )
 
+@Entity
 data class InvoiceWithItems(
     @Embedded val invoice: Invoice,
     @Relation(
@@ -80,5 +87,132 @@ data class InvoiceWithItems(
         entityColumn = "INVOICE_ID"
     )
     val items: List<Items>
-)
+): Identifiable{
+    override fun getPrimaryKeyValue(): Any {
+        return invoice.id
+    }
+
+}
+
+fun convertInvoiceWithItemsToDto(invoiceWithItems: InvoiceWithItems): InvoiceDto {
+    val invoice = invoiceWithItems.invoice
+    val items = invoiceWithItems.items
+
+    return InvoiceDto(
+        invoiceId = invoice.id,
+        customerPhone = invoice.customerPhone,
+        parentMemoId = null,
+        posName = null,
+        isMemo = invoice.isMemo,
+        isDeleted = invoice.isDeleted,
+        isDelivery = false,
+        isDelivered = false,
+        isCredit = invoice.isCredit,
+        billerName = invoice.billerName,
+        totalItems = invoice.totalItems,
+        totalQuantity = invoice.totalQuantity,
+        totalSavings = invoice.totalSavings,
+        totalDiscount = invoice.totalDiscount,
+        netAmount = invoice.netAmount,
+        totalVatAmount = invoice.totalVatAmount,
+        totalAmount = invoice.totalAmount,
+        pendingAmount = invoice.pendingAmount,
+        deliveryCharges = 0,
+        billStartedAt = invoice.billStartedAt,
+        createdAt = invoice.createdAt,
+        updatedAt = invoice.updatedAt,
+        totalCgstAmount = invoice.totalCgstAmount,
+        totalSgstAmount = invoice.totalSgstAmount,
+        totalIgstAmount = invoice.totalIgstAmount,
+        totalCessAmount = invoice.totalCessAmount,
+        additionalTotalCessAmount = invoice.totalAdditionalCessAmount,
+        eWayNumber = null,
+        billToPhone = invoice.billToPhone,
+        billToAddress = null,
+        billToGstin = invoice.billToGstin,
+        shipToPhone = null,
+        shipToAddress = null,
+        shipToGstin = null,
+        isGst = invoice.isGst,
+        isSplitDiscountActivated = false,
+        isEdited = false,
+        referenceInvoiceId = null,
+        billEditedAt = null,
+        isConvertedIntoInvoice = false,
+        couponCode = null,
+        couponAmount = null,
+        paybackAmount = null,
+        paybackStatus = null,
+        snapOrderCartId = null,
+        tokenNo = null,
+        doctorId = null,
+        roundOffAmount = invoice.roundOffAmount,
+        mdrAmount = invoice.mdrAmount ?: 0,
+        items = items.map { item ->
+            InvoiceItemDto(
+                productCode = item.productCode,
+                name = item.name,
+                quantity = item.quantity,
+                uom = item.uom,
+                measure = 0,
+                packSize = 0,
+                mrp = item.mrp,
+                salePrice = item.salePrice,
+                totalAmount = item.totalAmount,
+                savings = item.savings,
+                vatRate = item.vatRate,
+                vatAmount = item.vatAmount,
+                brandDiscount = 0,
+                promotionId = null,
+                hsnCode = item.hsnCode,
+                gst = getGSTDetailsFromItems(item),
+                billItemDiscount = 0,
+                purchasePrice = item.purchasePrice,
+                categoryId = item.categoryId,
+                actualProfit = 0,
+                estimatedProfit = 0,
+                isExclusiveGst = item.isExclusiveGst ?: false,
+                farmerShare = item.farmerShare ?: 0,
+                agroCharge = item.agroCharge ?: 0,
+                concernedDdo = item.concernedDdo ?: 0
+            )
+        }
+    )
+}
+private fun getGSTDetailsFromItems(items: Items): List<GstDetailsDto> {
+    val CGST_RATE_TAG = "cgst_rate"
+    val IGST_RATE_TAG = "igst_rate"
+    val SGST_RATE_TAG = "sgst_rate"
+    val CESS_RATE_TAG = "cess_rate"
+    val ADDITIONAL_CESS_TAG = "additional_cess_rate"
+    return listOfNotNull(
+        items.cgstAmount.let { amount ->
+            items.cgstRate?.let { rate ->
+                GstDetailsDto(description = CGST_RATE_TAG, rate = rate, amount = amount)
+            }
+        },
+        items.sgstAmount.let { amount ->
+            items.sgstRate?.let { rate ->
+                GstDetailsDto(description = SGST_RATE_TAG, rate = rate, amount = amount)
+            }
+        },
+        items.igstAmount.let { amount ->
+            items.igstRate?.let { rate ->
+                GstDetailsDto(description = IGST_RATE_TAG, rate = rate, amount = amount)
+            }
+        },
+        items.cessAmount.let { amount ->
+            items.cessRate?.let { rate ->
+                GstDetailsDto(description = CESS_RATE_TAG, rate = rate, amount = amount)
+            }
+        },
+        items.additionalCessAmount.let { amount ->
+            items.additionalCessRate?.let { rate ->
+                GstDetailsDto(description = ADDITIONAL_CESS_TAG, rate = rate.toDouble(), amount = amount)
+            }
+        }
+    )
+}
+
+
 

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.snapbizz.inventory.screen.GlobalProductScreen
 import com.snapbizz.inventory.screen.InventoryScreen
 import com.snapbizz.onboarding.registration.OtpScreen
 import com.snapbizz.onboarding.registration.RegisterScreen

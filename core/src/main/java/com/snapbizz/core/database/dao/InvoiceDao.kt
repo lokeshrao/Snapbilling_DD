@@ -32,8 +32,8 @@ interface InvoiceDao : GenericDao<Invoice> {
     fun getBillsSummary(query: String?, startDate: Long, endDate: Long): Long?
 
     @Transaction
-    @Query("SELECT * FROM INVOICES WHERE _id = :invoiceId")
-    fun getInvoiceWithItems(invoiceId: Long): InvoiceWithItems
+    @Query("SELECT * FROM INVOICES WHERE IS_SYNC_PENDING = 1 LIMIT 100 OFFSET :offset ")
+    fun getDataForSync(offset: Int): List<InvoiceWithItems>
 
 //    @Query(
 //        "SELECT i.*, c.NAME From INVOICES i Left Join CUSTOMERS c on i.CUSTOMER_PHONE = c.PHONE " + "WHERE (:query IS NULL OR _id LIKE '%' || :query || '%' " + "OR c.NAME LIKE '%' || :query || '%' " + "OR CUSTOMER_PHONE LIKE '%' || :query || '%') " + "AND i.CREATED_AT BETWEEN :startDate AND :endDate " + " ORDER BY i.BILL_STARTED_AT DESC LIMIT :limit OFFSET :offset "
