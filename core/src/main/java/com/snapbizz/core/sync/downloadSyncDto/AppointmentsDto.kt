@@ -2,6 +2,7 @@ package com.snapbizz.core.sync.downloadSyncDto
 
 import com.google.gson.annotations.SerializedName
 import com.snapbizz.core.database.SnapDatabase
+import com.snapbizz.core.database.entities.AppointmentServices
 import com.snapbizz.core.database.entities.Appointments
 import com.snapbizz.core.database.entities.AppointmentsWithServices
 import com.snapbizz.core.utils.DownSyncConfig
@@ -67,6 +68,37 @@ fun appointmentsToEntity(appointment: Appointments): AppointmentsDto {
         appointment.updatedAt
     )
 }
+
+fun appointmentDtoToEntity(apiAppointment: AppointmentsDto): Pair<Appointments, List<AppointmentServices>> {
+    val appointment = Appointments(
+        appointmentId = apiAppointment.appointmentId,
+        customerNumber = apiAppointment.customerNumber,
+        representativeId = apiAppointment.representativeId,
+        startDate = apiAppointment.startDate ?: Date(),
+        endDate = apiAppointment.endDate ?: Date(),
+        description = apiAppointment.description ?: "",
+        isDeleted = apiAppointment.isDeleted ?: false,
+        status = apiAppointment.status ?: "",
+        cancellationReason = apiAppointment.cancellationReason ?: "",
+        isSyncPending = false,
+        createdAt = apiAppointment.createdAt ?: Date(),
+        updatedAt = apiAppointment.updatedAt ?: Date()
+    )
+
+    val appointmentServices = apiAppointment.services?.map { serviceDto ->
+        AppointmentServices(
+            id = null,
+            appointmentId = apiAppointment.appointmentId?:0,
+            serviceName = serviceDto.serviceName ?: "",
+            serviceProductCode = serviceDto.serviceProductCode ?: 0,
+            createdAt = apiAppointment.createdAt ?: Date(),
+            updatedAt = apiAppointment.updatedAt ?: Date()
+        )
+    } ?: emptyList()
+
+    return Pair(appointment, appointmentServices)
+}
+
 
 fun convertAppointmentWithServicesToDto(appointmentsWithServices: AppointmentsWithServices): AppointmentsDto {
     val appointment = appointmentsWithServices.appointment

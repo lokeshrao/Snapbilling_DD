@@ -97,7 +97,6 @@ class UploadSyncer @AssistedInject constructor(
                     var offset = 0
                     do {
                         val query = buildQuery(sync.tableName, "IS_SYNC_PENDING", offset)
-                        //val pendingItems =if(sync.tableName=="INVOICES") (sync.daoProvider as InvoiceDao).getDataForSync(offset) else sync.daoProvider.getPendingItemsRaw(query) as List<Any>
                         val pendingItems = when(sync.tableName) {
                             "INVOICES" -> (sync.daoProvider as InvoiceDao).getDataForSync(offset)
                             "APPOINTMENTS" -> (sync.daoProvider as AppointmentsDao).getDataForSync(offset)

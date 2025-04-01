@@ -9,9 +9,11 @@ import com.snapbizz.core.database.dao.GenericDao
 import com.snapbizz.core.helpers.LogModule
 import com.snapbizz.core.helpers.LogPriority
 import com.snapbizz.core.helpers.SnapLogger
+import com.snapbizz.core.sync.downloadSyncDto.AppointmentsDto
 import com.snapbizz.core.utils.DownSyncConfig
 import com.snapbizz.core.utils.SnapPreferences
 import com.snapbizz.core.sync.downloadSyncDto.InvoiceDto
+import com.snapbizz.core.sync.downloadSyncDto.appointmentDtoToEntity
 import com.snapbizz.core.sync.downloadSyncDto.getAppointmentsSyncConfig
 import com.snapbizz.core.sync.downloadSyncDto.getCustomerDetailsSyncConfig
 import com.snapbizz.core.sync.downloadSyncDto.getCustomersSyncConfig
@@ -100,10 +102,10 @@ class DownSyncHelper @Inject constructor(
         dao: GenericDao<Any>,
     ) {
         try {
-            if (config.tableName == "invoices") {
-                saveInvoiceDataToDao(response)
-            } else {
-                saveDataToDao(response, config, dao)
+            when(config.tableName) {
+                "appointments" -> saveAppointmentDataToDao(response)
+                "invoices" -> saveInvoiceDataToDao(response)
+                else -> saveDataToDao(response, config, dao)
             }
         } catch (ex: Exception) {
             SnapLogger.log("Sync","Error saving data to DAO for ${config.tableName}: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
@@ -145,6 +147,25 @@ class DownSyncHelper @Inject constructor(
             }
         } catch (ex: Exception) {
             SnapLogger.log("Sync","Error saving invoice data to DAO: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
+            throw ex
+        }
+    }
+
+    private suspend fun saveAppointmentDataToDao(response: JsonObject) {
+        try {
+            val jsonArray = response.getAsJsonArray("appointmentsList")
+            val dtoType = TypeToken.getParameterized(List::class.java, AppointmentsDto::class.java).type
+            val apiDataList: List<AppointmentsDto> = Gson().fromJson(jsonArray, dtoType)
+
+            apiDataList.forEach { apiAppointment ->
+                val (appointment, services) = appointmentDtoToEntity(apiAppointment)
+                snapDatabase.appointmentsDao().insertOrUpdateAsync(appointment)
+                if (services.isNotEmpty()) {
+                    snapDatabase.appointmentServicesDao().insertOrUpdateAsync(services)
+                }
+            }
+        } catch (ex: Exception) {
+            SnapLogger.log("Sync","Error saving appointment data to DAO: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
             throw ex
         }
     }
