@@ -66,56 +66,28 @@ fun getTransactionSyncConfig(snapDb: SnapDatabase): DownSyncConfig<Transactions,
     )
 }
 
-fun convertToTransactionAPIObjectList(transactionList: List<Transactions>?): List<TransactionDto> {
-    return try {
-        transactionList?.map { transaction ->
-            TransactionDto(
-                transaction.id,
-                transaction.customerPhone,
-                transaction.invoiceId,
-                transaction.paymentType,
-                transaction.paymentMode,
-                transaction.amount,
-                transaction.mdrAmount,
-                0,
-                0,
-                transaction.parentTransactionId,
-                transaction.paymentReference,
-                transaction.createdAt,
-                transaction.updatedAt,
-                transaction.transactionDate,
-                transaction.transactionReferenceNo,
-                transaction.transactionDescription,
-                transaction.transactionType,
-                transaction.transactionBankName,
-                transaction.source,
-                transaction.remark,
-                transaction.isVoid ?: false
-            )
-        } ?: emptyList()
-    } catch (ex: Exception) {
-        ex.printStackTrace()
-        emptyList()
-    }
+fun transactionToEntity(transaction: Transactions?): TransactionDto {
+    return TransactionDto(
+        transaction?.id ?: 0L,
+        transaction?.customerPhone,
+        transaction?.invoiceId,
+        transaction?.paymentType,
+        transaction?.paymentMode,
+        transaction?.amount,
+        transaction?.mdrAmount,
+        0,
+        0,
+        transaction?.parentTransactionId,
+        transaction?.paymentReference,
+        transaction?.createdAt,
+        transaction?.updatedAt,
+        transaction?.transactionDate,
+        transaction?.transactionReferenceNo,
+        transaction?.transactionDescription,
+        transaction?.transactionType,
+        transaction?.transactionBankName,
+        transaction?.source,
+        transaction?.remark,
+        transaction?.isVoid ?: false
+    )
 }
-
-//suspend fun upSyncTransactions(
-//    dao: TransactionsDao,
-//    syncApiService: SyncApiService,
-//    onStart: (String) -> Unit
-//) {
-//    onStart("Syncing Transactions ")
-//    try {
-//        syncData(
-//            dao = dao,
-//            primaryKeyColumn = "_id",
-//            syncStatusColumn = "IS_SYNC_PENDING",
-//            tableName = "TRANSACTIONS",
-//            apiUrl = "v4/api/${Preferences.STORE_ID}/transactions_apos",
-//            convertToApiObjectList = ::convertToTransactionAPIObjectList,
-//            syncApiService = syncApiService
-//        )
-//    } catch (e: Exception) {
-//        onStart("Syncing Transactions Failed: ${e.message}")
-//    }
-//}

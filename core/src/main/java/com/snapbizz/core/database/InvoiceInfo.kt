@@ -1,18 +1,14 @@
 package com.snapbizz.core.database
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
 import androidx.room.Relation
 import com.google.gson.annotations.SerializedName
-import com.snapbizz.core.database.dao.Identifiable
-import com.snapbizz.core.database.entities.Invoice
+import com.snapbizz.core.database.entities.InvoiceWithItems
 import com.snapbizz.core.database.entities.Items
 import com.snapbizz.core.sync.downloadSyncDto.GstDetailsDto
 import com.snapbizz.core.sync.downloadSyncDto.InvoiceDto
 import com.snapbizz.core.sync.downloadSyncDto.InvoiceItemDto
 import java.util.Date
-import kotlin.text.toDouble
 
 data class InvoiceInfo(
     @ColumnInfo(name = "_id") @SerializedName("_id") val id: Long = 0,
@@ -78,21 +74,6 @@ data class InvoiceInfo(
     )
     var items: List<Items>? = mutableListOf()
 )
-
-@Entity
-data class InvoiceWithItems(
-    @Embedded val invoice: Invoice,
-    @Relation(
-        parentColumn = "_id",
-        entityColumn = "INVOICE_ID"
-    )
-    val items: List<Items>
-): Identifiable{
-    override fun getPrimaryKeyValue(): Any {
-        return invoice.id
-    }
-
-}
 
 fun convertInvoiceWithItemsToDto(invoiceWithItems: InvoiceWithItems): InvoiceDto {
     val invoice = invoiceWithItems.invoice

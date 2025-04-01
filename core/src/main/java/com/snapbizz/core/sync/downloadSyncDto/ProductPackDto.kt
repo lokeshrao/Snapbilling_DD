@@ -79,7 +79,7 @@ fun getProductPackSyncConfig(snapDb: SnapDatabase): DownSyncConfig<ProductPacks,
     )
 }
 
-fun productPacksToDto(productPacks: ProductPacks): ProductPacksDto {
+fun productPacksToEntity(productPacks: ProductPacks): ProductPacksDto {
     return ProductPacksDto(
         productCode = productPacks.productCode,
         packSize = productPacks.packSize,
@@ -98,27 +98,6 @@ fun productPacksToDto(productPacks: ProductPacks): ProductPacksDto {
 }
 fun productPacksListToDto(productPacksList: List<ProductPacks>): List<ProductPacksDto> {
     return productPacksList.map { productPacks ->
-        productPacksToDto(productPacks)
+        productPacksToEntity(productPacks)
     }
 }
-
-//suspend fun upSyncProductPacks(
-//    dao: ProductPacksDao,
-//    syncApiService: SyncApiService,
-//    onStart: (String) -> Unit
-//) {
-//    onStart("Syncing Product Packs")
-//    try {
-//        syncData(
-//            dao = dao,
-//            primaryKeyColumn = "_id",
-//            syncStatusColumn = "IS_SYNC_PENDING",
-//            tableName = "PRODUCT_PACKS",
-//            apiUrl = "v3/api/${Preferences.STORE_ID}/product_packs",
-//            convertToApiObjectList = ::productPacksListToDto,
-//            syncApiService = syncApiService
-//        )
-//    } catch (e: Exception) {
-//        onStart("Syncing Product Packs Failed: ${e.message}")
-//    }
-//}

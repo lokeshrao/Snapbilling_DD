@@ -40,7 +40,7 @@ fun customerDetailsDtoToEntity(apiCustomerDetails: CustomerDetailsDto): Customer
     )
 }
 
-fun customerDetailsToUpSyncDto(customerDetails: CustomerDetails): CustomerDetailsDto {
+fun customerDetailsToEntity(customerDetails: CustomerDetails): CustomerDetailsDto {
     return CustomerDetailsDto(
         phone = customerDetails.phone,
         amountDue = customerDetails.amountDue,
@@ -58,7 +58,7 @@ fun customerDetailsToUpSyncDto(customerDetails: CustomerDetails): CustomerDetail
 }
 
 fun customerDetailsListToUpSyncDto(customerDetailsList: List<CustomerDetails>): List<CustomerDetailsDto> {
-    return customerDetailsList.map { customerDetails -> customerDetailsToUpSyncDto(customerDetails) }
+    return customerDetailsList.map { customerDetails -> customerDetailsToEntity(customerDetails) }
 }
 
 fun getCustomerDetailsSyncConfig(snapDb: SnapDatabase): DownSyncConfig<CustomerDetails, CustomerDetailsDto> {
@@ -71,18 +71,3 @@ fun getCustomerDetailsSyncConfig(snapDb: SnapDatabase): DownSyncConfig<CustomerD
         dtoToEntityMapper = ::customerDetailsDtoToEntity
     )
 }
-
-//suspend fun upSyncCustomerDetails(
-//    dao: CustomerDetailsDao, syncApiService: SyncApiService, onStart: (String) -> Unit
-//) {
-//    onStart("Syncing Customer Details")
-//    syncData(
-//        dao,
-//        primaryKeyColumn = "PHONE",
-//        syncStatusColumn = "IS_SYNC_PENDING",
-//        tableName = "CUSTOMER_DETAILS",
-//        apiUrl = "v3/api/${Preferences.STORE_ID}/customer_details",
-//        convertToApiObjectList = ::customerDetailsListToUpSyncDto,
-//        syncApiService = syncApiService
-//    )
-//}

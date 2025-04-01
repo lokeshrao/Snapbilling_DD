@@ -108,7 +108,7 @@ fun getProductsSyncConfig(snapDb: SnapDatabase): DownSyncConfig<Products, Produc
     )
 }
 
-fun productToUpSyncDto(product: Products): ProductsDto {
+fun productToEntity(product: Products): ProductsDto {
     return ProductsDto(
         productCode = product.productCode,
         name = product.name,
@@ -135,25 +135,6 @@ fun productToUpSyncDto(product: Products): ProductsDto {
 }
 
 fun convertProductListToUpSyncDtoList(products: List<Products>): List<ProductsDto> {
-    return products.map { product -> productToUpSyncDto(product) }
+    return products.map { product -> productToEntity(product) }
 }
-
-//suspend fun upSyncProducts(
-//    dao: ProductsDao, syncApiService: SyncApiService, onStart: (String) -> Unit
-//) {
-//    onStart("Syncing Products")
-//    try {
-//        syncData(
-//            dao = dao,
-//            primaryKeyColumn = "PRODUCT_CODE",
-//            syncStatusColumn = "IS_SYNC_PENDING",
-//            tableName = "PRODUCTS",
-//            apiUrl = "v3/api/${Preferences.STORE_ID}/products",
-//            convertToApiObjectList = ::convertProductListToUpSyncDtoList,
-//            syncApiService = syncApiService
-//        )
-//    } catch (e: Exception) {
-//        onStart("Syncing Products Failed: ${e.message}")
-//    }
-//}
 

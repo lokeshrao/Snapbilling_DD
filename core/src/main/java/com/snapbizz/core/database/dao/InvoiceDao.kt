@@ -3,9 +3,8 @@ package com.snapbizz.core.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.snapbizz.core.database.InvoiceInfo
-import com.snapbizz.core.database.InvoiceWithItems
 import com.snapbizz.core.database.entities.Invoice
+import com.snapbizz.core.database.entities.InvoiceWithItems
 
 @Dao
 interface InvoiceDao : GenericDao<Invoice> {

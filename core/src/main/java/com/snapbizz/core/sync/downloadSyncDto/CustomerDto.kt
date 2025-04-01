@@ -79,17 +79,3 @@ fun convertCustomerListToUpSyncDtoList(customers: List<Customer>): List<Customer
     return customers.map { customer -> customerEntityToDto(customer) }
 }
 
-//suspend fun upSyncCustomer(
-//    dao: CustomerDao, syncApiService: SyncApiService, onStart: (String) -> Unit
-//) {
-//    onStart("Syncing Customers")
-//    syncData(
-//        dao,
-//        primaryKeyColumn = "PHONE",
-//        syncStatusColumn = "IS_SYNC_PENDING",
-//        tableName = "CUSTOMERS",
-//        apiUrl = "v3/api/${Preferences.STORE_ID}/customers",
-//        convertToApiObjectList = ::convertCustomerListToUpSyncDtoList,
-//        syncApiService = syncApiService
-//    )
-//}

@@ -1,9 +1,11 @@
 package com.snapbizz.core.database.entities
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Index
+import androidx.room.Relation
 import com.snapbizz.core.database.dao.Identifiable
 import java.util.Date
 
@@ -41,6 +43,18 @@ data class Invoice(
     @ColumnInfo(name = "IS_GST") val isGst: Boolean,
     @ColumnInfo(name = "ROUND_OFF_AMOUNT") val roundOffAmount: Long?,
     @ColumnInfo(name = "MDR_VALUE") val mdrAmount: Long?
-) : Identifiable {
+): Identifiable {
     override fun getPrimaryKeyValue(): Any = id
+}
+
+@Entity
+data class InvoiceWithItems(
+    @Embedded val invoice: Invoice,
+    @Relation(
+        parentColumn = "_id",
+        entityColumn = "INVOICE_ID"
+    )
+    val items: List<Items>
+): Identifiable {
+    override fun getPrimaryKeyValue(): Any = invoice.id
 }

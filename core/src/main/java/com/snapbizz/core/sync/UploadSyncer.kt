@@ -12,18 +12,45 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.snapbizz.common.models.SyncApiService
-import com.snapbizz.core.database.InvoiceWithItems
 import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.database.convertInvoiceWithItemsToDto
 import com.snapbizz.core.database.dao.GenericDao
 import com.snapbizz.core.database.dao.Identifiable
 import com.snapbizz.core.database.dao.InvoiceDao
+import com.snapbizz.core.database.entities.Appointments
 import com.snapbizz.core.database.entities.Customer
+import com.snapbizz.core.database.entities.CustomerDetails
+import com.snapbizz.core.database.entities.Doctors
+import com.snapbizz.core.database.entities.Inventory
+import com.snapbizz.core.database.entities.InvoiceWithItems
+import com.snapbizz.core.database.entities.ProductCustomization
+import com.snapbizz.core.database.entities.ProductPacks
+import com.snapbizz.core.database.entities.Products
+import com.snapbizz.core.database.entities.Representative
+import com.snapbizz.core.database.entities.Transactions
 import com.snapbizz.core.helpers.LogModule
 import com.snapbizz.core.helpers.SnapLogger
+import com.snapbizz.core.sync.downloadSyncDto.AppointmentsDto
+import com.snapbizz.core.sync.downloadSyncDto.CustomerDetailsDto
 import com.snapbizz.core.sync.downloadSyncDto.CustomersDto
+import com.snapbizz.core.sync.downloadSyncDto.DoctorsDto
+import com.snapbizz.core.sync.downloadSyncDto.InventoryDto
 import com.snapbizz.core.sync.downloadSyncDto.InvoiceDto
+import com.snapbizz.core.sync.downloadSyncDto.ProductCustomizationDto
+import com.snapbizz.core.sync.downloadSyncDto.ProductPacksDto
+import com.snapbizz.core.sync.downloadSyncDto.ProductsDto
+import com.snapbizz.core.sync.downloadSyncDto.RepresentativeDto
+import com.snapbizz.core.sync.downloadSyncDto.TransactionDto
+import com.snapbizz.core.sync.downloadSyncDto.appointmentsToEntity
+import com.snapbizz.core.sync.downloadSyncDto.customerDetailsToEntity
 import com.snapbizz.core.sync.downloadSyncDto.customerEntityToDto
+import com.snapbizz.core.sync.downloadSyncDto.doctorsToEntity
+import com.snapbizz.core.sync.downloadSyncDto.inventoryToEntity
+import com.snapbizz.core.sync.downloadSyncDto.productCustomizationToEntity
+import com.snapbizz.core.sync.downloadSyncDto.productPacksToEntity
+import com.snapbizz.core.sync.downloadSyncDto.productToEntity
+import com.snapbizz.core.sync.downloadSyncDto.representativeToEntity
+import com.snapbizz.core.sync.downloadSyncDto.transactionToEntity
 import com.snapbizz.core.utils.DateTypeAdapter
 import com.snapbizz.core.utils.SnapPreferences
 import dagger.assisted.Assisted
@@ -31,6 +58,9 @@ import dagger.assisted.AssistedInject
 import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import kotlin.collections.count
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapNotNull
 
 interface BaseSyncer {
     suspend fun getPendingItem()
@@ -51,8 +81,16 @@ class UploadSyncer @AssistedInject constructor(
             syncRepository.snapDataStore.loadPrefs()
             val syncList = listOf(
                 getCustomerSyncModel(snapDatabase),
-                getInvoiceSync(snapDatabase)
-
+                getInvoiceSync(snapDatabase),
+                getCustomerDetailSyncModel(snapDatabase),
+                inventorySyncModel(snapDatabase),
+                productsSyncModel(snapDatabase),
+                productPacksSyncModel(snapDatabase),
+                appointmentsSyncModel(snapDatabase),
+                doctorsSyncModel(snapDatabase),
+                representativeSyncModel(snapDatabase),
+                transactionSyncModel(snapDatabase),
+                productCustomizationSyncModel(snapDatabase)
             )
 
             for (sync in syncList) {
@@ -112,6 +150,10 @@ private fun buildQuery(
             LIMIT 100 OFFSET $offset
             """
         )
+        "APPOINTMENTS" -> SimpleSQLiteQuery(
+            "SELECT appointments.*, appointment_services.* FROM appointments " +
+                    "LEFT JOIN appointment_services ON appointments.APPOINTMENT_ID = appointment_services.APPOINTMENT_ID " +
+                    "WHERE appointments.$syncStatusColumn = 1 LIMIT 100 OFFSET $offset")
         else -> SimpleSQLiteQuery(
             "SELECT * FROM $tableName WHERE $syncStatusColumn = 1 LIMIT 100 OFFSET $offset"
         )
@@ -223,10 +265,96 @@ fun getCustomerSyncModel(snapDatabase: SnapDatabase) = SyncBase<Customer, Custom
 )
 fun getInvoiceSync(snapDatabase: SnapDatabase) = SyncBase<InvoiceWithItems, InvoiceDto>(
     tableName = "INVOICES",
-    url = "v3/api/${SnapPreferences.STORE_ID}/invoices",
+    url = "v4/api/${SnapPreferences.STORE_ID}/invoices_apos",
     entityClass = InvoiceWithItems::class.java,
     dtoClass = InvoiceDto::class.java,
     daoProvider = snapDatabase.invoiceDao(),
     entityToDtoMapper= ::convertInvoiceWithItemsToDto,
     primaryKeyColumn = "_id"
+)
+fun getCustomerDetailSyncModel(snapDatabase: SnapDatabase) = SyncBase<CustomerDetails, CustomerDetailsDto>(
+    tableName = "CUSTOMER_DETAILS",
+    url = "v3/api/${SnapPreferences.STORE_ID}/customer_details",
+    entityClass = CustomerDetails::class.java,
+    dtoClass = CustomerDetailsDto::class.java,
+    daoProvider = snapDatabase.customerDetailsDao(),
+    entityToDtoMapper = ::customerDetailsToEntity,
+    primaryKeyColumn = "PHONE"
+)
+fun inventorySyncModel(snapDatabase: SnapDatabase) = SyncBase<Inventory, InventoryDto>(
+    tableName = "INVENTORY",
+    url = "v3/api/${SnapPreferences.STORE_ID}/inventory",
+    entityClass = Inventory::class.java,
+    dtoClass = InventoryDto::class.java,
+    daoProvider = snapDatabase.inventoryDao(),
+    entityToDtoMapper = ::inventoryToEntity,
+    primaryKeyColumn = "PRODUCT_CODE"
+)
+fun productsSyncModel(snapDatabase: SnapDatabase) = SyncBase<Products, ProductsDto>(
+    tableName = "PRODUCTS",
+    url = "v3/api/${SnapPreferences.STORE_ID}/products",
+    entityClass = Products::class.java,
+    dtoClass = ProductsDto::class.java,
+    daoProvider = snapDatabase.productsDao(),
+    entityToDtoMapper = ::productToEntity,
+    primaryKeyColumn = "PRODUCT_CODE"
+)
+fun productPacksSyncModel(snapDatabase: SnapDatabase) = SyncBase<ProductPacks, ProductPacksDto>(
+    tableName = "PRODUCT_PACKS",
+    url = "v3/api/${SnapPreferences.STORE_ID}/product_packs",
+    entityClass = ProductPacks::class.java,
+    dtoClass = ProductPacksDto::class.java,
+    daoProvider = snapDatabase.productPacksDao(),
+    entityToDtoMapper = ::productPacksToEntity,
+    primaryKeyColumn = "_id"
+)
+
+fun appointmentsSyncModel(snapDatabase: SnapDatabase) = SyncBase<Appointments, AppointmentsDto>(
+    tableName = "APPOINTMENTS",
+    url = "v3/api/${SnapPreferences.STORE_ID}/appointments",
+    entityClass = Appointments::class.java,
+    dtoClass = AppointmentsDto::class.java,
+    daoProvider = snapDatabase.appointmentsDao(),
+    entityToDtoMapper = ::appointmentsToEntity,
+    primaryKeyColumn = "APPOINTMENT_ID"
+)
+
+fun doctorsSyncModel(snapDatabase: SnapDatabase) = SyncBase<Doctors, DoctorsDto>(
+    tableName = "DOCTORS",
+    url = "v3/api/${SnapPreferences.STORE_ID}/doctors",
+    entityClass = Doctors::class.java,
+    dtoClass = DoctorsDto::class.java,
+    daoProvider = snapDatabase.doctorsDao(),
+    entityToDtoMapper = ::doctorsToEntity,
+    primaryKeyColumn = "DOCTOR_ID"
+)
+
+fun representativeSyncModel(snapDatabase: SnapDatabase) = SyncBase<Representative, RepresentativeDto>(
+    tableName = "REPRESENTATIVE",
+    url = "v3/api/${SnapPreferences.STORE_ID}/representative",
+    entityClass = Representative::class.java,
+    dtoClass = RepresentativeDto::class.java,
+    daoProvider = snapDatabase.representativeDao(),
+    entityToDtoMapper = ::representativeToEntity,
+    primaryKeyColumn = "REPRESENTATIVE_ID"
+)
+
+fun transactionSyncModel(snapDatabase: SnapDatabase) = SyncBase<Transactions, TransactionDto>(
+    tableName = "TRANSACTIONS",
+    url = "v4/api/${SnapPreferences.STORE_ID}/transactions_apos",
+    entityClass = Transactions::class.java,
+    dtoClass = TransactionDto::class.java,
+    daoProvider = snapDatabase.transactionsDao(),
+    entityToDtoMapper = ::transactionToEntity,
+    primaryKeyColumn = "_id"
+)
+
+fun productCustomizationSyncModel(snapDatabase: SnapDatabase) = SyncBase<ProductCustomization, ProductCustomizationDto>(
+    tableName = "PRODUCT_CUSTOMIZATION",
+    url = "v3/api/${SnapPreferences.STORE_ID}/product_customizations",
+    entityClass = ProductCustomization::class.java,
+    dtoClass = ProductCustomizationDto::class.java,
+    daoProvider = snapDatabase.productCustomizationDao(),
+    entityToDtoMapper = ::productCustomizationToEntity,
+    primaryKeyColumn = "PRODUCT_CODE"
 )

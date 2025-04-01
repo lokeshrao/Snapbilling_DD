@@ -18,7 +18,8 @@ data class AppointmentsDto(
     @SerializedName("cancellation_reason") val cancellationReason: String?,
     @SerializedName("is_sync") val isSync: Boolean,
     @SerializedName("created_at") val createdAt: Date?,
-    @SerializedName("updated_at") val updatedAt: Date?
+    @SerializedName("updated_at") val updatedAt: Date?,
+    @SerializedName("appointment_service") val services: List<AppointmentServicesDto>? = null
 )
 
 fun appointmentsDtoToEntity(dto: AppointmentsDto): Appointments {
@@ -32,7 +33,7 @@ fun appointmentsDtoToEntity(dto: AppointmentsDto): Appointments {
         isDeleted = dto.isDeleted,
         status = dto.status ?: "",
         cancellationReason = dto.cancellationReason,
-        isSync = dto.isSync,
+        isSyncPending = dto.isSync,
         createdAt = dto.createdAt ?: Date(),
         updatedAt = dto.updatedAt ?: Date()
     )
@@ -49,21 +50,20 @@ fun getAppointmentsSyncConfig(snapDb: SnapDatabase): DownSyncConfig<Appointments
     )
 }
 
-fun convertToAppointmentsAPIObjectList(appointmentsList: List<Appointments>?): List<AppointmentsDto> {
-    return appointmentsList?.map { appointment ->
-        AppointmentsDto(
-            appointment.appointmentId,
-            appointment.customerNumber,
-            appointment.representativeId,
-            appointment.startDate,
-            appointment.endDate,
-            appointment.description,
-            appointment.isDeleted,
-            appointment.status,
-            appointment.cancellationReason,
-            appointment.isSync,
-            appointment.createdAt,
-            appointment.updatedAt
-        )
-    } ?: emptyList()
+fun appointmentsToEntity(appointment: Appointments): AppointmentsDto {
+    return AppointmentsDto(
+        appointment.appointmentId,
+        appointment.customerNumber,
+        appointment.representativeId,
+        appointment.startDate,
+        appointment.endDate,
+        appointment.description,
+        appointment.isDeleted,
+        appointment.status,
+        appointment.cancellationReason,
+        appointment.isSyncPending,
+        appointment.createdAt,
+        appointment.updatedAt
+    )
 }
+

@@ -5,13 +5,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.snapbizz.common.config.InventoryRepository
 import com.snapbizz.common.models.ProductInfo
-import com.snapbizz.core.database.InvoiceInfo
-import com.snapbizz.core.database.InvoiceWithItems
 import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.database.SnapGlobalDatabase
+import com.snapbizz.core.database.entities.InvoiceWithItems
 import com.snapbizz.core.database.entities.global.GlobalProduct
-import com.snapbizz.core.helpers.LogModule
-import com.snapbizz.core.helpers.SnapLogger
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

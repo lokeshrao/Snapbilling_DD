@@ -39,7 +39,7 @@ fun apiProductCustomizationsToEntity(productCustomizationDto: ProductCustomizati
     )
 }
 
-fun productCustomizationToApi(productCustomization: ProductCustomization): ProductCustomizationDto {
+fun productCustomizationToEntity(productCustomization: ProductCustomization): ProductCustomizationDto {
     return ProductCustomizationDto(
         updatedAt = productCustomization.updatedAt,
         isOffer = productCustomization.isOffer,
@@ -54,7 +54,7 @@ fun productCustomizationToApi(productCustomization: ProductCustomization): Produ
 
 fun productCustomizationsToApiList(productCustomizations: List<ProductCustomization>): List<ProductCustomizationDto> {
     return productCustomizations.map { productCustomization ->
-        productCustomizationToApi(productCustomization)
+        productCustomizationToEntity(productCustomization)
     }
 }
 
@@ -68,22 +68,3 @@ fun getProductCustomizationSyncConfig(snapDb: SnapDatabase): DownSyncConfig<Prod
         dtoToEntityMapper = ::apiProductCustomizationsToEntity
     )
 }
-
-//suspend fun upSyncProductCustomization(
-//    dao: ProductCustomizationDao, syncApiService: SyncApiService, onStart: (String) -> Unit
-//) {
-//    onStart("Syncing Product Packs")
-//    try {
-//        syncData(
-//            dao = dao,
-//            primaryKeyColumn = "PRODUCT_CODE",
-//            syncStatusColumn = "IS_SYNC_PENDING",
-//            tableName = "PRODUCT_CUSTOMIZATION",
-//            apiUrl = "v3/api/${Preferences.STORE_ID}/product_customizations",
-//            convertToApiObjectList = ::productCustomizationsToApiList,
-//            syncApiService = syncApiService
-//        )
-//    } catch (e: Exception) {
-//        onStart("Syncing Product Packs Failed: ${e.message}")
-//    }
-//}

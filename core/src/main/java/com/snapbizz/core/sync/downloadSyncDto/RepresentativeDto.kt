@@ -22,7 +22,7 @@ fun representativeDtoToEntity(dto: RepresentativeDto): Representative {
         name = dto.name ?: "",
         phone = dto.phone ?: 0,
         isDeleted = dto.isDeleted,
-        isSync = dto.isSync,
+        isSyncPending = dto.isSync,
         createdAt = dto.createdAt ?: Date(),
         updatedAt = dto.updatedAt ?: Date()
     )
@@ -36,5 +36,16 @@ fun getRepresentativeSyncConfig(snapDb: SnapDatabase): DownSyncConfig<Representa
         dtoClass = RepresentativeDto::class.java,
         daoProvider = { snapDb.representativeDao() },
         dtoToEntityMapper = ::representativeDtoToEntity
+    )
+}
+fun representativeToEntity(representative: Representative): RepresentativeDto {
+    return RepresentativeDto(
+        representative.representativeId?:0L,
+        representative.name,
+        representative.phone,
+        representative.isDeleted,
+        representative.isSyncPending,
+        representative.createdAt,
+        representative.updatedAt
     )
 }

@@ -53,7 +53,7 @@ fun getInventorySyncConfig(snapDb: SnapDatabase): DownSyncConfig<Inventory, Inve
     )
 }
 
-fun inventoryToUpSyncDto(inventory: Inventory): InventoryDto {
+fun inventoryToEntity(inventory: Inventory): InventoryDto {
     return InventoryDto(
         minimumBaseQuantity = inventory.minimumBaseQuantity?:0,
         reorderPoint = inventory.reOrderPoint?:0,
@@ -65,21 +65,5 @@ fun inventoryToUpSyncDto(inventory: Inventory): InventoryDto {
     )
 }
 fun inventoryListToUpSyncDtoList(inventories: List<Inventory>): List<InventoryDto> {
-    return inventories.map { inventory -> inventoryToUpSyncDto(inventory) }
+    return inventories.map { inventory -> inventoryToEntity(inventory) }
 }
-//suspend fun upSyncInventories(
-//    dao: InventoryDao,
-//    syncApiService: SyncApiService,
-//    onStart: (String) -> Unit
-//) {
-//    onStart("Syncing Inventories")
-//    syncData(
-//        dao,
-//        primaryKeyColumn = "PRODUCT_CODE",
-//        syncStatusColumn = "IS_SYNC_PENDING",
-//        tableName = "INVENTORY",
-//        apiUrl = "v3/api/${Preferences.STORE_ID}/inventory",
-//        convertToApiObjectList = ::inventoryListToUpSyncDtoList,
-//        syncApiService = syncApiService
-//    )
-//}
