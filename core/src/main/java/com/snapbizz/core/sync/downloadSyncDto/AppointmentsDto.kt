@@ -3,6 +3,7 @@ package com.snapbizz.core.sync.downloadSyncDto
 import com.google.gson.annotations.SerializedName
 import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.database.entities.Appointments
+import com.snapbizz.core.database.entities.AppointmentsWithServices
 import com.snapbizz.core.utils.DownSyncConfig
 import java.util.Date
 
@@ -64,6 +65,35 @@ fun appointmentsToEntity(appointment: Appointments): AppointmentsDto {
         appointment.isSyncPending,
         appointment.createdAt,
         appointment.updatedAt
+    )
+}
+
+fun convertAppointmentWithServicesToDto(appointmentsWithServices: AppointmentsWithServices): AppointmentsDto {
+    val appointment = appointmentsWithServices.appointment
+    val services = appointmentsWithServices.services
+    return AppointmentsDto(
+        appointmentId = appointment.appointmentId,
+        customerNumber = appointment.customerNumber,
+        representativeId = appointment.representativeId,
+        startDate = appointment.startDate,
+        endDate = appointment.endDate,
+        description = appointment.description,
+        isDeleted = appointment.isDeleted,
+        status = appointment.status,
+        cancellationReason = appointment.cancellationReason,
+        isSync = appointment.isSyncPending,
+        createdAt = appointment.createdAt,
+        updatedAt = appointment.updatedAt,
+        services = services.map {
+            AppointmentServicesDto(
+                appointmentId = it.appointmentId,
+                serviceId = it.id?:0,
+                serviceName = it.serviceName,
+                serviceProductCode = it.serviceProductCode,
+                createdAt = it.createdAt,
+                updatedAt = it.updatedAt
+            )
+        }
     )
 }
 

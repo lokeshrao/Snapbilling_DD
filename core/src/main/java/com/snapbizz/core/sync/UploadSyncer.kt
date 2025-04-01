@@ -14,10 +14,11 @@ import com.google.gson.JsonArray
 import com.snapbizz.common.models.SyncApiService
 import com.snapbizz.core.database.SnapDatabase
 import com.snapbizz.core.database.convertInvoiceWithItemsToDto
+import com.snapbizz.core.database.dao.AppointmentsDao
 import com.snapbizz.core.database.dao.GenericDao
 import com.snapbizz.core.database.dao.Identifiable
 import com.snapbizz.core.database.dao.InvoiceDao
-import com.snapbizz.core.database.entities.Appointments
+import com.snapbizz.core.database.entities.AppointmentsWithServices
 import com.snapbizz.core.database.entities.Customer
 import com.snapbizz.core.database.entities.CustomerDetails
 import com.snapbizz.core.database.entities.Doctors
@@ -41,7 +42,7 @@ import com.snapbizz.core.sync.downloadSyncDto.ProductPacksDto
 import com.snapbizz.core.sync.downloadSyncDto.ProductsDto
 import com.snapbizz.core.sync.downloadSyncDto.RepresentativeDto
 import com.snapbizz.core.sync.downloadSyncDto.TransactionDto
-import com.snapbizz.core.sync.downloadSyncDto.appointmentsToEntity
+import com.snapbizz.core.sync.downloadSyncDto.convertAppointmentWithServicesToDto
 import com.snapbizz.core.sync.downloadSyncDto.customerDetailsToEntity
 import com.snapbizz.core.sync.downloadSyncDto.customerEntityToDto
 import com.snapbizz.core.sync.downloadSyncDto.doctorsToEntity
@@ -58,9 +59,6 @@ import dagger.assisted.AssistedInject
 import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.TimeUnit
-import kotlin.collections.count
-import kotlin.collections.isNotEmpty
-import kotlin.collections.mapNotNull
 
 interface BaseSyncer {
     suspend fun getPendingItem()
@@ -99,7 +97,12 @@ class UploadSyncer @AssistedInject constructor(
                     var offset = 0
                     do {
                         val query = buildQuery(sync.tableName, "IS_SYNC_PENDING", offset)
-                        val pendingItems =if(sync.tableName=="INVOICES") (sync.daoProvider as InvoiceDao).getDataForSync(offset) else sync.daoProvider.getPendingItemsRaw(query) as List<Any>
+                        //val pendingItems =if(sync.tableName=="INVOICES") (sync.daoProvider as InvoiceDao).getDataForSync(offset) else sync.daoProvider.getPendingItemsRaw(query) as List<Any>
+                        val pendingItems = when(sync.tableName) {
+                            "INVOICES" -> (sync.daoProvider as InvoiceDao).getDataForSync(offset)
+                            "APPOINTMENTS" -> (sync.daoProvider as AppointmentsDao).getDataForSync(offset)
+                            else -> sync.daoProvider.getPendingItemsRaw(query)
+                        }
                         SnapLogger.log(
                             "Item Pending For Sync",
                             "Items - ${pendingItems.count()}  Offset - $offset",
@@ -309,13 +312,13 @@ fun productPacksSyncModel(snapDatabase: SnapDatabase) = SyncBase<ProductPacks, P
     primaryKeyColumn = "_id"
 )
 
-fun appointmentsSyncModel(snapDatabase: SnapDatabase) = SyncBase<Appointments, AppointmentsDto>(
+fun appointmentsSyncModel(snapDatabase: SnapDatabase) = SyncBase<AppointmentsWithServices, AppointmentsDto>(
     tableName = "APPOINTMENTS",
     url = "v3/api/${SnapPreferences.STORE_ID}/appointments",
-    entityClass = Appointments::class.java,
+    entityClass = AppointmentsWithServices::class.java,
     dtoClass = AppointmentsDto::class.java,
     daoProvider = snapDatabase.appointmentsDao(),
-    entityToDtoMapper = ::appointmentsToEntity,
+    entityToDtoMapper = ::convertAppointmentWithServicesToDto,
     primaryKeyColumn = "APPOINTMENT_ID"
 )
 

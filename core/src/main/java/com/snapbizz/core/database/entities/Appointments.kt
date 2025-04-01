@@ -1,8 +1,10 @@
 package com.snapbizz.core.database.entities
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.snapbizz.core.database.dao.Identifiable
 import java.util.Date
 
@@ -47,5 +49,17 @@ data class Appointments(
     val updatedAt: Date
 ): Identifiable {
     override fun getPrimaryKeyValue(): Any = appointmentId?:0
+}
+
+@Entity
+data class AppointmentsWithServices(
+    @Embedded val appointment: Appointments,
+    @Relation(
+        parentColumn = "APPOINTMENT_ID",
+        entityColumn = "APPOINTMENT_ID"
+    )
+    val services: List<AppointmentServices>
+): Identifiable {
+    override fun getPrimaryKeyValue(): Any = appointment.appointmentId?:0
 }
 
