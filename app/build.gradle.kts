@@ -9,15 +9,13 @@ plugins {
 
 
 android {
-    namespace = "com.snapbizz.axis"
+    namespace = "com.snapbizz.snapbillingv2"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.snapbizz.axis"
+        applicationId = "com.snapbizz.snapbillingv2"
         minSdk = 23
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -39,6 +37,23 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    flavorDimensions += "version"
+    productFlavors{
+        create("axis"){
+            dimension = "version"
+            applicationIdSuffix = ".axis"
+            versionNameSuffix = "-axis"
+            versionCode = 1
+            versionName = "1.0"
+        }
+        create("axisworldline"){
+            dimension = "version"
+            applicationIdSuffix = ".axisworldline"
+            versionNameSuffix = "-axisworldline"
+            versionCode = 1
+            versionName = "1.0"
+        }
     }
 }
 

@@ -35,6 +35,15 @@ android {
     buildFeatures {
         compose = true
     }
+    flavorDimensions += "version"
+    productFlavors{
+        create("axis"){
+            dimension = "version"
+        }
+        create("axisworldline"){
+            dimension = "version"
+        }
+    }
 }
 
 dependencies {

@@ -9,7 +9,26 @@
       "client_info": {
         "mobilesdk_app_id": "1:225090059821:android:19de109c834e425b05c2a4",
         "android_client_info": {
-          "package_name": "com.snapbizz.axis"
+          "package_name": "com.snapbizz.snapbillingv2.axis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZTb21PiN023ESXHGSW4wUBuQLC8WUaiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225090059821:android:19de109c834e425b05c2a4",
+        "android_client_info": {
+          "package_name": "com.snapbizz.snapbillingv2.axisworldline"
         }
       },
       "oauth_client": [],

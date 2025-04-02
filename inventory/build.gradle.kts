@@ -32,6 +32,15 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    flavorDimensions += "version"
+    productFlavors{
+        create("axis"){
+            dimension = "version"
+        }
+        create("axisworldline"){
+            dimension = "version"
+        }
+    }
 }
 
 dependencies {
