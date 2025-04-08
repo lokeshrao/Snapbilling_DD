@@ -56,15 +56,14 @@ class MainActivity : ComponentActivity() {
                             showSplash = false
                         }
                     } else {
-                        SnapScaffold(Modifier.padding(insets)) {
-                            Navigation(startDestination)
-                        }
+                        Navigation(Modifier.padding(insets), startDestination)
                     }
                 }
             }
         }
 
     }
+
     private suspend fun getStartingScreen(): Screen {
 
         val isRegistered = snapDataStore.isStoreRegistrationComplete()
