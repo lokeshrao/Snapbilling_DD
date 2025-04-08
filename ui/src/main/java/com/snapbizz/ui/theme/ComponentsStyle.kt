@@ -30,6 +30,7 @@ object SnapTextComponent {
     val subheadingFontWeight: FontWeight = FontWeight.SemiBold
 
     val defaultTextAlign: TextAlign = TextAlign.Start
+    val centerTextAlign: TextAlign = TextAlign.Center
 }
 
 object SnapButtonStyle {

@@ -21,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.snapbillingv2.R
 import com.snapbizz.ui.snapComponents.BottomBarItem
 import com.snapbizz.ui.snapComponents.SnapScaffoldWithDrawer
@@ -35,7 +34,11 @@ fun HomeScreenWithLayout() {
         BottomBarItem(R.drawable.baseline_home_filled_24, "Profile")
     )
     SnapScaffoldWithDrawer(
-        drawerItems = listOf("Reports", "Settings", "Logout"),
+        drawerItems = listOf(
+            "Settings" to com.snapbizz.ui.R.drawable.baseline_check_24,
+            "Reports" to com.snapbizz.ui.R.drawable.baseline_check_24,
+            "Logout" to com.snapbizz.ui.R.drawable.baseline_check_24
+        ),
         bottomItems = bottomItems,
         onDrawerItemClick = { item ->
             println("Drawer clicked: $item")
@@ -54,7 +57,7 @@ fun HomeScreen(modifier: Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(SnapThemeConfig.Text)
+            .background(Color.White)
             .padding(16.dp)
     ) {
         SnapText(

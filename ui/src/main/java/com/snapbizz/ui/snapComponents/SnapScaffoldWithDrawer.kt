@@ -7,7 +7,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -16,20 +15,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.ModalDrawer
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,12 +53,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snapbizz.common.config.SnapThemeConfig
+import com.snapbizz.core.utils.Dimens
 import com.snapbizz.ui.R
+import com.snapbizz.ui.theme.SnapTextComponent
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun SnapScaffoldWithDrawer(
-    drawerItems: List<String>,
+    drawerItems: List<Pair<String, Int>>,
     bottomItems: List<BottomBarItem>,
     onDrawerItemClick: (String) -> Unit,
     onBottomItemClick: (String) -> Unit,
@@ -65,34 +70,91 @@ fun SnapScaffoldWithDrawer(
 ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    var selectedItem  by rememberSaveable{ mutableStateOf(bottomSelectedField)}
+    var selectedItem by rememberSaveable { mutableStateOf(bottomSelectedField) }
 
     LaunchedEffect(Unit) {
-        if(bottomItems.any { x-> x.label == bottomSelectedField }){
+        if (bottomItems.any { x -> x.label == bottomSelectedField }) {
             onBottomItemClick(bottomSelectedField)
         }
     }
+
     ModalDrawer(
+        drawerState = scaffoldState.drawerState,
+        drawerBackgroundColor = Color.Transparent,
         drawerContent = {
-            Column(modifier = Modifier.padding(16.dp)) {
-                drawerItems.forEach { item ->
-                    SnapText(
-                        text = item,
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(topEnd = Dimens.size_32, bottomEnd = Dimens.size_32))
+                    .background(SnapThemeConfig.ContainerBg)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
+                            .background(SnapThemeConfig.Primary)
+                            .padding(Dimens.paddingMedium)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.baseline_check_24),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .size(Dimens.size_80)
+                                .align(Alignment.Start)
+                                .clip(RoundedCornerShape(Dimens.size_32,Dimens.size_32,Dimens.size_32,Dimens.size_32))
+                                .background(SnapThemeConfig.ContainerBg),
+                        )
+                        Spacer(modifier = Modifier.height(Dimens.spacerHeight))
+                        Text("Axis Digital Dukaan", color = SnapThemeConfig.ContainerBg, fontWeight = SnapTextComponent.subheadingFontWeight, fontSize = SnapTextComponent.subheadingFontSize)
+                        Spacer(modifier = Modifier.height(Dimens.spacerHeight))
+                    }
+
+                    Spacer(modifier = Modifier.height(Dimens.spacerHeight))
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        drawerItems.forEach { (label, iconRes) ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        onDrawerItemClick(label)
+                                        scope.launch { scaffoldState.drawerState.close() }
+                                    }
+                                    .padding(Dimens.paddingMedium),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                onDrawerItemClick(item)
-                                scope.launch { scaffoldState.drawerState.close() }
+                                Image(
+                                    modifier = Modifier.size(Dimens.size_24),
+                                    painter = painterResource(id = iconRes),
+                                    contentDescription = "Store Image"
+                                )
+                                Spacer(modifier = Modifier.width(Dimens.spacerHeight))
+                                Text(label, fontSize = Dimens.textSizeMedium)
                             }
+                        }
+                    }
+
+                    SnapText(
+                        text = "1.0.0( TEST ) - LITE",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(SnapThemeConfig.SurfaceBg)
+                            .padding(Dimens.paddingSmall),
+                        fontSize = SnapTextComponent.defaultFontSize,
+                        color = SnapThemeConfig.Primary,
+                        textAlign = SnapTextComponent.centerTextAlign,
                     )
                 }
             }
-        },
-        drawerState = scaffoldState.drawerState
+        }
     ) {
         Scaffold(
             scaffoldState = scaffoldState,
@@ -103,21 +165,24 @@ fun SnapScaffoldWithDrawer(
                         IconButton(onClick = {
                             scope.launch { scaffoldState.drawerState.open() }
                         }) {
-                            Image(painter = painterResource(R.drawable.baseline_check_24), contentDescription = "")
+                            Image(
+                                painter = painterResource(R.drawable.baseline_check_24),
+                                contentDescription = ""
+                            )
                         }
                     }
                 )
             },
             bottomBar = {
-                CustomBottomAppBar(bottomItems,selectedItem){newSelected->
-                    onBottomItemClick(newSelected).also { selectedItem=newSelected }
-
+                CustomBottomAppBar(bottomItems, selectedItem) { newSelected ->
+                    onBottomItemClick(newSelected).also { selectedItem = newSelected }
                 }
             },
             content = content
         )
     }
 }
+
 data class BottomBarItem(
     val iconRes: Int,
     val label: String
