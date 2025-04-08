@@ -31,8 +31,10 @@ import com.snapbizz.ui.snapComponents.SnapText
 fun HomeScreenWithLayout() {
     val bottomItems = listOf(
         BottomBarItem(R.drawable.baseline_home_filled_24, "Home"),
-        BottomBarItem(R.drawable.baseline_home_filled_24, "Transactions"),
-        BottomBarItem(R.drawable.baseline_home_filled_24, "Profile")
+        BottomBarItem(R.drawable.baseline_home_filled_24, "Promotions"),
+        BottomBarItem(R.drawable.baseline_home_filled_24, "Customers"),
+        BottomBarItem(R.drawable.baseline_home_filled_24, "Reports"),
+        BottomBarItem(R.drawable.baseline_home_filled_24, "More")
     )
     SnapScaffoldWithDrawer(
         drawerItems = listOf("Reports", "Settings", "Logout"),
@@ -54,7 +56,7 @@ fun HomeScreen(modifier: Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Gray)
+            .background(Color.LightGray)
             .padding(16.dp)
     ) {
         SnapText(
