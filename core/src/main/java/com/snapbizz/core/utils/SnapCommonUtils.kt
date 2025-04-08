@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import com.snapbizz.core.R
 import com.snapbizz.core.datastore.SnapDataStore
+import org.json.JSONArray
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -53,6 +55,21 @@ object SnapCommonUtils {
             )
         }
         return deviceId
+    }
+
+    fun returnRequestParams(obj: Any): String {
+        return try {
+            JSONArray().apply {
+                put(0, obj)
+            }.toString()
+        } catch (e: Exception) {
+            "[]"
+        }
+    }
+    fun formatAmountToDouble(amt: Double): String {
+        val formatter = DecimalFormat("#0.00")
+        val d = amt.toDouble()
+        return formatter.format(d)
     }
 
 }

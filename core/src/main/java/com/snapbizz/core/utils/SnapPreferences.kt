@@ -10,6 +10,7 @@ object SnapPreferences {
     var IS_SEARCH_DATA_UPDATED: Boolean = false
     var isSyncing: Boolean = false
     var isSyncingTable: String = ""
+    var isSdkInit: Boolean = false
     var isWifiConnected: Boolean = false
     var isAirtel: Boolean = true
     var v4Token: String? = null

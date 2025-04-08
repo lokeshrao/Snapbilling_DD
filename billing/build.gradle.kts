@@ -52,7 +52,10 @@ dependencies {
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.androidx.foundation.layout.android)
     androidTestImplementation(libs.androidx.espresso.core)
     kapt(libs.hilt.compiler)
     implementation(libs.retrofit)
+    implementation(files("libs/ezetapandroidsdk_3.24.aar"))
+
 }
