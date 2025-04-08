@@ -16,10 +16,10 @@ import com.snapbizz.onboarding.registration.OtpScreen
 import com.snapbizz.onboarding.registration.RegisterScreen
 
 @Composable
-fun Navigation(modifier: Modifier,startingDestination: Screen?) {
+fun Navigation(startingDestination: Screen?) {
     val navController = rememberNavController()
     var startingPage = startingDestination ?: Screen.OTP
-    NavHost(modifier=modifier,navController = navController, startDestination = startingPage.route) {
+    NavHost(navController = navController, startDestination = startingPage.route) {
         composable(Screen.OTP.route) {
             OtpScreen(onNavigateToRegister = {
                 navController.navigate(Screen.REGISTER.route) {

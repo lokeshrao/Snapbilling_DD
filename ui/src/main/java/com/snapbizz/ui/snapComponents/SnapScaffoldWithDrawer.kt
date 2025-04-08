@@ -231,13 +231,18 @@ fun CustomBottomAppBar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Image(
-                            painter = painterResource(id = item.iconRes),
-                            contentDescription = item.label,
-                            modifier = Modifier
-                                .size(22.dp)
-                                .padding(bottom = 2.dp)
-                        )
+                        if(isSelected.not()) {
+                            Image(
+                                painter = painterResource(id = item.iconRes),
+                                contentDescription = item.label,
+                                modifier = Modifier
+                                    .size(22.dp)
+                                    .padding(bottom = 2.dp)
+                            )
+                        }
+                        else{
+                            SnapDivider(modifier = Modifier.height(26.dp), color = Color.Transparent)
+                        }
                         Text(
                             text = item.label,
                             fontSize = 11.sp,

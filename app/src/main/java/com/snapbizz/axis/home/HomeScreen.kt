@@ -54,7 +54,7 @@ fun HomeScreen(modifier: Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(SnapThemeConfig.Text)
+            .background(Color.Gray)
             .padding(16.dp)
     ) {
         SnapText(

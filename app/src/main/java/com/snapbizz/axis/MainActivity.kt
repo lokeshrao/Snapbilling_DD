@@ -56,7 +56,9 @@ class MainActivity : ComponentActivity() {
                             showSplash = false
                         }
                     } else {
-                        Navigation(Modifier.padding(insets), startDestination)
+                        SnapScaffold(modifier = Modifier.padding(insets)) {
+                            Navigation(startDestination)
+                        }
                     }
                 }
             }
