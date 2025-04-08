@@ -13,7 +13,7 @@ import retrofit2.http.Path
 
 interface OnboardingApiService {
     @POST("otp_generation")
-    fun generateOtp(@Body otpGenerationInput: ApiGenerateOTPInputDetails?): Call<GenerateStoreOTPAPIResponse?>?
+    suspend fun generateOtp(@Body otpGenerationInput: ApiGenerateOTPInputDetails?): GenerateStoreOTPAPIResponse?
 
     @POST("device_registration")
     fun verify(@Body verifyOtp: ApiDeviceRegistrationInput?): Call<StoreDetailsResponse?>?

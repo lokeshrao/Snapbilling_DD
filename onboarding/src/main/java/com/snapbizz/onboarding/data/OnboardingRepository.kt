@@ -27,8 +27,9 @@ class OnboardingRepositoryImpl @Inject constructor(
             when (storeResult?.status) {
                 "Found" -> {
                     if (storeResult.storeTypes?.contains(STORE_TYPE) == true) {
-                        generateOtp(phoneNo, deviceId)
-                        SnapResult.Success(Unit)
+                        generateOtp(phoneNo, deviceId).let {  response->
+                            response
+                        }
                     } else {
                         SnapResult.Error(resourceProvider.getString(R.string.registration_error))
                     }
@@ -44,33 +45,31 @@ class OnboardingRepositoryImpl @Inject constructor(
             SnapResult.Error(resourceProvider.getString(R.string.otp_send_failure))
         }
     }
-    private suspend fun generateOtp(phoneNo: Long, deviceId: String): Result<Unit> {
+    private suspend fun generateOtp(phoneNo: Long, deviceId: String): SnapResult<Unit> {
         val otpInputDetails = ApiGenerateOTPInputDetails().apply {
             this.deviceId = deviceId
             this.storePhone = phoneNo
             this.deviceType = DEVICE_TYPE
             this.osVersion = Build.VERSION.SDK_INT.toString()
-            this.buildNos = "" //TD
+            this.buildNos = ""
             this.modelNo = Build.MODEL
         }
 
-        val response = apiService?.generateOtp(otpInputDetails)?.execute()
-        val result = response?.body()
+        val result = apiService?.generateOtp(otpInputDetails)
 
         return when {
-            response?.isSuccessful == true && result?.status.equals("Success") -> {
-                Result.success(Unit)
+            result != null && result?.status.equals("Success") -> {
+                SnapResult.Success(Unit)
             }
 
             result?.status.equals("Device attached to another store") -> {
-                Result.failure(Exception(resourceProvider.getString(R.string.device_attached_error)))
+                SnapResult.Error(resourceProvider.getString(R.string.device_attached_error))
             }
 
             else -> {
-                Result.failure(
-                    Exception(
+                SnapResult.Error(
                         result?.status ?: resourceProvider.getString(R.string.otp_send_failure)
-                    )
+
                 )
             }
         }

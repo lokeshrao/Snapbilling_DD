@@ -43,9 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -196,8 +198,8 @@ fun CustomBottomAppBar(
     val selectedIndex = items.indexOfFirst { it.label == selectedItem }
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val itemWidth = screenWidth / items.size
-    val circleSize = 42.dp
-    val curveDepth = 30.dp
+    val circleSize = 40.dp
+    val curveDepth = 20.dp
 
     val density = LocalDensity.current
     val targetOffset = if (selectedIndex != -1)
@@ -216,11 +218,11 @@ fun CustomBottomAppBar(
         label = "curveCenter"
     )
     val scale = remember { Animatable(0f) }
-    val yOffset = remember { Animatable(10f) }
+    val yOffset = remember { Animatable(12f) }
 
     LaunchedEffect(selectedItem) {
-        scale.snapTo(0.8f)
-        yOffset.snapTo(10f)
+        scale.snapTo(1f)
+        yOffset.snapTo(12f)
         launch {
             scale.animateTo(
                 1f,
@@ -236,11 +238,36 @@ fun CustomBottomAppBar(
     }
 
 
-    Box(modifier = Modifier.fillMaxWidth().height(60.dp)) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxWidth().height(60.dp).shadow(10.dp, shape = RectangleShape, clip = false)
+    ) {
+        if (selectedIndex != -1) {
+            Box(
+                modifier = Modifier
+                    .offset(x = animatedXOffset, y = (-28).dp + with(density) { yOffset.value.dp })
+                    .graphicsLayer {
+                        scaleX = scale.value
+                        scaleY = scale.value
+                    }
+                    .size(circleSize)
+                    .align(Alignment.TopStart)
+                    .clip(CircleShape)
+                    .background(Color(0xFF9B004F))
+                    .clickable { onItemSelected(items[selectedIndex].label) },
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = items[selectedIndex].iconRes),
+                    contentDescription = items[selectedIndex].label,
+                    modifier = Modifier.size(22.dp),
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+            }
+        }
+
+        Canvas(modifier = Modifier.fillMaxSize().background(Color.Gray.copy(alpha = 0.0f))) {
             val curveDepthPx = curveDepth.toPx()
             val itemWidthPxCanvas = size.width / items.size
-            val curveWidthPx = itemWidthPxCanvas * 0.8f
+            val curveWidthPx = itemWidthPxCanvas * 1f
             val cutoutCenterX = animatedCurveCenter
 
             val startX = cutoutCenterX - (curveWidthPx / 2)
@@ -296,16 +323,20 @@ fun CustomBottomAppBar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Image(
-                            painter = painterResource(id = item.iconRes),
-                            contentDescription = item.label,
-                            modifier = Modifier
-                                .size(22.dp)
-                                .padding(bottom = 2.dp)
-                        )
+                        if(isSelected.not()) {
+                            Image(
+                                painter = painterResource(id = item.iconRes),
+                                contentDescription = item.label,
+                                modifier = Modifier
+                                    .size(18.dp)
+                            )
+                        }
+                        else{
+                            SnapDivider(modifier = Modifier.height(5.dp), color = Color.Transparent)
+                        }
                         Text(
                             text = item.label,
-                            fontSize = 11.sp,
+                            fontSize = 10.sp,
                             color = if (isSelected) SnapThemeConfig.Primary else Color.Gray
                         )
                     }
@@ -313,29 +344,7 @@ fun CustomBottomAppBar(
             }
         }
 
-        if (selectedIndex != -1) {
-            Box(
-                modifier = Modifier
-                    .offset(x = animatedXOffset, y = (-24).dp + with(density) { yOffset.value.dp })
-                    .graphicsLayer {
-                        scaleX = scale.value
-                        scaleY = scale.value
-                    }
-                    .size(circleSize)
-                    .align(Alignment.TopStart)
-                    .clip(CircleShape)
-                    .background(Color(0xFF9B004F))
-                    .clickable { onItemSelected(items[selectedIndex].label) },
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = items[selectedIndex].iconRes),
-                    contentDescription = items[selectedIndex].label,
-                    modifier = Modifier.size(22.dp),
-                    colorFilter = ColorFilter.tint(Color.White)
-                )
-            }
-        }
+
     }
 }
 

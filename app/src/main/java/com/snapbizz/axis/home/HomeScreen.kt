@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.snapbillingv2.R
 import com.snapbizz.ui.snapComponents.BottomBarItem
 import com.snapbizz.ui.snapComponents.SnapScaffoldWithDrawer
@@ -30,8 +31,10 @@ import com.snapbizz.ui.snapComponents.SnapText
 fun HomeScreenWithLayout() {
     val bottomItems = listOf(
         BottomBarItem(R.drawable.baseline_home_filled_24, "Home"),
-        BottomBarItem(R.drawable.baseline_home_filled_24, "Transactions"),
-        BottomBarItem(R.drawable.baseline_home_filled_24, "Profile")
+        BottomBarItem(R.drawable.baseline_home_filled_24, "Promotions"),
+        BottomBarItem(R.drawable.baseline_home_filled_24, "Customers"),
+        BottomBarItem(R.drawable.baseline_home_filled_24, "Reports"),
+        BottomBarItem(R.drawable.baseline_home_filled_24, "More")
     )
     SnapScaffoldWithDrawer(
         drawerItems = listOf(
