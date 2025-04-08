@@ -221,7 +221,10 @@ fun CustomBottomAppBar(
                     modifier = Modifier
                         .weight(1f)
                         .height(60.dp)
-                        .clickable { onItemSelected(item.label) },
+                        .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { onItemSelected(item.label) },
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
