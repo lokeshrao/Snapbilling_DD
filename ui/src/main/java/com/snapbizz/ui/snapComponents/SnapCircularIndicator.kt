@@ -1,4 +1,5 @@
 package com.snapbizz.ui.snapComponents
+
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package com.ban.otptextfield
+package com.snapbizz.ui.snapComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snapbizz.common.config.SnapThemeConfig
-import com.snapbizz.ui.snapComponents.SnapText
 
 @Composable
 fun SnapOtpField(

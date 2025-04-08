@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snapbizz.common.config.SnapThemeConfig
@@ -16,6 +17,20 @@ import com.snapbizz.core.utils.Dimens.iconSizeExtraSmall
 import com.snapbizz.core.utils.Dimens.inputFieldHeightSmall
 import com.snapbizz.core.utils.Dimens.paddingMedium
 import com.snapbizz.core.utils.Dimens.paddingSmall
+
+object SnapTextComponent {
+    val defaultFontSize: TextUnit = SnapTextStyle.Default.fontSize
+    val headingFontSize: TextUnit = SnapTextStyle.Large.fontSize
+    val subheadingFontSize: TextUnit = SnapTextStyle.Medium.fontSize
+
+    val defaultTextColor: Color = Color.Black
+
+    val defaultFontWeight: FontWeight = FontWeight.Normal
+    val headingFontWeight: FontWeight = FontWeight.Bold
+    val subheadingFontWeight: FontWeight = FontWeight.SemiBold
+
+    val defaultTextAlign: TextAlign = TextAlign.Start
+}
 
 object SnapButtonStyle {
     val defaultCornerRadius = cornerSmall
