@@ -33,8 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ComponentActivity
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ban.otptextfield.SnapOtpField
-import com.google.gson.Gson
+import com.snapbizz.ui.snapComponents.SnapOtpField
 import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.core.utils.Dimens.paddingLarge
 import com.snapbizz.core.utils.Dimens.paddingSmall

@@ -65,7 +65,7 @@ object Dimens {
     val cardElevationLarge: Dp = 8.dp
     val cardCornerRadiusSmall: Dp = 4.dp
     val cardCornerRadiusMedium: Dp = 8.dp
-    val cardCornerRadiusLarge: Dp = 16.dp
+    val cardCornerRadiusLarge: Dp = 12.dp
 
     // Input field dimensions
     val inputFieldHeightSmall: Dp = 40.dp

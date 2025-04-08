@@ -210,7 +210,7 @@ fun RegisterScreen(
 
     }
     if (uiState.isLoading) {
-        SnapProgressDialog(syncMessages)
+        SnapProgressDialog(message = syncMessages, isVisible = true)
     }
 }
 
