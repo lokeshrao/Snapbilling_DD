@@ -1,6 +1,5 @@
 package com.snapbizz.axis.navigation
 
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -8,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.snapbizz.axis.home.HomeScreen
+import com.snapbizz.billing.QuickPayScreen
 import com.snapbizz.axis.home.HomeScreenWithLayout
 import com.snapbizz.billing.PaymentActivity
 import com.snapbizz.common.models.PaymentData
@@ -38,17 +38,11 @@ fun Navigation(modifier: Modifier,startingDestination: Screen?) {
                     launchSingleTop = true
                 }
             })
-//            RegisterScreen(navigateForward = {
-//                navController.navigate(Screen.LOGIN.route) {
-//                    popUpTo(Screen.REGISTER.route) { inclusive = true }
-//                    launchSingleTop = true
-//                    startingPage = Screen.LOGIN
-//                }
-//            })
         }
         composable(Screen.INVENTORY.route) { backStackEntry ->
 //            GlobalProductScreen()
-            InventoryScreen()
+//            InventoryScreen()
+            QuickPayScreen()
         }
     }
 }

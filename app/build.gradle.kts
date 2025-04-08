@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.navigation.compose)
 
-
+    implementation(libs.retrofit)
     implementation(libs.ui)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

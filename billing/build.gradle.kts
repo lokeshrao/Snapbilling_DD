@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
+    id("kotlin-kapt")
 }
 
 android {
@@ -54,6 +54,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     implementation(libs.androidx.foundation.layout.android)
     androidTestImplementation(libs.androidx.espresso.core)
+    kapt(libs.hilt.compiler)
+    implementation(libs.retrofit)
     implementation(files("libs/ezetapandroidsdk_3.24.aar"))
 
 }

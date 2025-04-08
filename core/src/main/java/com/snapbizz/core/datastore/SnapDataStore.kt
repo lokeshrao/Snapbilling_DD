@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.snapbizz.common.models.AppKeysData
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import com.snapbizz.common.models.RetailerDetails
@@ -51,6 +52,12 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         private val POS_ID = intPreferencesKey("pos_id")
         private val STORE_REGISTRATION_STATUS = booleanPreferencesKey("is_store_registered")
         private val SYNC_TOKEN = stringPreferencesKey("sync_token")
+        private val TID = stringPreferencesKey("tid")
+        private val MID = stringPreferencesKey("mid")
+        private val APP_KEY = stringPreferencesKey("app_key")
+        private val USER_NAME = stringPreferencesKey("user_name")
+        private val MERCHANT_NAME = stringPreferencesKey("merchant_name")
+        private val AUTH_TOKEN_V4 = stringPreferencesKey("auth_token_v4")
     }
 
     suspend fun saveConfig(json: String) {
@@ -129,6 +136,31 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    suspend fun setAppKeys(data: AppKeysData) {
+        snapstore.edit { preferences ->
+            data.let {
+                preferences[TID] = it.tid.orEmpty()
+                preferences[MID] = it.mid.orEmpty()
+                preferences[APP_KEY] = it.appKey.orEmpty()
+                preferences[USER_NAME] = it.userName.orEmpty()
+                preferences[MERCHANT_NAME] = it.merchantName.orEmpty()
+            }
+        }
+    }
+
+    fun getAppKeys () :Flow<AppKeysData> {
+        return snapstore.data.map { preferences ->
+            AppKeysData(
+                appKey = preferences[APP_KEY],
+                mid = preferences[MID],
+                tid = preferences[TID],
+                userName = preferences[USER_NAME],
+                merchantName = preferences[MERCHANT_NAME],
+                storeId = preferences[STORE_ID]?.toInt()
+            )
+        }
+    }
+
 
     suspend fun setStoreAsRegistered(registrationStatus: Boolean) {
         snapstore.edit { preferences ->
@@ -153,6 +185,18 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    suspend fun getAuthTokenV4(): String? {
+        return snapstore.data.map { preferences ->
+            preferences[AUTH_TOKEN_V4]
+        }.first()
+    }
+
+    suspend fun setAuthTokenV4(token: String) {
+        snapstore.edit { preferences ->
+            preferences[AUTH_TOKEN_V4] = token
+        }
+    }
+
     suspend fun loadPrefs() {
         val preferences = snapstore.data.first()
         SnapPreferences.STORE_ID = preferences[STORE_ID] ?: 0L
@@ -160,6 +204,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         SnapPreferences.DEVICE_ID = preferences[DEVICE_ID]?.toString().orEmpty()
         SnapPreferences.ACCESS_TOKEN = preferences[STORE_AUTH_KEY]?.toString().orEmpty()
         SnapPreferences.BILLER_NAME = preferences[RETAILER_OWNER_NAME]?.toString().orEmpty()
+        SnapPreferences.v4Token = preferences[AUTH_TOKEN_V4]?.toString().orEmpty()
     }
 
 }

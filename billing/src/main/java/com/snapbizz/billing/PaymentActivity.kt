@@ -149,7 +149,7 @@ fun PaymentScreen(
                 Box(
                     modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
-                    SnapProgressDialog()
+                    SnapProgressDialog(isVisible = isLoading)
                 }
             }
 
