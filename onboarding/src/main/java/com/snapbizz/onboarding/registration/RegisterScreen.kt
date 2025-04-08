@@ -202,7 +202,7 @@ fun RegisterScreen(
                 onClick = {
 //                    HPHCommonUtils.isInternetAvailable(context) {
                     viewModel.doDownloadSync {
-//                            onNavigateToLogin()
+                        navigateForward()
                     }
 //                    }
                 })

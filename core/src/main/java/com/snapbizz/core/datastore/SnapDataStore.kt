@@ -167,10 +167,10 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
-    fun isStoreRegistrationComplete(): Flow<Boolean?> {
+    suspend fun isStoreRegistrationComplete(): Boolean? {
         return snapstore.data.map { preferences ->
             preferences[STORE_REGISTRATION_STATUS]
-        }
+        }.first()
     }
 
     suspend fun getSyncToken(): String? {
