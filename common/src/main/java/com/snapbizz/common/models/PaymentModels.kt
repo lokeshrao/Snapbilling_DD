@@ -8,6 +8,7 @@ data class PaymentData(
     val transactionId: String,
     val customerName: String?,
     val phoneNumber: String?,
+    val remark: String?,
     val additionalParams: Map<String, String> = emptyMap()
 )
 

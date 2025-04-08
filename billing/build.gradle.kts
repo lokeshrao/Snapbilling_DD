@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+
 }
 
 android {
@@ -50,5 +52,8 @@ dependencies {
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.androidx.foundation.layout.android)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(files("libs/ezetapandroidsdk_3.24.aar"))
+
 }
