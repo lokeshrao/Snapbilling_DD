@@ -57,6 +57,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         private val APP_KEY = stringPreferencesKey("app_key")
         private val USER_NAME = stringPreferencesKey("user_name")
         private val MERCHANT_NAME = stringPreferencesKey("merchant_name")
+        private val AUTH_TOKEN_V4 = stringPreferencesKey("auth_token_v4")
     }
 
     suspend fun saveConfig(json: String) {
@@ -184,6 +185,18 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
+    suspend fun getAuthTokenV4(): String? {
+        return snapstore.data.map { preferences ->
+            preferences[AUTH_TOKEN_V4]
+        }.first()
+    }
+
+    suspend fun setAuthTokenV4(token: String) {
+        snapstore.edit { preferences ->
+            preferences[AUTH_TOKEN_V4] = token
+        }
+    }
+
     suspend fun loadPrefs() {
         val preferences = snapstore.data.first()
         SnapPreferences.STORE_ID = preferences[STORE_ID] ?: 0L
@@ -191,6 +204,7 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
         SnapPreferences.DEVICE_ID = preferences[DEVICE_ID]?.toString().orEmpty()
         SnapPreferences.ACCESS_TOKEN = preferences[STORE_AUTH_KEY]?.toString().orEmpty()
         SnapPreferences.BILLER_NAME = preferences[RETAILER_OWNER_NAME]?.toString().orEmpty()
+        SnapPreferences.v4Token = preferences[AUTH_TOKEN_V4]?.toString().orEmpty()
     }
 
 }

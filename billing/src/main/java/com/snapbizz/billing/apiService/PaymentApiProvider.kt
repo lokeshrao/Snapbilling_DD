@@ -20,13 +20,5 @@ object PaymentApiProvider {
 //        return if (SnapThemeConfig.features.cart) retrofit.value?.create(PaymentApiService::class.java) else null
 //    }
 
-    @Singleton
-    @Provides
-    fun providePaymentService(
-        okHttpClient: OkHttpClient,
-        converterFactory: Converter.Factory
-    ): PaymentApiService {
-        return Retrofit.Builder().baseUrl(ApiURL.BASE_URL_V4).client(okHttpClient)
-            .addConverterFactory(converterFactory).build().create(PaymentApiService::class.java)
-    }
+
 }

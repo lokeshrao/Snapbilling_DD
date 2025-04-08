@@ -1,5 +1,6 @@
 package com.snapbizz.common.models
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class PaymentModels {
@@ -38,6 +39,18 @@ data class AppKeysData(
     @SerializedName("merchant_name") var merchantName: String? = null
 
 )
+
+data class AuthorisedTokenResponse (
+    @SerializedName("token") var token: String? = null
+): ApiResponse()
+
+class GenerateTokenRequestBody {
+    @SerializedName("access_token") var accessToken: String? = null
+
+    @SerializedName("device_id") var deviceId: String? = null
+
+    @SerializedName("store_id") var storeId: Long = 0
+}
 
 open class ApiResponse(
     @SerializedName("message") var message: String? = null,

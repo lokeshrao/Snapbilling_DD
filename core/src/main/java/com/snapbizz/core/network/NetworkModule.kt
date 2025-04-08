@@ -1,6 +1,9 @@
 package com.snapbizz.core.network
 import com.snapbizz.common.models.ApiGenerateJWTTokenInput
 import com.snapbizz.common.models.ApiGenerateJWTTokenResponse
+import com.snapbizz.common.models.AppKeysResponse
+import com.snapbizz.common.models.AuthorisedTokenResponse
+import com.snapbizz.common.models.GenerateTokenRequestBody
 import com.snapbizz.common.models.SyncApiService
 import com.snapbizz.core.datastore.SnapDataStore
 import com.snapbizz.core.utils.ApiURL
@@ -12,6 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -21,6 +25,8 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import java.net.ProtocolException
 import java.util.concurrent.TimeUnit
@@ -76,6 +82,15 @@ object NetworkModule {
         return Retrofit.Builder().baseUrl(ApiURL.BASE_URL_V3).client(okHttpClient)
             .addConverterFactory(converterFactory).build().create(GenerateTokenService::class.java)
     }
+    @Singleton
+    @Provides
+    fun provideTokenV4Service(
+        okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): GenerateTokenV4Service {
+        return Retrofit.Builder().baseUrl(ApiURL.BASE_URL_V4).client(okHttpClient)
+            .addConverterFactory(converterFactory).build().create(GenerateTokenV4Service::class.java)
+    }
 
     @Singleton
     @Provides
@@ -120,6 +135,22 @@ object NetworkModule {
         )
         return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()) // ✅ Required for JsonObject
             .baseUrl(ApiURL.BASE_URL_V3).client(client).build().create(SyncApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideHomeApiService(
+        snapDataStore: SnapDataStore,
+        generateTokenV4Service: GenerateTokenV4Service,
+        loggingProvider:LoggingProvider
+    ): HomeApiService {
+        val client = provideTokenV4HttpClient(
+            snapDataStore,
+            generateTokenV4Service,
+            loggingProvider
+        )
+        return Retrofit.Builder().baseUrl(ApiURL.BASE_URL_V4).client(client)
+            .addConverterFactory(GsonConverterFactory.create()).build().create(HomeApiService::class.java)
     }
 }
 private fun provideHttpClient(
@@ -210,10 +241,92 @@ private fun provideHttpClient(
         .build()
 }
 
+private fun provideTokenV4HttpClient(
+    snapDataStore: SnapDataStore,
+    generateTokenV4Service: GenerateTokenV4Service,
+    loggingProvider: LoggingProvider,
+): OkHttpClient {
+    val authInterceptor = Interceptor { chain ->
+        var token = runBlocking { snapDataStore.getAuthTokenV4() }
+
+        if (token.isNullOrBlank()) {
+            runBlocking {
+                fetchAndStoreV4Token(snapDataStore, generateTokenV4Service)
+            }
+            token = SnapPreferences.v4Token
+        }
+
+        val newRequest = chain.request().newBuilder()
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+
+        var response = chain.proceed(newRequest)
+
+        if (response.code == 401) {
+            response.close()
+            runBlocking {
+                fetchAndStoreV4Token(snapDataStore, generateTokenV4Service)
+            }
+            val retryRequest = chain.request().newBuilder()
+                .addHeader("Authorization", "${SnapPreferences.v4Token}")
+                .build()
+
+            response = chain.proceed(retryRequest)
+        }
+
+        response
+    }
+
+    return OkHttpClient.Builder()
+        .addInterceptor(loggingProvider.getLoggingInterceptor())
+        .addInterceptor(authInterceptor)
+        .protocols(listOf(Protocol.HTTP_1_1))
+        .build()
+}
+
+
+suspend fun fetchAndStoreV4Token(
+    snapDataStore: SnapDataStore,
+    generateTokenV4Service: GenerateTokenV4Service
+) {
+    try {
+        val request = GenerateTokenRequestBody().apply {
+            this.accessToken = SnapPreferences.ACCESS_TOKEN
+            this.deviceId = SnapPreferences.DEVICE_ID
+            this.storeId = SnapPreferences.STORE_ID
+        }
+
+        val response = generateTokenV4Service.getTokenV4(request).execute()
+        val result = response.body()
+
+        if (response.isSuccessful && result != null && !result.token.isNullOrEmpty()) {
+            SnapPreferences.v4Token = result.token!!
+            snapDataStore.setAuthTokenV4(result.token?:"")
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        // Handle/log error if needed
+    }
+}
+
 interface GenerateTokenService {
     @POST("v3/api/generate_token")
     fun genJWTToken(@Body apiGenerateJWTTokenInput: ApiGenerateJWTTokenInput?): Call<ApiGenerateJWTTokenResponse?>?
 }
 interface LoggingProvider {
     fun getLoggingInterceptor(): HttpLoggingInterceptor
+}
+interface GenerateTokenV4Service {
+    @POST("v1/api/auth/token")
+    fun getTokenV4(@Body body: GenerateTokenRequestBody?): Call<AuthorisedTokenResponse>
+}
+
+interface HomeApiService {
+    @GET("v1/api/store/tid_details")
+    fun getAppKeys(
+        @Header("store_id") storeId: String,
+        @Header("device_id") deviceId: String,
+        @Header("access_token") accessToken: String
+    ): Call<AppKeysResponse>
+
 }
