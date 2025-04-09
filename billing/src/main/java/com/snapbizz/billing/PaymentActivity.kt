@@ -97,8 +97,9 @@ class PaymentActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        paymentData = PaymentData(10.10, Date().time.toString(), "", "", "")
+//        val raw = intent.getStringExtra("EXTRA_PAYMENT_DATA")
+//        val paymentData = raw?.let { PaymentData.fromString(it) }
+        //paymentData = PaymentData(10.10, Date().time.toString(), "", "", "","")
 
         if (SnapPreferences.isSdkInit) {
             isSdkInitialized.value = true

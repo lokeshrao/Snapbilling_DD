@@ -12,6 +12,8 @@ data class PaymentData(
     val customerName: String?,
     val phoneNumber: String?,
     val remark: String?,
+    val type: Type? = null,
+    val paymentSource: PaymentSource? = null,
     val additionalParams: Map<String, String> = emptyMap()
 )
 
@@ -56,3 +58,16 @@ open class ApiResponse(
     @SerializedName("message") var message: String? = null,
     @SerializedName("status") var status: String? = null
 )
+
+enum class PaymentSource() {
+    CUSTOMERS,
+    QUICK_PAY,
+    BILLING
+}
+enum class Type() {
+    PAYMENT,
+    CHECK_STATUS,
+    AUTO_CHECK_STATUS,
+    VOID,
+    REPRINT
+}

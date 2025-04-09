@@ -62,7 +62,7 @@ fun HomeScreen(modifier: Modifier,viewModel: HomeViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(SnapThemeConfig.ContainerBg)
             .padding(16.dp)
     ) {
         SnapText(
