@@ -238,7 +238,7 @@ fun CustomBottomAppBar(
     }
 
 
-    Box(modifier = Modifier.fillMaxWidth().height(60.dp).shadow(10.dp, shape = RectangleShape, clip = false)
+    Box(modifier = Modifier.fillMaxWidth().height(60.dp)
     ) {
         if (selectedIndex != -1) {
             Box(
