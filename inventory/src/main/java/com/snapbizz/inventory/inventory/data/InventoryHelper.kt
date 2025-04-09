@@ -1,4 +1,4 @@
-package com.snapbizz.inventory.data
+package com.snapbizz.inventory.inventory.data
 
 import com.snapbizz.common.models.ProductInfo
 import com.snapbizz.core.database.entities.Inventory

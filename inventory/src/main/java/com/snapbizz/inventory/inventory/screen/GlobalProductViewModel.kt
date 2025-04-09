@@ -1,9 +1,9 @@
-package com.snapbizz.inventory.screen
+package com.snapbizz.inventory.inventory.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.snapbizz.inventory.data.InventoryRepositoryImpl
+import com.snapbizz.inventory.inventory.data.InventoryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.snapbizz.inventory.screen
+package com.snapbizz.inventory.inventory.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
