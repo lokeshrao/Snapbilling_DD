@@ -1,5 +1,6 @@
 package com.snapbizz.core.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import com.snapbizz.core.database.entities.Customer
@@ -8,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CustomerDao : GenericDao<Customer> {
 
-    @Query("SELECT * FROM CUSTOMERS WHERE phone = :phone")
-    fun getCustomerByPhone(phone: Long): Flow<Customer?>
+    @Query("SELECT * FROM CUSTOMERS WHERE phone = :phone ORDER BY name ASC")
+    fun getCustomerByPhone(phone: Long): PagingSource<Int, Customer>
 
     @Query("DELETE FROM CUSTOMERS WHERE phone = :phone")
     suspend fun deleteByPhone(phone: Long)

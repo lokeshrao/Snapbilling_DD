@@ -1,4 +1,4 @@
-package com.snapbizz.inventory.data
+package com.snapbizz.inventory.inventory.data
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig

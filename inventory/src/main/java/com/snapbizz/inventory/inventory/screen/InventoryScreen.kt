@@ -1,4 +1,4 @@
-package com.snapbizz.inventory.screen
+package com.snapbizz.inventory.inventory.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.common.models.ProductInfo
-import com.snapbizz.inventory.InventoryViewModel
+import com.snapbizz.inventory.inventory.InventoryViewModel
 import com.snapbizz.ui.SnackbarManager
 import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapEditText

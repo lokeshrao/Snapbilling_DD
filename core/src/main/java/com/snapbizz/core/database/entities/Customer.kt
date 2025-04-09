@@ -13,13 +13,13 @@ data class Customer(
     @ColumnInfo(name = "ADDRESS") val address: String?,
     @ColumnInfo(name = "EMAIL") val email: String?,
     @ColumnInfo(name = "CREDIT_LIMIT") val creditLimit: Long?,
-    @ColumnInfo(name = "IS_DISABLED") val isDisabled: Boolean,
-    @ColumnInfo(name = "IS_SYNC_PENDING") var isSyncPending: Boolean,
-    @ColumnInfo(name = "CREATED_AT") val createdAt: Date,
-    @ColumnInfo(name = "UPDATED_AT") val updatedAt: Date,
+    @ColumnInfo(name = "IS_DISABLED") val isDisabled: Boolean?,
+    @ColumnInfo(name = "IS_SYNC_PENDING") var isSyncPending: Boolean?,
+    @ColumnInfo(name = "CREATED_AT") val createdAt: Date?,
+    @ColumnInfo(name = "UPDATED_AT") val updatedAt: Date?,
     @ColumnInfo(name = "GSTIN") val gstin: String?,
     @ColumnInfo(name = "ALT_PHONE") val altPhone: Long?,
-    @ColumnInfo(name = "IS_ALT_PHONE_SELECTED") val isAltPhoneSelected: Boolean,
+    @ColumnInfo(name = "IS_ALT_PHONE_SELECTED") val isAltPhoneSelected: Boolean?,
     @ColumnInfo(name = "IS_SNAP_ORDER_SYNC") val isSnapOrderSync: Boolean?
 ) : Identifiable {
     override fun getPrimaryKeyValue(): Any = phone

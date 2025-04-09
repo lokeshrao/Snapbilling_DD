@@ -11,7 +11,6 @@ import com.snapbizz.billing.QuickPayScreen
 import com.snapbizz.axis.home.HomeScreenWithLayout
 import com.snapbizz.billing.PaymentActivity
 import com.snapbizz.common.models.PaymentData
-import com.snapbizz.inventory.screen.InventoryScreen
 import com.snapbizz.onboarding.registration.OtpScreen
 import com.snapbizz.onboarding.registration.RegisterScreen
 
