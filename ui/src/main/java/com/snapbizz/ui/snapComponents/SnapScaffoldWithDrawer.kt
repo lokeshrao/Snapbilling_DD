@@ -91,8 +91,7 @@ fun SnapScaffoldWithDrawer(
                     .background(SnapThemeConfig.ContainerBg)
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     Column(
                         modifier = Modifier
@@ -105,22 +104,23 @@ fun SnapScaffoldWithDrawer(
                             contentDescription = "Logo",
                             modifier = Modifier
                                 .size(Dimens.size_80)
-                                .align(Alignment.Start)
-                                .clip(RoundedCornerShape(Dimens.size_32,Dimens.size_32,Dimens.size_32,Dimens.size_32))
+                                .clip(RoundedCornerShape(Dimens.size_32))
                                 .background(SnapThemeConfig.ContainerBg),
                         )
                         Spacer(modifier = Modifier.height(Dimens.spacerHeight))
-                        Text("Axis Digital Dukaan", color = SnapThemeConfig.ContainerBg, fontWeight = SnapTextComponent.subheadingFontWeight, fontSize = SnapTextComponent.subheadingFontSize)
-                        Spacer(modifier = Modifier.height(Dimens.spacerHeight))
+                        Text(
+                            "Axis Digital Dukaan",
+                            color = SnapThemeConfig.ContainerBg,
+                            fontWeight = SnapTextComponent.subheadingFontWeight,
+                            fontSize = SnapTextComponent.subheadingFontSize,
+                            modifier = Modifier.padding(vertical = Dimens.spacerHeight)
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(Dimens.spacerHeight))
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Top
+                        modifier = Modifier.weight(1f)
                     ) {
                         drawerItems.forEach { (label, iconRes) ->
                             Row(
