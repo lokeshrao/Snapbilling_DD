@@ -60,9 +60,6 @@ import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-interface BaseSyncer {
-    suspend fun getPendingItem()
-}
 
 @HiltWorker
 class UploadSyncer @AssistedInject constructor(
@@ -168,8 +165,8 @@ private suspend fun <T : Identifiable> syncChunks(
     apiUrl: String,
     dao: GenericDao<*>,
     gson: Gson,
-    convertToApiObjectList: (Identifiable) -> Any, // Ensure correct mapping
-    syncApiService: SyncApiService,
+    convertToApiObjectList: (Identifiable) -> Any,
+    syncApiService: SyncApiService?,
     primaryKeyColumn: String,
     tableName: String
 ): Int {
@@ -189,7 +186,7 @@ private suspend fun <T : Identifiable> syncChunks(
                 val uploadDataObjects = chunk.map(convertToApiObjectList)
 
                 val response =
-                    syncApiService.uploadData(apiUrl, prepareDataForUpload(gson, uploadDataObjects))
+                    syncApiService?.uploadData(apiUrl, prepareDataForUpload(gson, uploadDataObjects))
 
                 if (response?.status.equals("Success", true)) {
                     val markSyncDoneQuery = buildMarkSyncDoneQuery(

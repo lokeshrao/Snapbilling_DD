@@ -11,6 +11,6 @@ import javax.inject.Singleton
 
 
 
-class SyncRepository (val syncApiService: SyncApiService,val snapDataStore: SnapDataStore) {
+class SyncRepository (val syncApiService: SyncApiService?,val snapDataStore: SnapDataStore) {
 
 }

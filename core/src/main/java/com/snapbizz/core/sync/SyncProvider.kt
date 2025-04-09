@@ -14,5 +14,8 @@ object SyncProvider {
 
     @Provides
     @Singleton
-    fun provideSyncRepo(syncApiService: SyncApiService,snapDataStore: SnapDataStore): SyncRepository = SyncRepository(syncApiService,snapDataStore)
+    fun provideSyncRepo(
+        syncApiService: SyncApiService?,
+        snapDataStore: SnapDataStore
+    ): SyncRepository = SyncRepository(syncApiService,snapDataStore)
 }

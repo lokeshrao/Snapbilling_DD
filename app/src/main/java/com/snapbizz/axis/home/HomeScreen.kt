@@ -21,9 +21,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.snapbizz.common.config.SnapThemeConfig
 import com.snapbizz.snapbillingv2.R
 import com.snapbizz.ui.snapComponents.BottomBarItem
+import com.snapbizz.ui.snapComponents.SnapButton
 import com.snapbizz.ui.snapComponents.SnapScaffoldWithDrawer
 import com.snapbizz.ui.snapComponents.SnapText
 
@@ -56,7 +58,7 @@ fun HomeScreenWithLayout() {
 }
 
 @Composable
-fun HomeScreen(modifier: Modifier) {
+fun HomeScreen(modifier: Modifier,viewModel: HomeViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +73,7 @@ fun HomeScreen(modifier: Modifier) {
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-
+        SnapButton(text = "fetch", onClick = { viewModel.getAppKeys() })
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()

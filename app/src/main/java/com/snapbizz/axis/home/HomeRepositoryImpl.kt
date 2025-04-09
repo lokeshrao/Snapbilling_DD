@@ -14,22 +14,21 @@ import javax.inject.Inject
 class HomeRepositoryImpl @Inject constructor(
     private val snapDatabase: SnapDatabase,
     private val snapDataStore: SnapDataStore,
-    private val apiService: HomeApiService
+    private val apiService: HomeApiService?
 ): HomeRepository {
 
     override suspend fun validateAndGetAppKeys(): Result<String> {
         return try {
             if (validateAppKeys()) {
-                val response = apiService.getAppKeys(
+                val response = apiService?.getAppKeys(
                     SnapPreferences.STORE_ID.toString(),
                     SnapPreferences.DEVICE_ID,
-                    SnapPreferences.ACCESS_TOKEN).execute()
-                val result = response.body()
-                if (response.isSuccessful && result?.status.equals("Success",true)) {
-                    snapDataStore.setAppKeys(result?.appKeysData ?:AppKeysData())
+                    SnapPreferences.ACCESS_TOKEN)
+                if (response!=null && response.status.equals("Success",true)) {
+                    snapDataStore.setAppKeys(response.appKeysData ?:AppKeysData())
                     Result.success("")
                 } else {
-                    Result.failure(Exception(result?.message))
+                    Result.failure(Exception(response?.message))
                 }
             } else {
                 Result.failure(Exception("Invalid App Keys"))

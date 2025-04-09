@@ -30,8 +30,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class DownSyncHelper @Inject constructor(
-    private val syncApiService: SyncApiService,
-    private val snapDatabase: SnapDatabase
+    private val syncApiService: SyncApiService?, private val snapDatabase: SnapDatabase
 ) {
     private val tableConfigs = listOf(
         getInventorySyncConfig(snapDatabase),
@@ -54,11 +53,22 @@ class DownSyncHelper @Inject constructor(
                 syncStatus.update { "Syncing ${config.tableName}" }
                 var offset: String? = "0"
                 while (true) {
-                    SnapLogger.log("Sync","Calling API for ${config.tableName} with offset: $offset", LogModule.HOME, LogPriority.HIGH)
-                    val response =
-                        syncApiService.getData(config.tableName,SnapPreferences.STORE_ID,offset.toString())?.body()
+                    SnapLogger.log(
+                        "Sync",
+                        "Calling API for ${config.tableName} with offset: $offset",
+                        LogModule.HOME,
+                        LogPriority.HIGH
+                    )
+                    val response = syncApiService?.getData(
+                        config.tableName, SnapPreferences.STORE_ID, offset.toString()
+                    )?.body()
                     if (response != null) {
-                        SnapLogger.log("Sync","Response for ${config.tableName}: $response", LogModule.HOME, LogPriority.HIGH)
+                        SnapLogger.log(
+                            "Sync",
+                            "Response for ${config.tableName}: $response",
+                            LogModule.HOME,
+                            LogPriority.HIGH
+                        )
                         val status = response["status"]?.asString
                         val offsetJsonElement = response["offset"]
 
@@ -70,19 +80,34 @@ class DownSyncHelper @Inject constructor(
                                 if (offsetJsonElement != null && !offsetJsonElement.isJsonNull) {
                                     offset = offsetJsonElement.asString
                                 } else {
-                                    SnapLogger.log("Sync","Offset not found or is null, breaking the loop.", LogModule.HOME, LogPriority.HIGH)
+                                    SnapLogger.log(
+                                        "Sync",
+                                        "Offset not found or is null, breaking the loop.",
+                                        LogModule.HOME,
+                                        LogPriority.HIGH
+                                    )
                                     break
                                 }
                             }
 
                             else -> {
-                                SnapLogger.log("Sync","Unexpected status: $status", LogModule.HOME, LogPriority.HIGH)
+                                SnapLogger.log(
+                                    "Sync",
+                                    "Unexpected status: $status",
+                                    LogModule.HOME,
+                                    LogPriority.HIGH
+                                )
                                 clearAllTables()
                                 return Result.failure(Exception("Unexpected status: $status"))
                             }
                         }
                     } else {
-                        SnapLogger.log("Sync","Error syncing ${config.tableName} table: Response is null", LogModule.HOME, LogPriority.HIGH)
+                        SnapLogger.log(
+                            "Sync",
+                            "Error syncing ${config.tableName} table: Response is null",
+                            LogModule.HOME,
+                            LogPriority.HIGH
+                        )
                         clearAllTables()
                         return Result.failure(Exception("Error syncing ${config.tableName} table"))
                     }
@@ -90,7 +115,12 @@ class DownSyncHelper @Inject constructor(
             }
             Result.success(Unit)
         } catch (ex: Exception) {
-            SnapLogger.log("Sync","Error during download sync: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
+            SnapLogger.log(
+                "Sync",
+                "Error during download sync: ${ex.message}",
+                LogModule.HOME,
+                LogPriority.HIGH
+            )
             clearAllTables()
             Result.failure(Exception("Error during download sync :: Reason ${ex.message}"))
         }
@@ -102,13 +132,18 @@ class DownSyncHelper @Inject constructor(
         dao: GenericDao<Any>,
     ) {
         try {
-            when(config.tableName) {
+            when (config.tableName) {
                 "appointments" -> saveAppointmentDataToDao(response)
                 "invoices" -> saveInvoiceDataToDao(response)
                 else -> saveDataToDao(response, config, dao)
             }
         } catch (ex: Exception) {
-            SnapLogger.log("Sync","Error saving data to DAO for ${config.tableName}: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
+            SnapLogger.log(
+                "Sync",
+                "Error saving data to DAO for ${config.tableName}: ${ex.message}",
+                LogModule.HOME,
+                LogPriority.HIGH
+            )
             clearAllTables()
             throw Exception("Error saving data to DAO for ${config.tableName} :: Reason ${ex.message}")
         }
@@ -127,7 +162,12 @@ class DownSyncHelper @Inject constructor(
                 dao.insertOrUpdateAsync(dbDataList)
             }
         } catch (ex: Exception) {
-            SnapLogger.log("Sync","Error saving data to DAO for ${config.tableName}: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
+            SnapLogger.log(
+                "Sync",
+                "Error saving data to DAO for ${config.tableName}: ${ex.message}",
+                LogModule.HOME,
+                LogPriority.HIGH
+            )
             throw ex
         }
     }
@@ -146,7 +186,12 @@ class DownSyncHelper @Inject constructor(
                 }
             }
         } catch (ex: Exception) {
-            SnapLogger.log("Sync","Error saving invoice data to DAO: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
+            SnapLogger.log(
+                "Sync",
+                "Error saving invoice data to DAO: ${ex.message}",
+                LogModule.HOME,
+                LogPriority.HIGH
+            )
             throw ex
         }
     }
@@ -154,7 +199,8 @@ class DownSyncHelper @Inject constructor(
     private suspend fun saveAppointmentDataToDao(response: JsonObject) {
         try {
             val jsonArray = response.getAsJsonArray("appointmentsList")
-            val dtoType = TypeToken.getParameterized(List::class.java, AppointmentsDto::class.java).type
+            val dtoType =
+                TypeToken.getParameterized(List::class.java, AppointmentsDto::class.java).type
             val apiDataList: List<AppointmentsDto> = Gson().fromJson(jsonArray, dtoType)
 
             apiDataList.forEach { apiAppointment ->
@@ -165,7 +211,12 @@ class DownSyncHelper @Inject constructor(
                 }
             }
         } catch (ex: Exception) {
-            SnapLogger.log("Sync","Error saving appointment data to DAO: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
+            SnapLogger.log(
+                "Sync",
+                "Error saving appointment data to DAO: ${ex.message}",
+                LogModule.HOME,
+                LogPriority.HIGH
+            )
             throw ex
         }
     }
@@ -182,7 +233,9 @@ class DownSyncHelper @Inject constructor(
                 snapDatabase.transactionsDao().deleteAll()
             }
         } catch (ex: Exception) {
-            SnapLogger.log("Sync","Error clearing all tables: ${ex.message}", LogModule.HOME, LogPriority.HIGH)
+            SnapLogger.log(
+                "Sync", "Error clearing all tables: ${ex.message}", LogModule.HOME, LogPriority.HIGH
+            )
         }
     }
 

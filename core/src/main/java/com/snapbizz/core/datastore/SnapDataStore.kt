@@ -175,8 +175,9 @@ class SnapDataStore @Inject constructor(@ApplicationContext context: Context) {
     }
 
     suspend fun getSyncToken(): String? {
-        val preferences = snapstore.data.first()
-        return preferences[SYNC_TOKEN]
+        return snapstore.data.map { preferences ->
+            preferences[SYNC_TOKEN]
+        }.first()
     }
 
     suspend fun setSyncToken(token: String) {

@@ -1,6 +1,7 @@
 package com.snapbizz.onboarding.apiService
 
 import com.snapbizz.common.config.SnapThemeConfig
+import com.snapbizz.core.network.RetrofitBaseV2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,7 @@ object OnboardingApiProvider {
 
     @Singleton
     @Provides
-    fun provideOnboardingApiService(retrofit: Lazy<Retrofit?>): OnboardingApiService? {
-        return if (SnapThemeConfig.features.cart) retrofit.value?.create(OnboardingApiService::class.java) else null
+    fun provideOnboardingApiService(@RetrofitBaseV2 retrofit: Retrofit?): OnboardingApiService? {
+        return if (SnapThemeConfig.features.cart) retrofit?.create(OnboardingApiService::class.java) else null
     }
 }
